@@ -109,4 +109,17 @@ class DonationController extends Controller
 
         return view('donations.index', compact('donations'));
     }
+
+    public function adminIndex()
+    {
+        if (!auth()->user()->is_admin) {
+            abort(403, 'غير مصرح لك بالوصول لهذه الصفحة');
+        }
+
+        $donations = Donation::with(['user', 'campaign'])
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.donations.index', compact('donations'));
+    }
 }

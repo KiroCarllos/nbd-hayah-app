@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCampaignController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +50,11 @@ Route::middleware('auth')->group(function () {
     // Donation routes
     Route::post('/campaigns/{campaign}/donate', [DonationController::class, 'donate'])->name('campaigns.donate');
     Route::get('/my-donations', [DonationController::class, 'myDonations'])->name('donations.index');
+
+    // Profile routes
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 // Payment callback (no auth required)
@@ -55,4 +63,35 @@ Route::get('/payment/callback', [PaymentController::class, 'paymentCallback'])->
 // Admin routes
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Campaign management
+    Route::resource('campaigns', AdminCampaignController::class)->names([
+        'index' => 'admin.campaigns.index',
+        'create' => 'admin.campaigns.create',
+        'store' => 'admin.campaigns.store',
+        'show' => 'admin.campaigns.show',
+        'edit' => 'admin.campaigns.edit',
+        'update' => 'admin.campaigns.update',
+        'destroy' => 'admin.campaigns.destroy',
+    ]);
+
+    // User management
+    Route::resource('users', AdminUserController::class)->names([
+        'index' => 'admin.users.index',
+        'show' => 'admin.users.show',
+        'edit' => 'admin.users.edit',
+        'update' => 'admin.users.update',
+        'destroy' => 'admin.users.destroy',
+    ]);
+
+    // Donations management
+    Route::get('donations', [DonationController::class, 'adminIndex'])->name('admin.donations.index');
+
+    // Transactions management
+    Route::get('transactions', [WalletController::class, 'adminIndex'])->name('admin.transactions.index');
+
+    // Reports
+    Route::get('reports', function () {
+        return view('admin.reports.index');
+    })->name('admin.reports.index');
 });

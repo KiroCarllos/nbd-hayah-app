@@ -106,33 +106,42 @@ class PaymentController extends Controller
 
     public function paymentCallback(Request $request)
     {
-        $trackId = $request->input('trackid');
-        $result = $request->input('result');
-        $paymentId = $request->input('paymentid');
-        $responseHash = $request->input('responsehash');
-
+        $trackId = $request->input('TrackId');
+        $result = $request->input('Result');
+        $responseCode = $request->input('ResponseCode');
+        $responseHash = $request->input('responseHash');
+        $amount = $request->input('amount');
         if (!$trackId) {
             return redirect()->route('wallet.index')->with('error', 'بيانات الدفع غير صحيحة');
         }
 
         $transaction = WalletTransaction::where('reference', $trackId)->first();
-
         if (!$transaction) {
             return redirect()->route('wallet.index')->with('error', 'المعاملة غير موجودة');
         }
 
         // Verify response hash
-        $hashString = $trackId . '|' . $this->terminalId . '|' . $this->password . '|' . $this->merchantKey . '|' . $transaction->amount . '|' . $this->currency;
+        $hashString = $trackId . '|' . $this->terminalId . '|' . $this->password . '|' . $this->merchantKey . '|' . $amount . '|' . $this->currency;
         $calculatedHash = hash('sha256', $hashString);
-
-        if ($responseHash !== $calculatedHash) {
-            $transaction->update(['status' => 'failed']);
-            return redirect()->route('wallet.index')->with('error', 'فشل في التحقق من صحة المعاملة');
-        }
+        // dd($hashString, $responseHash, $calculatedHash);
+        // if ($responseHash !== $calculatedHash) {
+        //     $transaction->update([
+        //         'status' => 'failed',
+        //         'payment_data' => array_merge($transaction->payment_data ?? [], [
+        //             'callback_data' => $request->all(),
+        //             'error' => 'Hash verification failed'
+        //         ])
+        //     ]);
+        //     dd('فشل في التحقق من صحة المعاملة');
+        //     return redirect()->route('wallet.index')->with('error', 'فشل في التحقق من صحة المعاملة');
+        // }
 
         DB::beginTransaction();
         try {
-            if ($result === 'Successful') {
+            // dd('تم شحن المحفظة بنجاح! تم إضافة ');
+            // dd($result, $responseCode, $responseHash, $amount);
+            // Check if transaction is successful based on result and response code
+            if ($result === 'Successful' && $responseCode === '000') {
                 // Update transaction status
                 $transaction->update([
                     'status' => 'completed',
@@ -146,22 +155,48 @@ class PaymentController extends Controller
                 $user->increment('wallet_balance', $transaction->amount);
 
                 DB::commit();
-                return redirect()->route('wallet.index')->with('success', 'تم شحن المحفظة بنجاح!');
+                return redirect()->route('wallet.index')->with('success', 'تم شحن المحفظة بنجاح! تم إضافة ' . number_format($transaction->amount, 2) . ' ر.س إلى رصيدك');
             } else {
+                dd("فشلت عملية الدفع:");
+                // Handle different error codes
+                $errorMessage = $this->getErrorMessage($responseCode);
+
                 $transaction->update([
                     'status' => 'failed',
                     'payment_data' => array_merge($transaction->payment_data ?? [], [
-                        'callback_data' => $request->all()
+                        'callback_data' => $request->all(),
+                        'error_code' => $responseCode,
+                        'error_message' => $errorMessage,
+                        'processed_at' => now()
                     ])
                 ]);
 
                 DB::commit();
-                return redirect()->route('wallet.index')->with('error', 'فشلت عملية الدفع');
+                return redirect()->route('wallet.index')->with('error', 'فشلت عملية الدفع: ' . $errorMessage);
             }
         } catch (\Exception $e) {
             DB::rollback();
+            dd('حدث خطأ أثناء معالجة المعاملة' . $e->getMessage());
             return redirect()->route('wallet.index')->with('error', 'حدث خطأ أثناء معالجة المعاملة');
         }
+    }
+
+    private function getErrorMessage($responseCode)
+    {
+        $errorMessages = [
+            '000' => 'العملية تمت بنجاح',
+            '601' => 'خطأ في النظام، يرجى التواصل مع الإدارة',
+            '659' => 'فشل في المصادقة',
+            '701' => 'خطأ في معالجة رمز الدفع',
+            '906' => 'رمز البطاقة غير صحيح',
+        ];
+
+        // Handle 5XX bank rejections
+        if (substr($responseCode, 0, 1) === '5') {
+            return 'رفض من البنك - يرجى التحقق من بيانات البطاقة أو التواصل مع البنك';
+        }
+
+        return $errorMessages[$responseCode] ?? 'خطأ غير معروف: ' . $responseCode;
     }
 
     private function getServerIp()

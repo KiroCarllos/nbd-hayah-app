@@ -30,6 +30,21 @@ class Campaign extends Model
         'end_date' => 'date',
     ];
 
+    // Accessor to ensure images is always an array
+    public function getImagesAttribute($value)
+    {
+        if (is_null($value)) {
+            return [];
+        }
+
+        if (is_string($value)) {
+            $decoded = json_decode($value, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+
+        return is_array($value) ? $value : [];
+    }
+
     // Relationships
     public function creator()
     {

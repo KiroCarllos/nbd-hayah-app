@@ -14,7 +14,7 @@
                                 <div class="carousel-inner">
                                     @foreach ($campaign->images as $index => $image)
                                         <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                            <img src="{{ $image }}" class="d-block w-100 rounded"
+                                            <img src="{{ asset('storage/' . $image) }}" class="d-block w-100 rounded"
                                                 alt="{{ $campaign->title }}" style="height: 400px; object-fit: cover;">
                                         </div>
                                     @endforeach
@@ -31,8 +31,8 @@
                                 </button>
                             </div>
                         @else
-                            <img src="{{ $campaign->images[0] }}" class="img-fluid rounded" alt="{{ $campaign->title }}"
-                                style="width: 100%; height: 400px; object-fit: cover;">
+                            <img src="{{ asset('storage/' . $campaign->images[0]) }}" class="img-fluid rounded"
+                                alt="{{ $campaign->title }}" style="width: 100%; height: 400px; object-fit: cover;">
                         @endif
                     </div>
                 @else

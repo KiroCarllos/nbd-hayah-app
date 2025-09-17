@@ -113,7 +113,7 @@
                                 {{ auth()->user()->name }}
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ url('/profile') }}">الملف الشخصي</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.show') }}">الملف الشخصي</a></li>
                                 <li><a class="dropdown-item" href="{{ route('wallet.index') }}">المحفظة
                                         ({{ number_format(auth()->user()->wallet_balance, 2) }} ر.س)
                                     </a></li>

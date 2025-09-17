@@ -33,7 +33,7 @@
                                         <div class="row g-0">
                                             <div class="col-md-4">
                                                 @if ($campaign->images && count($campaign->images) > 0)
-                                                    <img src="{{ $campaign->images[0] }}"
+                                                    <img src="{{ asset('storage/' . $campaign->images[0]) }}"
                                                         class="img-fluid rounded-start h-100" alt="{{ $campaign->title }}"
                                                         style="object-fit: cover;">
                                                 @else
@@ -125,7 +125,7 @@
                                     @endauth
 
                                     @if ($campaign->images && count($campaign->images) > 0)
-                                        <img src="{{ $campaign->images[0] }}" class="card-img-top"
+                                        <img src="{{ asset('storage/' . $campaign->images[0]) }}" class="card-img-top"
                                             alt="{{ $campaign->title }}" style="height: 200px; object-fit: cover;">
                                     @else
                                         <div class="bg-primary d-flex align-items-center justify-content-center"

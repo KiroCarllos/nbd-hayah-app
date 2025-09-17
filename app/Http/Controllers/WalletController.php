@@ -42,4 +42,17 @@ class WalletController extends Controller
         // Redirect to payment gateway
         return app(PaymentController::class)->redirectToPaymentPage($request);
     }
+
+    public function adminIndex()
+    {
+        if (!auth()->user()->is_admin) {
+            abort(403, 'غير مصرح لك بالوصول لهذه الصفحة');
+        }
+
+        $transactions = WalletTransaction::with('user')
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.transactions.index', compact('transactions'));
+    }
 }
