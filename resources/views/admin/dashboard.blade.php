@@ -69,7 +69,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <h4>{{ number_format($stats['total_donated_amount'], 2) }} ر.س</h4>
+                                <h4>@currency($stats['total_donated_amount'])</h4>
                                 <p class="mb-0">إجمالي المبلغ المتبرع</p>
                             </div>
                             <div class="align-self-center">
@@ -87,7 +87,7 @@
                 <div class="card">
                     <div class="card-body text-center">
                         <h5>رصيد المحافظ الإجمالي</h5>
-                        <h3 class="text-success">{{ number_format($stats['total_wallet_balance'], 2) }} ر.س</h3>
+                        <h3 class="text-success">@currency($stats['total_wallet_balance'])</h3>
                     </div>
                 </div>
             </div>
@@ -140,9 +140,7 @@
                                                 </td>
                                                 <td>{{ \Illuminate\Support\Str::limit($donation->campaign->title, 30) }}
                                                 </td>
-                                                <td><span
-                                                        class="badge bg-success">{{ number_format($donation->amount, 2) }}
-                                                        ر.س</span></td>
+                                                <td><span class="badge bg-success">@currency($donation->amount)</span></td>
                                                 <td><small>{{ $donation->created_at->diffForHumans() }}</small></td>
                                             </tr>
                                         @endforeach
@@ -186,7 +184,7 @@
                                                     {{ $user->name }}
                                                 </td>
                                                 <td>{{ $user->mobile }}</td>
-                                                <td>{{ number_format($user->wallet_balance, 2) }} ر.س</td>
+                                                <td>@currency($user->wallet_balance)</td>
                                                 <td><small>{{ $user->created_at->diffForHumans() }}</small></td>
                                             </tr>
                                         @endforeach
@@ -221,8 +219,7 @@
                                     <div class="text-end">
                                         <span class="badge bg-primary">{{ $campaign->donations_count }} تبرع</span>
                                         <br>
-                                        <small class="text-success">{{ number_format($campaign->current_amount, 2) }}
-                                            ر.س</small>
+                                        <small class="text-success">@currency($campaign->current_amount)</small>
                                     </div>
                                 </div>
                             @endforeach
@@ -257,8 +254,7 @@
                                         </div>
                                     </div>
                                     <div class="text-end">
-                                        <span class="badge bg-success">{{ number_format($donor->total_donated, 2) }}
-                                            ر.س</span>
+                                        <span class="badge bg-success">@currency($donor->total_donated)</span>
                                     </div>
                                 </div>
                             @endforeach

@@ -96,7 +96,7 @@
                                                 class="text-muted d-block">{{ $donation->created_at->diffForHumans() }}</small>
                                         </div>
                                     </div>
-                                    <span class="badge bg-success">{{ number_format($donation->amount, 2) }} ر.س</span>
+                                    <span class="badge bg-success">@currency($donation->amount)</span>
                                 </div>
                             @endforeach
                         </div>
@@ -112,8 +112,8 @@
 
                         <div class="mb-3">
                             <div class="d-flex justify-content-between mb-2">
-                                <span class="fw-bold">{{ number_format($campaign->current_amount, 2) }} ر.س</span>
-                                <span class="text-muted">من {{ number_format($campaign->target_amount, 2) }} ر.س</span>
+                                <span class="fw-bold">@currency($campaign->current_amount)</span>
+                                <span class="text-muted">من @currency($campaign->target_amount)</span>
                             </div>
                             <div class="progress mb-2" style="height: 10px;">
                                 <div class="progress-bar bg-success" role="progressbar"
@@ -125,8 +125,7 @@
                             <div class="d-flex justify-content-between">
                                 <small class="text-success">{{ number_format($campaign->progress_percentage, 1) }}%
                                     مكتمل</small>
-                                <small class="text-muted">متبقي: {{ number_format($campaign->remaining_amount, 2) }}
-                                    ر.س</small>
+                                <small class="text-muted">متبقي: @currency($campaign->remaining_amount)</small>
                             </div>
                         </div>
 
@@ -174,7 +173,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <p>رصيد محفظتك الحالي: <strong>{{ number_format(auth()->user()->wallet_balance, 2) }} ر.س</strong></p>
+                        <p>رصيد محفظتك الحالي: <strong>@currency(auth()->user()->wallet_balance)</strong></p>
 
                         @if (auth()->user()->wallet_balance <= 0)
                             <div class="alert alert-warning">
@@ -191,11 +190,10 @@
                             <form id="donationForm">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="amount" class="form-label">مبلغ التبرع (ر.س)</label>
+                                    <label for="amount" class="form-label">مبلغ التبرع ({!! \App\Helpers\CurrencyHelper::getSymbol() !!})</label>
                                     <input type="number" class="form-control" id="amount" name="amount" min="1"
                                         max="{{ auth()->user()->wallet_balance }}" required>
-                                    <div class="form-text">الحد الأقصى: {{ number_format(auth()->user()->wallet_balance, 2) }}
-                                        ر.س</div>
+                                    <div class="form-text">الحد الأقصى: @currency(auth()->user()->wallet_balance)</div>
                                 </div>
 
                                 <div class="mb-3">

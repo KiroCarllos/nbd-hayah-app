@@ -40,8 +40,8 @@
 
                                 <div class="mb-3">
                                     <div class="d-flex justify-content-between mb-1">
-                                        <small>{{ number_format($campaign->current_amount, 0) }} ر.س</small>
-                                        <small>{{ number_format($campaign->target_amount, 0) }} ر.س</small>
+                                        <small>@currency($campaign->current_amount)</small>
+                                        <small>@currency($campaign->target_amount)</small>
                                     </div>
                                     <div class="progress">
                                         <div class="progress-bar bg-success" role="progressbar"
