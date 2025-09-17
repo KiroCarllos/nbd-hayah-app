@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Campaign;
 use App\Models\Donation;
+use App\Models\Slider;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -11,6 +12,9 @@ class HomeController extends Controller
 {
     public function index()
     {
+        // Get sliders
+        $sliders = Slider::active()->ordered()->get();
+
         // Get priority campaigns for slider
         $priorityCampaigns = Campaign::active()
             ->priority()
@@ -32,6 +36,6 @@ class HomeController extends Controller
             'total_donations' => Donation::completed()->sum('amount'),
             'completed_campaigns' => Campaign::whereColumn('current_amount', '>=', 'target_amount')->count(),
         ];
-        return view('home', compact('priorityCampaigns', 'campaigns', 'stats'));
+        return view('home', compact('sliders', 'priorityCampaigns', 'campaigns', 'stats'));
     }
 }

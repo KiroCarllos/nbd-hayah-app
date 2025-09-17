@@ -3,22 +3,102 @@
 @section('title', 'الرئيسية - نبض الحياة')
 
 @section('content')
-    <div class="container">
-        <!-- Hero Section -->
-        <div class="row mb-5">
-            <div class="col-12">
-                <div class="bg-primary text-white rounded p-5 text-center">
-                    <h1 class="display-4 mb-3">مرحباً بك في نبض الحياة</h1>
-                    <p class="lead">منصة التبرعات الخيرية لمساعدة المحتاجين وإحداث فرق في المجتمع</p>
-                    @guest
-                        <a href="{{ route('register') }}" class="btn btn-light btn-lg mt-3">
-                            <i class="bi bi-person-plus me-2"></i>
-                            انضم إلينا الآن
-                        </a>
-                    @endguest
+    <!-- Main Slider -->
+    @if ($sliders->count() > 0)
+        <div id="mainSlider" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="5000">
+            <style>
+                .carousel-item {
+                    transition: transform 0.8s ease-in-out;
+                }
+
+                .carousel-caption {
+                    bottom: 20%;
+                }
+
+                .carousel-control-prev,
+                .carousel-control-next {
+                    width: 5%;
+                }
+
+                .carousel-indicators button {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    margin: 0 5px;
+                }
+            </style>
+            <div class="carousel-indicators">
+                @foreach ($sliders as $index => $slider)
+                    <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="{{ $index }}"
+                        class="{{ $index === 0 ? 'active' : '' }}" aria-current="true"
+                        aria-label="Slide {{ $index + 1 }}"></button>
+                @endforeach
+            </div>
+            <div class="carousel-inner">
+                @foreach ($sliders as $index => $slider)
+                    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                        <div class="position-relative">
+                            @if (file_exists(public_path('storage/' . $slider->image)))
+                                <img src="{{ asset('storage/' . $slider->image) }}" class="d-block w-100"
+                                    alt="{{ $slider->title }}" style="height: 500px; object-fit: cover;">
+                            @else
+                                <!-- Fallback gradient background -->
+                                <div class="d-block w-100"
+                                    style="height: 500px; background: linear-gradient(135deg,
+                                    @if ($index % 3 == 0) #667eea 0%, #764ba2 100%
+                                    @elseif($index % 3 == 1) #f093fb 0%, #f5576c 100%
+                                    @else #4facfe 0%, #00f2fe 100% @endif
+                                    ); display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-heart-fill text-white" style="font-size: 8rem; opacity: 0.3;"></i>
+                                </div>
+                            @endif
+                            <div class="carousel-caption d-none d-md-block">
+                                <div class="bg-dark bg-opacity-50 p-4 rounded">
+                                    <h2 class="display-5 fw-bold">{{ $slider->title }}</h2>
+                                    @if ($slider->description)
+                                        <p class="lead">{{ $slider->description }}</p>
+                                    @endif
+                                    @if ($slider->button_text && $slider->button_link)
+                                        <a href="{{ $slider->button_link }}" class="btn btn-primary btn-lg">
+                                            {{ $slider->button_text }}
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#mainSlider" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#mainSlider" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    @else
+        <!-- Default Hero Section if no sliders -->
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12">
+                    <div class="bg-primary text-white rounded p-5 text-center">
+                        <h1 class="display-4 mb-3">مرحباً بك في نبض الحياة</h1>
+                        <p class="lead">منصة التبرعات الخيرية لمساعدة المحتاجين وإحداث فرق في المجتمع</p>
+                        @guest
+                            <a href="{{ route('register') }}" class="btn btn-light btn-lg mt-3">
+                                <i class="bi bi-person-plus me-2"></i>
+                                انضم إلينا الآن
+                            </a>
+                        @endguest
+                    </div>
                 </div>
             </div>
         </div>
+    @endif
+
+    <div class="container">
 
         <!-- Priority Campaigns Slider -->
         @if ($priorityCampaigns->count() > 0)
@@ -147,8 +227,8 @@
                                             <div class="progress">
                                                 <div class="progress-bar bg-success" role="progressbar"
                                                     style="width: {{ $campaign->progress_percentage }}%"
-                                                    aria-valuenow="{{ $campaign->progress_percentage }}" aria-valuemin="0"
-                                                    aria-valuemax="100">
+                                                    aria-valuenow="{{ $campaign->progress_percentage }}"
+                                                    aria-valuemin="0" aria-valuemax="100">
                                                 </div>
                                             </div>
                                             <small
@@ -249,6 +329,109 @@
                         </div>
                         <h5>3. تبرع</h5>
                         <p>اختر الحملة التي تريد دعمها وتبرع بسهولة</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile App Download Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="text-white rounded-4 p-5"
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" id="app-download">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <h2 class="display-6 fw-bold mb-3">حمل التطبيق الآن</h2>
+                            <p class="lead mb-4">استمتع بتجربة أفضل مع تطبيق نبض الحياة على هاتفك المحمول. تبرع بسهولة
+                                وتابع حملاتك المفضلة في أي وقت ومكان.</p>
+                            <div class="d-flex flex-wrap gap-3">
+                                <a href="#" class="btn btn-light btn-lg d-flex align-items-center">
+                                    <i class="bi bi-apple me-2" style="font-size: 1.5rem;"></i>
+                                    <div class="text-start">
+                                        <small class="d-block">متوفر على</small>
+                                        <strong>App Store</strong>
+                                    </div>
+                                </a>
+                                <a href="#" class="btn btn-light btn-lg d-flex align-items-center">
+                                    <i class="bi bi-google-play me-2" style="font-size: 1.5rem;"></i>
+                                    <div class="text-start">
+                                        <small class="d-block">متوفر على</small>
+                                        <strong>Google Play</strong>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 text-center">
+                            <div class="position-relative">
+                                <i class="bi bi-phone" style="font-size: 12rem; opacity: 0.3;"></i>
+                                <div class="position-absolute top-50 start-50 translate-middle">
+                                    <i class="bi bi-heart-fill text-danger" style="font-size: 3rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="text-center mb-5">لماذا تختار نبض الحياة؟</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                    style="width: 80px; height: 80px;">
+                                    <i class="bi bi-shield-check text-primary" style="font-size: 2rem;"></i>
+                                </div>
+                                <h5 class="card-title">آمان وموثوقية</h5>
+                                <p class="card-text text-muted">نضمن وصول تبرعاتك للمستحقين بأمان تام وشفافية كاملة</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                    style="width: 80px; height: 80px;">
+                                    <i class="bi bi-lightning-charge text-success" style="font-size: 2rem;"></i>
+                                </div>
+                                <h5 class="card-title">سهولة الاستخدام</h5>
+                                <p class="card-text text-muted">واجهة بسيطة وسهلة تمكنك من التبرع في خطوات قليلة</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                    style="width: 80px; height: 80px;">
+                                    <i class="bi bi-graph-up text-info" style="font-size: 2rem;"></i>
+                                </div>
+                                <h5 class="card-title">متابعة مستمرة</h5>
+                                <p class="card-text text-muted">تابع تقدم الحملات وتأثير تبرعاتك بشكل مستمر</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="bg-light rounded-4 p-5 text-center">
+                    <h3 class="mb-3">ابق على اطلاع</h3>
+                    <p class="text-muted mb-4">اشترك في نشرتنا الإخبارية لتصلك آخر الحملات والأخبار</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="أدخل بريدك الإلكتروني">
+                                <button class="btn btn-primary" type="button">اشتراك</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
