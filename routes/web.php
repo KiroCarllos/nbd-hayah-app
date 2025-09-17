@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminCampaignController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\DonationController;
@@ -94,6 +95,16 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 
     // Transactions management
     Route::get('transactions', [WalletController::class, 'adminIndex'])->name('admin.transactions.index');
+
+    // Slider management
+    Route::resource('sliders', SliderController::class)->names([
+        'index' => 'admin.sliders.index',
+        'create' => 'admin.sliders.create',
+        'store' => 'admin.sliders.store',
+        'edit' => 'admin.sliders.edit',
+        'update' => 'admin.sliders.update',
+        'destroy' => 'admin.sliders.destroy',
+    ]);
 
     // Reports
     Route::get('reports', function () {
