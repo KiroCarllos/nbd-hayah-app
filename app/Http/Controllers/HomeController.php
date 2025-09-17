@@ -6,7 +6,6 @@ use App\Models\Campaign;
 use App\Models\Donation;
 use App\Models\Slider;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -30,12 +29,28 @@ class HomeController extends Controller
             ->paginate(12);
 
         // Get statistics
+        $totalCampaigns = Campaign::active()->count();
+        $totalUsers = User::whereHas('donations')->count();
+        $totalDonations = Donation::count();
+        $totalAmount = Donation::completed()->sum('amount');
+
         $stats = [
-            'total_campaigns' => Campaign::active()->count(),
-            'total_donors' => User::whereHas('donations')->count(),
-            'total_donations' => Donation::completed()->sum('amount'),
+            'total_campaigns' => $totalCampaigns,
+            'total_donors' => $totalUsers,
+            'total_donations' => $totalDonations,
+            'total_amount' => $totalAmount,
             'completed_campaigns' => Campaign::whereColumn('current_amount', '>=', 'target_amount')->count(),
         ];
-        return view('home', compact('sliders', 'priorityCampaigns', 'campaigns', 'stats'));
+
+        return view('home', compact(
+            'sliders',
+            'priorityCampaigns',
+            'campaigns',
+            'stats',
+            'totalCampaigns',
+            'totalUsers',
+            'totalDonations',
+            'totalAmount'
+        ));
     }
 }

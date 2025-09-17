@@ -3,7 +3,7 @@
 @section('title', 'تسجيل الدخول - نبض الحياة')
 
 @section('content')
-    <div class="min-vh-100 d-flex align-items-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="min-vh-100 d-flex align-items-center bg-gradient-mixed">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-5 col-md-7">
@@ -11,9 +11,8 @@
                         <div class="card-body p-5">
                             <!-- Logo and Title -->
                             <div class="text-center mb-4">
-                                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                                    style="width: 80px; height: 80px;">
-                                    <i class="bi bi-heart-fill text-primary" style="font-size: 2.5rem;"></i>
+                                <div class="mb-3">
+                                    <img src="{{ asset('logo-text-bottom.png') }}" alt="نبض الحياة" class="logo-large">
                                 </div>
                                 <h2 class="fw-bold text-dark">مرحباً بعودتك</h2>
                                 <p class="text-muted">سجل دخولك لمتابعة رحلة العطاء</p>
