@@ -67,7 +67,7 @@
         .favorite-btn {
             position: absolute;
             top: 10px;
-            left: 10px;
+            right: 0px;
             background: rgba(255, 255, 255, 0.9);
             border: none;
             border-radius: 50%;

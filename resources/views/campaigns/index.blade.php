@@ -3,7 +3,7 @@
 @section('title', 'جميع الحملات - نبض الحياة')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-5">
         <div class="row mb-4">
             <div class="col-12">
                 <h1>جميع الحملات</h1>

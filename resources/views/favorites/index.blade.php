@@ -19,7 +19,7 @@
                                 <div class="card h-100 shadow-sm">
                                     <!-- Favorite Button -->
                                     <div class="position-absolute top-0 end-0 m-2" style="z-index: 10;">
-                                        <button class="btn btn-sm btn-danger favorite-btn"
+                                        <button class="btn btn-sm btn-danger favorite-btn active"
                                             data-campaign-id="{{ $campaign->id }}" data-is-favorited="true">
                                             <i class="bi bi-heart-fill"></i>
                                         </button>
