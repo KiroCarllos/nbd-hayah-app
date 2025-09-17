@@ -61,6 +61,11 @@ class Campaign extends Model
         return $this->belongsToMany(User::class, 'user_favorite_campaigns');
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(UserFavoriteCampaign::class);
+    }
+
     // Accessors & Mutators
     public function getProgressPercentageAttribute()
     {
@@ -82,5 +87,17 @@ class Campaign extends Model
     public function scopePriority($query)
     {
         return $query->where('is_priority', true);
+    }
+
+    // Helper methods
+    public function isFavoritedBy($userId)
+    {
+        if (!$userId) {
+            return false;
+        }
+
+        return UserFavoriteCampaign::where('user_id', $userId)
+            ->where('campaign_id', $this->id)
+            ->exists();
     }
 }

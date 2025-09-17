@@ -118,6 +118,7 @@
                                         ({{ number_format(auth()->user()->wallet_balance, 2) }} ر.س)
                                     </a></li>
                                 <li><a class="dropdown-item" href="{{ route('donations.index') }}">تبرعاتي</a></li>
+                                <li><a class="dropdown-item" href="{{ route('favorites.index') }}">المفضلة</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

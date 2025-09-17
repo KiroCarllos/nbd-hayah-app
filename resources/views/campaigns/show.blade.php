@@ -48,9 +48,10 @@
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <h1 class="card-title">{{ $campaign->title }}</h1>
                             @auth
-                                <button class="favorite-btn position-static"
+                                <button
+                                    class="favorite-btn position-static {{ $campaign->isFavoritedBy(auth()->id()) ? 'active' : '' }}"
                                     onclick="toggleFavorite({{ $campaign->id }}, this)">
-                                    <i class="bi bi-heart"></i>
+                                    <i class="bi bi-heart{{ $campaign->isFavoritedBy(auth()->id()) ? '-fill' : '' }}"></i>
                                 </button>
                             @endauth
                         </div>
@@ -226,6 +227,9 @@
     @push('scripts')
         <script>
             function toggleFavorite(campaignId, button) {
+                // Disable button during request
+                button.disabled = true;
+
                 fetch(`/campaigns/${campaignId}/favorite`, {
                         method: 'POST',
                         headers: {
@@ -235,26 +239,52 @@
                     })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.error) {
-                            alert(data.error);
-                            return;
-                        }
+                        if (data.success) {
+                            const icon = button.querySelector('i');
+                            if (data.is_favorited) {
+                                icon.classList.remove('bi-heart');
+                                icon.classList.add('bi-heart-fill');
+                                button.classList.add('active');
+                            } else {
+                                icon.classList.remove('bi-heart-fill');
+                                icon.classList.add('bi-heart');
+                                button.classList.remove('active');
+                            }
 
-                        const icon = button.querySelector('i');
-                        if (data.is_favorite) {
-                            icon.classList.remove('bi-heart');
-                            icon.classList.add('bi-heart-fill');
-                            button.classList.add('active');
+                            // Show success message
+                            showAlert(data.message, 'success');
                         } else {
-                            icon.classList.remove('bi-heart-fill');
-                            icon.classList.add('bi-heart');
-                            button.classList.remove('active');
+                            showAlert('حدث خطأ، يرجى المحاولة مرة أخرى', 'error');
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('حدث خطأ، يرجى المحاولة مرة أخرى');
+                        showAlert('حدث خطأ، يرجى المحاولة مرة أخرى', 'error');
+                    })
+                    .finally(() => {
+                        button.disabled = false;
                     });
+            }
+
+            function showAlert(message, type) {
+                const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+                const alertHtml = `
+                    <div class="alert ${alertClass} alert-dismissible fade show position-fixed"
+                         style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;" role="alert">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML('beforeend', alertHtml);
+
+                // Auto dismiss after 3 seconds
+                setTimeout(() => {
+                    const alert = document.querySelector('.alert');
+                    if (alert) {
+                        alert.remove();
+                    }
+                }, 3000);
             }
 
             @auth

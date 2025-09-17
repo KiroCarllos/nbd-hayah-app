@@ -64,4 +64,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Campaign::class, 'user_favorite_campaigns');
     }
+
+    // Alias for favorites
+    public function favorites()
+    {
+        return $this->hasMany(UserFavoriteCampaign::class);
+    }
 }
