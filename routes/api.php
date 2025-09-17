@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CampaignController;
 use App\Http\Controllers\Api\DonationController;
+use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -64,4 +65,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/wallet', [WalletController::class, 'index']);
     Route::post('/wallet/charge', [WalletController::class, 'charge']);
     Route::get('/wallet/transactions', [WalletController::class, 'transactions']);
+
+    // Reports routes
+    Route::get('/reports/dashboard', [ReportsController::class, 'dashboard']);
+    Route::get('/reports/top-campaigns', [ReportsController::class, 'topCampaigns']);
+    Route::get('/reports/top-donors', [ReportsController::class, 'topDonors']);
+    Route::get('/reports/campaign/{id}', [ReportsController::class, 'campaignReport']);
+    Route::get('/reports/user-stats', [ReportsController::class, 'userStats']);
 });

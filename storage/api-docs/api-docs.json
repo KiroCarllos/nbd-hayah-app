@@ -858,6 +858,451 @@
                 ]
             }
         },
+        "/reports/dashboard": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "إحصائيات لوحة التحكم",
+                "operationId": "8465e85cec5409c50024ff7a4a754d2d",
+                "responses": {
+                    "200": {
+                        "description": "إحصائيات شاملة",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "overview": {
+                                                    "properties": {
+                                                        "total_campaigns": {
+                                                            "type": "integer",
+                                                            "example": 150
+                                                        },
+                                                        "active_campaigns": {
+                                                            "type": "integer",
+                                                            "example": 120
+                                                        },
+                                                        "total_users": {
+                                                            "type": "integer",
+                                                            "example": 500
+                                                        },
+                                                        "total_donations": {
+                                                            "type": "integer",
+                                                            "example": 1200
+                                                        },
+                                                        "total_amount": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 250000
+                                                        },
+                                                        "total_wallet_balance": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 50000
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "monthly_donations": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "month": {
+                                                                "type": "string",
+                                                                "example": "2023-01"
+                                                            },
+                                                            "count": {
+                                                                "type": "integer",
+                                                                "example": 45
+                                                            },
+                                                            "total": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 12500
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "campaign_stats": {
+                                                    "properties": {
+                                                        "active": {
+                                                            "type": "integer",
+                                                            "example": 120
+                                                        },
+                                                        "inactive": {
+                                                            "type": "integer",
+                                                            "example": 30
+                                                        },
+                                                        "priority": {
+                                                            "type": "integer",
+                                                            "example": 15
+                                                        },
+                                                        "completed": {
+                                                            "type": "integer",
+                                                            "example": 85
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/top-campaigns": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "أفضل الحملات",
+                "operationId": "410fb55de1d7945633825b0a7120970e",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "عدد الحملات",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "أفضل الحملات",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "مساعدة الأسر المحتاجة"
+                                                    },
+                                                    "current_amount": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 15000
+                                                    },
+                                                    "target_amount": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 50000
+                                                    },
+                                                    "donations_count": {
+                                                        "type": "integer",
+                                                        "example": 45
+                                                    },
+                                                    "progress_percentage": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 30
+                                                    },
+                                                    "creator": {
+                                                        "properties": {
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "أحمد محمد"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/top-donors": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "أفضل المتبرعين",
+                "operationId": "acdfc9731d12f365784969de9b589671",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "عدد المتبرعين",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "أفضل المتبرعين",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "أحمد محمد"
+                                                    },
+                                                    "donations_count": {
+                                                        "type": "integer",
+                                                        "example": 25
+                                                    },
+                                                    "total_donated": {
+                                                        "type": "number",
+                                                        "format": "float",
+                                                        "example": 5000
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/campaign/{id}": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "تقرير تفصيلي لحملة",
+                "operationId": "a673baa6de5e9ab4b5a114f03bf2a565",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "معرف الحملة",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تقرير الحملة",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "campaign": {
+                                                    "type": "object"
+                                                },
+                                                "donations_timeline": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "date": {
+                                                                "type": "string",
+                                                                "example": "2023-01-01"
+                                                            },
+                                                            "count": {
+                                                                "type": "integer",
+                                                                "example": 5
+                                                            },
+                                                            "total": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 1500
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "top_donors": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "أحمد محمد"
+                                                            },
+                                                            "donations_count": {
+                                                                "type": "integer",
+                                                                "example": 3
+                                                            },
+                                                            "total_donated": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 750
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/user-stats": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "إحصائيات المستخدم الحالي",
+                "operationId": "ca126237f1f3f48a8a5efffa39125594",
+                "responses": {
+                    "200": {
+                        "description": "إحصائيات المستخدم",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "total_donated": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 1500
+                                                },
+                                                "donations_count": {
+                                                    "type": "integer",
+                                                    "example": 12
+                                                },
+                                                "favorite_campaigns_count": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "created_campaigns_count": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "wallet_balance": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 250
+                                                },
+                                                "monthly_donations": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "month": {
+                                                                "type": "string",
+                                                                "example": "2023-01"
+                                                            },
+                                                            "count": {
+                                                                "type": "integer",
+                                                                "example": 3
+                                                            },
+                                                            "total": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 450
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/profile": {
             "get": {
                 "tags": [
@@ -1406,6 +1851,10 @@
         {
             "name": "Donations",
             "description": "Donations"
+        },
+        {
+            "name": "Reports",
+            "description": "Reports"
         },
         {
             "name": "User",
