@@ -25,7 +25,6 @@ class ReportsController extends Controller
 
     public function index()
     {
-        // Basic statistics
         $totalCampaigns = Campaign::count();
         $activeCampaigns = Campaign::active()->count();
         $totalUsers = User::count();
@@ -33,7 +32,6 @@ class ReportsController extends Controller
         $totalAmount = Donation::completed()->sum('amount');
         $totalWalletBalance = User::sum('wallet_balance');
 
-        // Monthly donations for the last 12 months
         $monthlyDonations = Donation::completed()
             ->select(
                 DB::raw('YEAR(created_at) as year'),
@@ -47,14 +45,12 @@ class ReportsController extends Controller
             ->orderBy('month', 'asc')
             ->get();
 
-        // Top campaigns by donations
         $topCampaigns = Campaign::withCount('donations')
             ->with('creator')
             ->orderBy('donations_count', 'desc')
             ->limit(10)
             ->get();
 
-        // Top donors
         $topDonors = User::select('users.id', 'users.name', 'users.email') // الأعمدة المطلوبة فقط
             ->selectRaw('COALESCE(COUNT(donations.id), 0) as donations_count')
             ->selectRaw('COALESCE(SUM(donations.amount), 0) as total_donated')
@@ -68,7 +64,6 @@ class ReportsController extends Controller
             ->get();
 
 
-        // Daily donations for the last 30 days
         $dailyDonations = Donation::completed()
             ->select(
                 DB::raw('DATE(created_at) as date'),
@@ -80,7 +75,6 @@ class ReportsController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
-        // Campaign status distribution
         $campaignStats = [
             'active' => Campaign::active()->count(),
             'inactive' => Campaign::where('is_active', false)->count(),
@@ -88,7 +82,6 @@ class ReportsController extends Controller
             'completed' => Campaign::whereRaw('current_amount >= target_amount')->count(),
         ];
 
-        // Wallet transactions statistics
         $walletTransactions = collect([
             // All donations (since they use wallet balance)
             (object) [
@@ -146,7 +139,6 @@ class ReportsController extends Controller
     {
         $campaign = Campaign::with(['creator', 'donations.user'])->findOrFail($id);
 
-        // Campaign donations over time
         $campaignDonations = $campaign->donations()
             ->completed()
             ->select(
@@ -158,7 +150,6 @@ class ReportsController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
-        // Top donors for this campaign
         $campaignTopDonors = User::select('users.*')
             ->selectRaw('COUNT(donations.id) as donations_count')
             ->selectRaw('SUM(donations.amount) as total_donated')
@@ -182,7 +173,6 @@ class ReportsController extends Controller
     {
         $user = User::with(['donations.campaign'])->findOrFail($id);
 
-        // User donations over time
         $userDonations = $user->donations()
             ->completed()
             ->select(
@@ -194,7 +184,6 @@ class ReportsController extends Controller
             ->orderBy('date', 'asc')
             ->get();
 
-        // User's favorite campaigns
         $favoriteCampaigns = $user->favoriteCampaigns()
             ->withCount('donations')
             ->get();
@@ -371,7 +360,6 @@ class ReportsController extends Controller
                     'تاريخ التسجيل'
                 ]);
 
-                // Data rows
                 foreach ($users as $user) {
                     fputcsv($file, [
                         $user->id,
