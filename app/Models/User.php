@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'mobile',
+        'profile_image',
+        'wallet_balance',
+        'is_admin',
     ];
 
     /**
@@ -41,5 +45,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'wallet_balance' => 'decimal:2',
+        'is_admin' => 'boolean',
     ];
+
+    // Relationships
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
+    public function walletTransactions()
+    {
+        return $this->hasMany(WalletTransaction::class);
+    }
+
+    public function favoriteCampaigns()
+    {
+        return $this->belongsToMany(Campaign::class, 'user_favorite_campaigns');
+    }
 }
