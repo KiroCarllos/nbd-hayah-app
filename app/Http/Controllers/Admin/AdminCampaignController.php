@@ -81,6 +81,7 @@ class AdminCampaignController extends Controller
             'is_active' => $request->boolean('is_active', true),
             'is_priority' => $request->boolean('is_priority', false),
             'creator_id' => $request->creator_id,
+            'created_by' => auth()->id(),
             'images' => $images,
         ]);
 
