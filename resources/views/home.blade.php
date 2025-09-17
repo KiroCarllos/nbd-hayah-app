@@ -50,10 +50,8 @@
 
                                                     <div class="mb-3">
                                                         <div class="d-flex justify-content-between mb-1">
-                                                            <span>تم جمع: {{ number_format($campaign->current_amount, 2) }}
-                                                                ر.س</span>
-                                                            <span>الهدف: {{ number_format($campaign->target_amount, 2) }}
-                                                                ر.س</span>
+                                                            <span>تم جمع: @currency($campaign->current_amount)</span>
+                                                            <span>الهدف: @currency($campaign->target_amount)</span>
                                                         </div>
                                                         <div class="progress">
                                                             <div class="progress-bar bg-success" role="progressbar"
@@ -143,8 +141,8 @@
 
                                         <div class="mb-3">
                                             <div class="d-flex justify-content-between mb-1">
-                                                <small>{{ number_format($campaign->current_amount, 0) }} ر.س</small>
-                                                <small>{{ number_format($campaign->target_amount, 0) }} ر.س</small>
+                                                <small>@currency($campaign->current_amount)</small>
+                                                <small>@currency($campaign->target_amount)</small>
                                             </div>
                                             <div class="progress">
                                                 <div class="progress-bar bg-success" role="progressbar"
@@ -207,7 +205,7 @@
                 <div class="card text-center">
                     <div class="card-body">
                         <i class="bi bi-currency-dollar text-warning display-4 mb-3"></i>
-                        <h5 class="card-title">{{ number_format($stats['total_donations'], 0) }} ر.س</h5>
+                        <h5 class="card-title">@currency($stats['total_donations'])</h5>
                         <p class="card-text">إجمالي التبرعات</p>
                     </div>
                 </div>
