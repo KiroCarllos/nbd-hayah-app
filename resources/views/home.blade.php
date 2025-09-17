@@ -404,60 +404,333 @@
 
     <div class="container">
 
-        <!-- Priority Campaigns Slider -->
+        <!-- Priority Campaigns Slider - Enhanced Auto Play Cards -->
         @if ($priorityCampaigns->count() > 0)
             <div class="row mb-5">
                 <div class="col-12">
-                    <h2 class="mb-4">الحملات المميزة</h2>
-                    <div id="priorityCampaignsCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0">
+                            <i class="bi bi-star-fill text-warning me-2"></i>
+                            الحملات المميزة
+                        </h2>
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-primary me-2">{{ $priorityCampaigns->count() }} حملة</span>
+{{--                            <div class="btn-group" role="group">--}}
+{{--                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="pauseCarousel()">--}}
+{{--                                    <i class="bi bi-pause-fill" id="pauseIcon"></i>--}}
+{{--                                </button>--}}
+{{--                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="playCarousel()">--}}
+{{--                                    <i class="bi bi-play-fill" id="playIcon"></i>--}}
+{{--                                </button>--}}
+{{--                            </div>--}}
+                        </div>
+                    </div>
+
+                    <div id="priorityCampaignsCarousel" class="carousel slide" data-bs-ride="carousel"
+                        data-bs-interval="4000">
+                        <style>
+                            /* Enhanced Priority Campaigns Slider Styles */
+                            #priorityCampaignsCarousel {
+                                position: relative;
+                                overflow: hidden;
+                                border-radius: 20px;
+                                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+                                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                                padding: 20px;
+                            }
+
+                            #priorityCampaignsCarousel .carousel-item {
+                                transition: transform 0.8s ease-in-out;
+                                padding: 10px;
+                            }
+
+                            #priorityCampaignsCarousel .card {
+                                border: none;
+                                border-radius: 20px;
+                                overflow: hidden;
+                                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+                                transition: all 0.3s ease;
+                                background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+                                position: relative;
+                            }
+
+                            #priorityCampaignsCarousel .card:hover {
+                                transform: translateY(-5px);
+                                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+                            }
+
+                            #priorityCampaignsCarousel .card::before {
+                                content: '';
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                right: 0;
+                                height: 4px;
+                                background: linear-gradient(90deg, #ff4d57 0%, #31a354 50%, #007bff 100%);
+                                z-index: 1;
+                            }
+
+                            #priorityCampaignsCarousel .card-img-container {
+                                position: relative;
+                                overflow: hidden;
+                                border-radius: 15px;
+                                height: 250px;
+                            }
+
+                            #priorityCampaignsCarousel .card-img-container img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: contain;
+                                transition: transform 0.3s ease;
+                            }
+
+                            #priorityCampaignsCarousel .card:hover .card-img-container img {
+                                transform: scale(1.05);
+                            }
+
+                            #priorityCampaignsCarousel .card-img-overlay {
+                                position: absolute;
+                                top: 10px;
+                                right: 10px;
+                                color: white;
+                                padding: 5px 10px;
+                                border-radius: 15px;
+                                font-size: 0.8rem;
+                                font-weight: 600;
+                                z-index: 2;
+                            }
+
+                            #priorityCampaignsCarousel .card-body {
+                                padding: 1.5rem;
+                                position: relative;
+                            }
+
+                            #priorityCampaignsCarousel .card-title {
+                                font-size: 1.3rem;
+                                font-weight: 700;
+                                color: #2c3e50;
+                                margin-bottom: 0.8rem;
+                                line-height: 1.4;
+                            }
+
+                            #priorityCampaignsCarousel .card-text {
+                                color: #6c757d;
+                                font-size: 0.95rem;
+                                line-height: 1.6;
+                                margin-bottom: 1.2rem;
+                            }
+
+                            #priorityCampaignsCarousel .progress {
+                                height: 8px;
+                                border-radius: 10px;
+                                background: #e9ecef;
+                                overflow: hidden;
+                                box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+                            }
+
+                            #priorityCampaignsCarousel .progress-bar {
+                                background: linear-gradient(90deg, #31a354 0%, #28a745 100%);
+                                border-radius: 10px;
+                                transition: width 0.6s ease;
+                                position: relative;
+                            }
+
+                            #priorityCampaignsCarousel .progress-bar::after {
+                                content: '';
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                right: 0;
+                                bottom: 0;
+                                background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+                                animation: shimmer 2s infinite;
+                            }
+
+                            @keyframes shimmer {
+                                0% {
+                                    transform: translateX(-100%);
+                                }
+
+                                100% {
+                                    transform: translateX(100%);
+                                }
+                            }
+
+                            #priorityCampaignsCarousel .btn-primary {
+                                background: linear-gradient(135deg, #ff4d57 0%, #e63946 100%);
+                                border: none;
+                                border-radius: 25px;
+                                padding: 10px 20px;
+                                font-weight: 600;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 4px 15px rgba(255, 77, 87, 0.3);
+                            }
+
+                            #priorityCampaignsCarousel .btn-primary:hover {
+                                transform: translateY(-2px);
+                                box-shadow: 0 8px 25px rgba(255, 77, 87, 0.4);
+                                background: linear-gradient(135deg, #e63946 0%, #dc2626 100%);
+                            }
+
+                            #priorityCampaignsCarousel .carousel-control-prev,
+                            #priorityCampaignsCarousel .carousel-control-next {
+                                width: 50px;
+                                height: 50px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                background: rgba(255, 255, 255, 0.9);
+                                border-radius: 50%;
+                                border: 2px solid #e9ecef;
+                                opacity: 0.8;
+                                transition: all 0.3s ease;
+                            }
+
+                            #priorityCampaignsCarousel .carousel-control-prev {
+                                left:-0px;
+                            }
+
+                            #priorityCampaignsCarousel .carousel-control-next {
+                                right: 0px;
+                            }
+
+                            #priorityCampaignsCarousel .carousel-control-prev:hover,
+                            #priorityCampaignsCarousel .carousel-control-next:hover {
+                                opacity: 1;
+                                background: #ffffff;
+                                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                                transform: translateY(-50%) scale(1.1);
+                            }
+
+                            #priorityCampaignsCarousel .carousel-control-prev-icon,
+                            #priorityCampaignsCarousel .carousel-control-next-icon {
+                                width: 20px;
+                                height: 20px;
+                                background-size: 100% 100%;
+                                filter: invert(1);
+                            }
+
+                            /* Responsive adjustments */
+                            @media (max-width: 768px) {
+                                #priorityCampaignsCarousel {
+                                    padding: 15px;
+                                    border-radius: 15px;
+                                }
+
+                                #priorityCampaignsCarousel .card-img-container {
+                                    height: 200px;
+                                }
+
+                                #priorityCampaignsCarousel .card-body {
+                                    padding: 1rem;
+                                }
+
+                                #priorityCampaignsCarousel .carousel-control-prev,
+                                #priorityCampaignsCarousel .carousel-control-next {
+                                    width: 40px;
+                                    height: 40px;
+                                }
+
+                                #priorityCampaignsCarousel .carousel-control-prev {
+                                    left: -20px;
+                                }
+
+                                #priorityCampaignsCarousel .carousel-control-next {
+                                    right: -20px;
+                                }
+                            }
+                        </style>
                         <div class="carousel-inner">
                             @foreach ($priorityCampaigns as $index => $campaign)
                                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                                     <div class="card">
-                                        <div class="row g-0">
-                                            <div class="col-md-4">
-                                                @if ($campaign->images && count($campaign->images) > 0)
-                                                    <img src="{{ asset('storage/' . $campaign->images[0]) }}"
-                                                        class="img-fluid rounded-start h-100" alt="{{ $campaign->title }}"
-                                                        style="object-fit: cover;">
-                                                @else
-                                                    <div
-                                                        class="bg-primary d-flex align-items-center justify-content-center h-100 rounded-start">
-                                                        <i class="bi bi-heart-fill text-white" style="font-size: 4rem;"></i>
-                                                    </div>
-                                                @endif
+                                        <!-- Enhanced Card Image Container -->
+                                        <div class="card-img-container">
+                                            @if ($campaign->images && count($campaign->images) > 0)
+                                                <img src="{{ asset('storage/' . $campaign->images[0]) }}"
+                                                    alt="{{ $campaign->title }}"
+                                                    loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+                                            @else
+                                                <div class="d-flex align-items-center justify-content-center h-100"
+                                                    style="background: linear-gradient(135deg,
+                                                     @if ($index % 3 == 0) #ff4d57 0%, #31a354 100%
+                                                     @elseif($index % 3 == 1) #31a354 0%, #007bff 100%
+                                                     @else #007bff 0%, #ff4d57 100% @endif
+                                                     );">
+                                                    <i class="bi bi-heart-fill text-white"
+                                                        style="font-size: 4rem; opacity: 0.8;"></i>
+                                                </div>
+                                            @endif
+
+                                            <!-- Priority Badge -->
+                                            <div class="card-img-overlay">
+                                                <i class="bi bi-star-fill me-1"></i>مميزة
                                             </div>
-                                            <div class="col-md-8">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{ $campaign->title }}</h5>
-                                                    <p class="card-text">{{ Str::limit($campaign->description, 150) }}</p>
+                                        </div>
 
-                                                    <div class="mb-3">
-                                                        <div class="d-flex justify-content-between mb-1">
-                                                            <span>تم جمع: @currency($campaign->current_amount)</span>
-                                                            <span>الهدف: @currency($campaign->target_amount)</span>
-                                                        </div>
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-success" role="progressbar"
-                                                                style="width: {{ $campaign->progress_percentage }}%"
-                                                                aria-valuenow="{{ $campaign->progress_percentage }}"
-                                                                aria-valuemin="0" aria-valuemax="100">
-                                                                {{ number_format($campaign->progress_percentage, 1) }}%
-                                                            </div>
-                                                        </div>
+                                        <!-- Enhanced Card Body -->
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ $campaign->title }}</h5>
+                                            <p class="card-text">{{ Str::limit($campaign->description, 120) }}</p>
+
+                                            <!-- Enhanced Progress Section -->
+                                            <div class="mb-3">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-currency-exchange text-success me-1"></i>
+                                                        <span class="fw-bold text-success">@currency($campaign->current_amount)</span>
                                                     </div>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-bullseye text-primary me-1"></i>
+                                                        <span class="text-muted">@currency($campaign->target_amount)</span>
+                                                    </div>
+                                                </div>
 
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <a href="{{ route('campaigns.show', $campaign) }}"
-                                                            class="btn btn-primary">
-                                                            <i class="bi bi-eye me-2"></i>
-                                                            عرض التفاصيل
-                                                        </a>
-                                                        <small class="text-muted">
-                                                            <i class="bi bi-person me-1"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="width: {{ $campaign->progress_percentage }}%"
+                                                        aria-valuenow="{{ $campaign->progress_percentage }}"
+                                                        aria-valuemin="0" aria-valuemax="100">
+                                                        <span
+                                                            class="fw-bold">{{ number_format($campaign->progress_percentage, 1) }}%</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex justify-content-between mt-1">
+                                                    <small class="text-muted">
+                                                        <i class="bi bi-people me-1"></i>
+                                                        {{ $campaign->donations_count ?? 0 }} متبرع
+                                                    </small>
+                                                    <small class="text-muted">
+                                                        <i class="bi bi-clock me-1"></i>
+                                                        {{ $campaign->created_at->diffForHumans() }}
+                                                    </small>
+                                                </div>
+                                            </div>
+
+                                            <!-- Enhanced Action Section -->
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <a href="{{ route('campaigns.show', $campaign) }}"
+                                                    class="btn btn-primary">
+                                                    <i class="bi bi-eye me-2"></i>
+                                                    عرض التفاصيل
+                                                </a>
+
+                                                <div class="d-flex align-items-center">
+                                                    <div class="me-3">
+                                                        <small class="text-muted d-block">المنشئ</small>
+                                                        <small class="fw-bold">
+                                                            <i class="bi bi-person-circle me-1"></i>
                                                             {{ $campaign->creator->name }}
                                                         </small>
                                                     </div>
+
+                                                    @auth
+                                                        <button class="btn btn-outline-danger btn-sm"
+                                                            onclick="toggleFavorite({{ $campaign->id }})"
+                                                            title="إضافة للمفضلة">
+                                                            <i class="bi bi-heart"></i>
+                                                        </button>
+                                                    @endauth
                                                 </div>
                                             </div>
                                         </div>
@@ -478,7 +751,167 @@
                                 <span class="visually-hidden">التالي</span>
                             </button>
                         @endif
+
+                        <!-- Auto Play Indicators -->
+                        <div class="position-absolute bottom-0 start-50 translate-middle-x mb-3">
+                            <div class="d-flex align-items-center bg-white bg-opacity-90 rounded-pill px-3 py-2 shadow-sm">
+                                <div class="me-2">
+                                    <div id="priorityCarouselProgress" class="bg-primary rounded-pill"
+                                        style="width: 30px; height: 4px; transition: width 4s linear;"></div>
+                                </div>
+                                <small class="text-muted">
+                                    <span id="currentSlideNumber">1</span> / {{ $priorityCampaigns->count() }}
+                                </small>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Enhanced JavaScript for Priority Campaigns Carousel -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const priorityCarousel = document.getElementById('priorityCampaignsCarousel');
+                            const progressBar = document.getElementById('priorityCarouselProgress');
+                            const slideNumber = document.getElementById('currentSlideNumber');
+
+                            if (priorityCarousel && progressBar) {
+                                let currentSlide = 0;
+                                let isPlaying = true;
+                                let progressInterval;
+
+                                // Initialize Bootstrap carousel
+                                const carousel = new bootstrap.Carousel(priorityCarousel, {
+                                    interval: 4000,
+                                    ride: 'carousel'
+                                });
+
+                                // Progress bar animation
+                                function startProgress() {
+                                    progressBar.style.width = '0%';
+                                    progressBar.style.transition = 'width 4s linear';
+                                    setTimeout(() => {
+                                        if (isPlaying) {
+                                            progressBar.style.width = '100%';
+                                        }
+                                    }, 100);
+                                }
+
+                                function resetProgress() {
+                                    progressBar.style.transition = 'none';
+                                    progressBar.style.width = '0%';
+                                }
+
+                                // Start initial progress
+                                startProgress();
+
+                                // Handle slide events
+                                priorityCarousel.addEventListener('slide.bs.carousel', function(e) {
+                                    resetProgress();
+                                    currentSlide = e.to;
+                                    slideNumber.textContent = currentSlide + 1;
+                                });
+
+                                priorityCarousel.addEventListener('slid.bs.carousel', function(e) {
+                                    if (isPlaying) {
+                                        startProgress();
+                                    }
+                                });
+
+                                // Pause on hover
+                                priorityCarousel.addEventListener('mouseenter', function() {
+                                    carousel.pause();
+                                    progressBar.style.animationPlayState = 'paused';
+                                });
+
+                                priorityCarousel.addEventListener('mouseleave', function() {
+                                    if (isPlaying) {
+                                        carousel.cycle();
+                                        progressBar.style.animationPlayState = 'running';
+                                    }
+                                });
+
+                                // Global functions for play/pause buttons
+                                window.pauseCarousel = function() {
+                                    isPlaying = false;
+                                    carousel.pause();
+                                    progressBar.style.animationPlayState = 'paused';
+                                    document.getElementById('pauseIcon').style.opacity = '1';
+                                    document.getElementById('playIcon').style.opacity = '0.5';
+                                };
+
+                                window.playCarousel = function() {
+                                    isPlaying = true;
+                                    carousel.cycle();
+                                    startProgress();
+                                    document.getElementById('pauseIcon').style.opacity = '0.5';
+                                    document.getElementById('playIcon').style.opacity = '1';
+                                };
+
+                                // Touch/swipe support
+                                let startX = 0;
+                                let startY = 0;
+
+                                priorityCarousel.addEventListener('touchstart', function(e) {
+                                    startX = e.touches[0].clientX;
+                                    startY = e.touches[0].clientY;
+                                });
+
+                                priorityCarousel.addEventListener('touchend', function(e) {
+                                    if (!startX || !startY) return;
+
+                                    let endX = e.changedTouches[0].clientX;
+                                    let endY = e.changedTouches[0].clientY;
+
+                                    let diffX = startX - endX;
+                                    let diffY = startY - endY;
+
+                                    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                                        if (diffX > 0) {
+                                            carousel.next();
+                                        } else {
+                                            carousel.prev();
+                                        }
+                                    }
+
+                                    startX = 0;
+                                    startY = 0;
+                                });
+                            }
+                        });
+
+                        // Favorite toggle function
+                        @auth
+
+                        function toggleFavorite(campaignId) {
+                            fetch(`/api/campaigns/${campaignId}/favorite`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer {{ auth()->user()->createToken('web')->plainTextToken ?? '' }}',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                    }
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Update heart icon
+                                        const heartIcon = event.target.closest('button').querySelector('i');
+                                        if (data.is_favorite) {
+                                            heartIcon.classList.remove('bi-heart');
+                                            heartIcon.classList.add('bi-heart-fill');
+                                            event.target.closest('button').classList.remove('btn-outline-danger');
+                                            event.target.closest('button').classList.add('btn-danger');
+                                        } else {
+                                            heartIcon.classList.remove('bi-heart-fill');
+                                            heartIcon.classList.add('bi-heart');
+                                            event.target.closest('button').classList.remove('btn-danger');
+                                            event.target.closest('button').classList.add('btn-outline-danger');
+                                        }
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
+                        @endauth
+                    </script>
                 </div>
             </div>
         @endif
