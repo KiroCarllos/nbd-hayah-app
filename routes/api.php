@@ -66,10 +66,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/wallet/charge', [WalletController::class, 'charge']);
     Route::get('/wallet/transactions', [WalletController::class, 'transactions']);
 
-    // Reports routes
-    Route::get('/reports/dashboard', [ReportsController::class, 'dashboard']);
-    Route::get('/reports/top-campaigns', [ReportsController::class, 'topCampaigns']);
-    Route::get('/reports/top-donors', [ReportsController::class, 'topDonors']);
-    Route::get('/reports/campaign/{id}', [ReportsController::class, 'campaignReport']);
-    Route::get('/reports/user-stats', [ReportsController::class, 'userStats']);
+    // Reports routes - تقارير شاملة للتطبيق المحمول
+    Route::get('/reports/dashboard', [ReportsController::class, 'dashboard']);           // إحصائيات لوحة التحكم الشاملة
+    Route::get('/reports/top-campaigns', [ReportsController::class, 'topCampaigns']);   // أفضل الحملات
+    Route::get('/reports/top-donors', [ReportsController::class, 'topDonors']);         // أفضل المتبرعين
+    Route::get('/reports/campaign/{id}', [ReportsController::class, 'campaignReport']); // تقرير تفصيلي للحملة
+    Route::get('/reports/user/{id}', [ReportsController::class, 'userDetails']);        // تفاصيل مستخدم معين (أدمن فقط)
+    Route::get('/reports/user-stats', [ReportsController::class, 'userStats']);         // إحصائيات المستخدم الحالي
 });

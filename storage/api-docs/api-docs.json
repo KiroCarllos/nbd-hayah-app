@@ -863,7 +863,8 @@
                 "tags": [
                     "Reports"
                 ],
-                "summary": "إحصائيات لوحة التحكم",
+                "summary": "إحصائيات لوحة التحكم الشاملة",
+                "description": "جلب جميع الإحصائيات والبيانات المطلوبة لعرض لوحة التحكم",
                 "operationId": "8465e85cec5409c50024ff7a4a754d2d",
                 "responses": {
                     "200": {
@@ -1294,6 +1295,142 @@
                                 }
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/reports/user/{id}": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "تفاصيل مستخدم معين",
+                "description": "جلب تفاصيل شاملة عن مستخدم محدد (للأدمن فقط)",
+                "operationId": "e05b7fc3757af406507ffef5bab51742",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "معرف المستخدم",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تفاصيل المستخدم",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "أحمد محمد"
+                                                        },
+                                                        "mobile": {
+                                                            "type": "string",
+                                                            "example": "01234567890"
+                                                        },
+                                                        "wallet_balance": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 1500
+                                                        },
+                                                        "is_admin": {
+                                                            "type": "boolean",
+                                                            "example": false
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "example": "2023-01-01T00:00:00Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "statistics": {
+                                                    "properties": {
+                                                        "total_donated": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 2500
+                                                        },
+                                                        "donations_count": {
+                                                            "type": "integer",
+                                                            "example": 12
+                                                        },
+                                                        "campaigns_created": {
+                                                            "type": "integer",
+                                                            "example": 3
+                                                        },
+                                                        "favorite_campaigns": {
+                                                            "type": "integer",
+                                                            "example": 8
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "recent_donations": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "amount": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 500
+                                                            },
+                                                            "campaign_title": {
+                                                                "type": "string",
+                                                                "example": "مساعدة الأسر المحتاجة"
+                                                            },
+                                                            "is_anonymous": {
+                                                                "type": "boolean",
+                                                                "example": false
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "example": "2023-12-01T10:30:00Z"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "غير مصرح - أدمن فقط"
+                    },
+                    "404": {
+                        "description": "المستخدم غير موجود"
                     }
                 },
                 "security": [
