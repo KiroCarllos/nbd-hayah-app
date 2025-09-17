@@ -12,6 +12,8 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <!-- Custom CSS -->
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -81,8 +83,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                <i class="bi bi-heart-fill me-2"></i>
-                نبض الحياة
+                <img src="{{ asset('logo-text-right.png') }}" alt="نبض الحياة" class="logo">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -113,6 +114,14 @@
                                 {{ auth()->user()->name }}
                             </a>
                             <ul class="dropdown-menu" style="z-index: 9999;">
+                                @if (auth()->user()->is_admin)
+                                    <li><a class="dropdown-item text-primary-custom" href="{{ route('admin.dashboard') }}">
+                                            <i class="bi bi-speedometer2 me-2"></i>لوحة التحكم
+                                        </a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                @endif
                                 <li><a class="dropdown-item" href="{{ route('profile.show') }}">الملف الشخصي</a></li>
                                 <li><a class="dropdown-item" href="{{ route('wallet.index') }}">المحفظة
                                         (@currency(auth()->user()->wallet_balance))
@@ -144,7 +153,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="py-4">
+    <main class="pb-4">
         @if (session('success'))
             <div class="container">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -167,15 +176,109 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>نبض الحياة</h5>
-                    <p>منصة التبرعات الخيرية لمساعدة المحتاجين</p>
+    <footer class="footer-modern">
+        <div class="footer-main">
+            <div class="container">
+                <div class="row g-4">
+                    <!-- Logo and Description -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-widget">
+                            <div class="footer-logo mb-3">
+                                <img src="{{ asset('logo-text-bottom.png') }}" alt="نبض الحياة"
+                                    style="filter: brightness(0) invert(1); max-height: 60px;">
+                            </div>
+                            <p class="footer-desc mb-4">
+                                منصة التبرعات الخيرية الرائدة في المنطقة، نساعد المحتاجين ونحدث فرقاً حقيقياً في المجتمع
+                                من خلال تبرعاتكم الكريمة.
+                            </p>
+                            <div class="footer-social">
+                                <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+                                <a href="#" class="social-link"><i class="bi bi-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="col-lg-2 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="footer-title">روابط سريعة</h5>
+                            <ul class="footer-links">
+                                <li><a href="{{ route('home') }}">الرئيسية</a></li>
+                                <li><a href="{{ route('campaigns.index') }}">الحملات</a></li>
+                                <li><a href="{{ route('favorites.index') }}">المفضلة</a></li>
+                                @auth
+                                    <li><a href="{{ route('profile.show') }}">الملف الشخصي</a></li>
+                                    <li><a href="{{ route('wallet.index') }}">المحفظة</a></li>
+                                @endauth
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Support -->
+                    <div class="col-lg-2 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="footer-title">الدعم</h5>
+                            <ul class="footer-links">
+                                <li><a href="#">مركز المساعدة</a></li>
+                                <li><a href="#">الأسئلة الشائعة</a></li>
+                                <li><a href="#">اتصل بنا</a></li>
+                                <li><a href="#">سياسة الخصوصية</a></li>
+                                <li><a href="#">الشروط والأحكام</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-widget">
+                            <h5 class="footer-title">تواصل معنا</h5>
+                            <div class="footer-contact">
+                                <div class="contact-item">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    <div>
+                                        <strong>العنوان:</strong><br>
+                                        القاهرة، مصر
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="bi bi-telephone-fill"></i>
+                                    <div>
+                                        <strong>الهاتف:</strong><br>
+                                        <a href="tel:+201234567890">+20 123 456 7890</a>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <i class="bi bi-envelope-fill"></i>
+                                    <div>
+                                        <strong>البريد الإلكتروني:</strong><br>
+                                        <a href="mailto:info@nabdhayah.com">info@nabdhayah.com</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 text-end">
-                    <p>&copy; {{ date('Y') }} نبض الحياة. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="mb-0">&copy; {{ date('Y') }} نبض الحياة. جميع الحقوق محفوظة.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="footer-payment">
+                            <span class="me-3">طرق الدفع المتاحة:</span>
+                            <i class="bi bi-credit-card-2-front payment-icon"></i>
+                            <i class="bi bi-paypal payment-icon"></i>
+                            <i class="bi bi-bank payment-icon"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -3,8 +3,7 @@
 @section('title', 'إنشاء حساب - نبض الحياة')
 
 @section('content')
-    <div class="min-vh-100 d-flex align-items-center py-5"
-        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="min-vh-100 d-flex align-items-center py-5 bg-gradient-success">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-md-10">
@@ -12,9 +11,8 @@
                         <div class="card-body p-5">
                             <!-- Logo and Title -->
                             <div class="text-center mb-4">
-                                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                                    style="width: 80px; height: 80px;">
-                                    <i class="bi bi-heart-fill text-primary" style="font-size: 2.5rem;"></i>
+                                <div class="mb-3">
+                                    <img src="{{ asset('logo-text-bottom.png') }}" alt="نبض الحياة" class="logo-large">
                                 </div>
                                 <h2 class="fw-bold text-dark">انضم إلى نبض الحياة</h2>
                                 <p class="text-muted">ابدأ رحلتك في العطاء وإحداث الفرق</p>

@@ -45,9 +45,9 @@
                                 <!-- Fallback gradient background -->
                                 <div class="d-block w-100"
                                     style="height: 500px; background: linear-gradient(135deg,
-                                    @if ($index % 3 == 0) #667eea 0%, #764ba2 100%
-                                    @elseif($index % 3 == 1) #f093fb 0%, #f5576c 100%
-                                    @else #4facfe 0%, #00f2fe 100% @endif
+                                    @if ($index % 3 == 0) #ff4d57 0%, #31a354 100%
+                                    @elseif($index % 3 == 1) #31a354 0%, #ff4d57 100%
+                                    @else #ff4d57 0%, #e6e6e6 100% @endif
                                     ); display: flex; align-items: center; justify-content: center;">
                                     <i class="bi bi-heart-fill text-white" style="font-size: 8rem; opacity: 0.3;"></i>
                                 </div>
@@ -337,8 +337,7 @@
         <!-- Mobile App Download Section -->
         <div class="row mb-5">
             <div class="col-12">
-                <div class="text-white rounded-4 p-5"
-                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" id="app-download">
+                <div class="text-white rounded-4 p-5 bg-gradient-mixed" id="app-download">
                     <div class="row align-items-center">
                         <div class="col-lg-6">
                             <h2 class="display-6 fw-bold mb-3">حمل التطبيق الآن</h2>
@@ -377,38 +376,38 @@
         <!-- Features Section -->
         <div class="row mb-5">
             <div class="col-12">
-                <h2 class="text-center mb-5">لماذا تختار نبض الحياة؟</h2>
+                <h2 class="text-center mb-5 animate-on-scroll">لماذا تختار نبض الحياة؟</h2>
                 <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
+                    <div class="col-md-4 animate-on-scroll" data-delay="100">
+                        <div class="card h-100 border-0 shadow-sm feature-card">
                             <div class="card-body text-center p-4">
-                                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                <div class="bg-primary-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3 icon-bounce"
                                     style="width: 80px; height: 80px;">
-                                    <i class="bi bi-shield-check text-primary" style="font-size: 2rem;"></i>
+                                    <i class="bi bi-shield-check text-primary-custom" style="font-size: 2rem;"></i>
                                 </div>
                                 <h5 class="card-title">آمان وموثوقية</h5>
                                 <p class="card-text text-muted">نضمن وصول تبرعاتك للمستحقين بأمان تام وشفافية كاملة</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
+                    <div class="col-md-4 animate-on-scroll" data-delay="200">
+                        <div class="card h-100 border-0 shadow-sm feature-card">
                             <div class="card-body text-center p-4">
-                                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                <div class="bg-success-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3 icon-bounce"
                                     style="width: 80px; height: 80px;">
-                                    <i class="bi bi-lightning-charge text-success" style="font-size: 2rem;"></i>
+                                    <i class="bi bi-lightning-charge text-success-custom" style="font-size: 2rem;"></i>
                                 </div>
                                 <h5 class="card-title">سهولة الاستخدام</h5>
                                 <p class="card-text text-muted">واجهة بسيطة وسهلة تمكنك من التبرع في خطوات قليلة</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
+                    <div class="col-md-4 animate-on-scroll" data-delay="300">
+                        <div class="card h-100 border-0 shadow-sm feature-card">
                             <div class="card-body text-center p-4">
-                                <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                                <div class="bg-primary-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3 icon-bounce"
                                     style="width: 80px; height: 80px;">
-                                    <i class="bi bi-graph-up text-info" style="font-size: 2rem;"></i>
+                                    <i class="bi bi-graph-up text-primary-custom" style="font-size: 2rem;"></i>
                                 </div>
                                 <h5 class="card-title">متابعة مستمرة</h5>
                                 <p class="card-text text-muted">تابع تقدم الحملات وتأثير تبرعاتك بشكل مستمر</p>
@@ -419,11 +418,89 @@
             </div>
         </div>
 
+        <!-- Statistics Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="bg-gradient-mixed text-white rounded-4 p-5">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-4 mb-md-0">
+                            <h3 class="h1 mb-2 counter-number" data-target="{{ $totalCampaigns }}">{{ $totalCampaigns }}
+                            </h3>
+                            <p class="mb-0">حملة نشطة</p>
+                        </div>
+                        <div class="col-md-3 mb-4 mb-md-0">
+                            <h3 class="h1 mb-2 counter-number" data-target="{{ $totalUsers }}">{{ $totalUsers }}
+                            </h3>
+                            <p class="mb-0">متبرع</p>
+                        </div>
+                        <div class="col-md-3 mb-4 mb-md-0">
+                            <h3 class="h1 mb-2 counter-number" data-target="{{ $totalDonations }}">{{ $totalDonations }}
+                            </h3>
+                            <p class="mb-0">تبرع</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h3 class="h1 mb-2 counter-number">@currency($totalAmount)</h3>
+                            <p class="mb-0">إجمالي التبرعات</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="text-center mb-5 animate-on-scroll">كيف تعمل المنصة؟</h2>
+                <div class="row g-4">
+                    <div class="col-md-3 text-center animate-on-scroll" data-delay="100">
+                        <div class="step-card">
+                            <div class="step-number">1</div>
+                            <div class="step-icon mb-3">
+                                <i class="bi bi-person-plus" style="font-size: 3rem; color: var(--primary-color);"></i>
+                            </div>
+                            <h5>إنشاء حساب</h5>
+                            <p class="text-muted">سجل حسابك الجديد بسهولة</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center animate-on-scroll" data-delay="200">
+                        <div class="step-card">
+                            <div class="step-number">2</div>
+                            <div class="step-icon mb-3">
+                                <i class="bi bi-search" style="font-size: 3rem; color: var(--success-color);"></i>
+                            </div>
+                            <h5>اختر حملة</h5>
+                            <p class="text-muted">تصفح الحملات واختر ما يناسبك</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center animate-on-scroll" data-delay="300">
+                        <div class="step-card">
+                            <div class="step-number">3</div>
+                            <div class="step-icon mb-3">
+                                <i class="bi bi-credit-card" style="font-size: 3rem; color: var(--primary-color);"></i>
+                            </div>
+                            <h5>تبرع بأمان</h5>
+                            <p class="text-muted">ادفع بطريقة آمنة ومضمونة</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center animate-on-scroll" data-delay="400">
+                        <div class="step-card">
+                            <div class="step-number">4</div>
+                            <div class="step-icon mb-3">
+                                <i class="bi bi-heart-fill" style="font-size: 3rem; color: var(--success-color);"></i>
+                            </div>
+                            <h5>احدث فرقاً</h5>
+                            <p class="text-muted">شاهد تأثير تبرعك الإيجابي</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Newsletter Section -->
         <div class="row mb-5">
             <div class="col-12">
-                <div class="bg-light rounded-4 p-5 text-center">
-                    <h3 class="mb-3">ابق على اطلاع</h3>
+                <div class="rounded-4 p-5 text-center" style="background-color: var(--light-color);">
+                    <h3 class="mb-3 text-primary-custom">ابق على اطلاع</h3>
                     <p class="text-muted mb-4">اشترك في نشرتنا الإخبارية لتصلك آخر الحملات والأخبار</p>
                     <div class="row justify-content-center">
                         <div class="col-md-6">
@@ -500,6 +577,92 @@
                     }
                 }, 3000);
             }
+
+            // Scroll animations
+            function animateOnScroll() {
+                const elements = document.querySelectorAll('.animate-on-scroll');
+                const windowHeight = window.innerHeight;
+
+                elements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+
+                    if (elementTop < windowHeight - elementVisible) {
+                        const delay = element.getAttribute('data-delay') || 0;
+                        setTimeout(() => {
+                            element.classList.add('animated');
+                        }, delay);
+                    }
+                });
+            }
+
+            // Counter animation
+            function animateCounters() {
+                const counters = document.querySelectorAll('.counter-number');
+
+                counters.forEach(counter => {
+                    const target = parseInt(counter.getAttribute('data-target')) || 0;
+                    if (target === 0) return;
+
+                    const increment = target / 100;
+                    let current = 0;
+
+                    const updateCounter = () => {
+                        if (current < target) {
+                            current += increment;
+                            counter.textContent = Math.ceil(current);
+                            setTimeout(updateCounter, 20);
+                        } else {
+                            counter.textContent = target;
+                        }
+                    };
+
+                    // Start animation when element is visible
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                updateCounter();
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    });
+
+                    observer.observe(counter);
+                });
+            }
+
+            // Navbar scroll effect
+            function handleNavbarScroll() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+
+            // Initialize animations
+            document.addEventListener('DOMContentLoaded', function() {
+                animateOnScroll();
+                animateCounters();
+
+                // Add scroll event listeners
+                window.addEventListener('scroll', () => {
+                    animateOnScroll();
+                    handleNavbarScroll();
+                });
+
+                // Add hover effects to feature cards
+                document.querySelectorAll('.feature-card').forEach(card => {
+                    card.addEventListener('mouseenter', function() {
+                        this.style.transform = 'translateY(-10px)';
+                    });
+
+                    card.addEventListener('mouseleave', function() {
+                        this.style.transform = 'translateY(0)';
+                    });
+                });
+            });
         </script>
     @endpush
 @endsection

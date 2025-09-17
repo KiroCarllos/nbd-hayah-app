@@ -12,6 +12,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
     <style>
         .sidebar {
@@ -71,8 +73,11 @@
                 <div class="position-sticky pt-3">
                     <!-- Logo -->
                     <div class="text-center mb-4">
-                        <h4 class="text-white">نبض الحياة</h4>
-                        <small class="text-white-50">لوحة التحكم</small>
+                        <img src="{{ asset('logo-text-bottom.png') }}" alt="نبض الحياة" class="logo-large mb-2"
+                            style="filter: brightness(0) invert(1);">
+                        <div>
+                            <small class="text-white-50">لوحة التحكم</small>
+                        </div>
                     </div>
 
                     <!-- Navigation -->
