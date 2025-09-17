@@ -220,9 +220,13 @@
                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                         <div class="position-relative w-100 h-100">
                             @if (file_exists(public_path('storage/' . $slider->image)))
-                                <img src="{{ asset('storage/' . $slider->image) }}" class="d-block w-100 h-100"
-                                    alt="{{ $slider->title }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
-                                    style="object-fit: cover; object-position: center;">
+                                <a href="{{ asset('storage/' . $slider->image) }}" class="glightbox d-block w-100 h-100"
+                                    data-gallery="main-slider" data-title="{{ $slider->title }}"
+                                    data-description="{{ $slider->description }}">
+                                    <img src="{{ asset('storage/' . $slider->image) }}" class="d-block w-100 h-100"
+                                        alt="{{ $slider->title }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                                        style="object-fit: cover; object-position: center; cursor: pointer;">
+                                </a>
                             @else
                                 <!-- Enhanced Fallback gradient background -->
                                 <div class="fallback-bg"
@@ -415,14 +419,14 @@
                         </h2>
                         <div class="d-flex align-items-center">
                             <span class="badge bg-primary me-2">{{ $priorityCampaigns->count() }} حملة</span>
-{{--                            <div class="btn-group" role="group">--}}
-{{--                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="pauseCarousel()">--}}
-{{--                                    <i class="bi bi-pause-fill" id="pauseIcon"></i>--}}
-{{--                                </button>--}}
-{{--                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="playCarousel()">--}}
-{{--                                    <i class="bi bi-play-fill" id="playIcon"></i>--}}
-{{--                                </button>--}}
-{{--                            </div>--}}
+                            {{--                            <div class="btn-group" role="group"> --}}
+                            {{--                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="pauseCarousel()"> --}}
+                            {{--                                    <i class="bi bi-pause-fill" id="pauseIcon"></i> --}}
+                            {{--                                </button> --}}
+                            {{--                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="playCarousel()"> --}}
+                            {{--                                    <i class="bi bi-play-fill" id="playIcon"></i> --}}
+                            {{--                                </button> --}}
+                            {{--                            </div> --}}
                         </div>
                     </div>
 
@@ -480,7 +484,7 @@
                             #priorityCampaignsCarousel .card-img-container img {
                                 width: 100%;
                                 height: 100%;
-                                object-fit: contain;
+                                object-fit: cover;
                                 transition: transform 0.3s ease;
                             }
 
@@ -497,7 +501,7 @@
                                 border-radius: 15px;
                                 font-size: 0.8rem;
                                 font-weight: 600;
-                                z-index: 2;
+                                z-index: -1;
                             }
 
                             #priorityCampaignsCarousel .card-body {
@@ -586,7 +590,7 @@
                             }
 
                             #priorityCampaignsCarousel .carousel-control-prev {
-                                left:-0px;
+                                left: -0px;
                             }
 
                             #priorityCampaignsCarousel .carousel-control-next {
@@ -646,9 +650,15 @@
                                         <!-- Enhanced Card Image Container -->
                                         <div class="card-img-container">
                                             @if ($campaign->images && count($campaign->images) > 0)
-                                                <img src="{{ asset('storage/' . $campaign->images[0]) }}"
-                                                    alt="{{ $campaign->title }}"
-                                                    loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+                                                <a href="{{ asset('storage/' . $campaign->images[0]) }}"
+                                                    class="glightbox d-block w-100 h-100" data-gallery="priority-campaigns"
+                                                    data-title="{{ $campaign->title }}"
+                                                    data-description="{{ Str::limit($campaign->description, 200) }}">
+                                                    <img src="{{ asset('storage/' . $campaign->images[0]) }}"
+                                                        alt="{{ $campaign->title }}"
+                                                        loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                                                        style="cursor: pointer;">
+                                                </a>
                                             @else
                                                 <div class="d-flex align-items-center justify-content-center h-100"
                                                     style="background: linear-gradient(135deg,
@@ -943,8 +953,13 @@
                                     @endauth
 
                                     @if ($campaign->images && count($campaign->images) > 0)
-                                        <img src="{{ asset('storage/' . $campaign->images[0]) }}" class="card-img-top"
-                                            alt="{{ $campaign->title }}" style="height: 200px; object-fit: cover;">
+                                        <a href="{{ asset('storage/' . $campaign->images[0]) }}" class="glightbox"
+                                            data-gallery="all-campaigns" data-title="{{ $campaign->title }}"
+                                            data-description="{{ Str::limit($campaign->description, 200) }}">
+                                            <img src="{{ asset('storage/' . $campaign->images[0]) }}"
+                                                class="card-img-top" alt="{{ $campaign->title }}"
+                                                style="height: 400px; object-fit: cover; cursor: pointer;">
+                                        </a>
                                     @else
                                         <div class="bg-primary d-flex align-items-center justify-content-center"
                                             style="height: 200px;">

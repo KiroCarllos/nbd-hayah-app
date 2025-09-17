@@ -31,8 +31,13 @@
                                 <div class="carousel-inner">
                                     @foreach ($campaign->images as $index => $image)
                                         <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                            <img src="{{ asset('storage/' . $image) }}" class="d-block w-100 rounded"
-                                                alt="{{ $campaign->title }}" style="height: 400px; object-fit: cover;">
+                                            <a href="{{ asset('storage/' . $image) }}" class="glightbox d-block"
+                                                data-gallery="admin-campaign-images" data-title="{{ $campaign->title }}"
+                                                data-description="صورة {{ $index + 1 }} من {{ count($campaign->images) }} - لوحة التحكم">
+                                                <img src="{{ asset('storage/' . $image) }}" class="d-block w-100 rounded"
+                                                    alt="{{ $campaign->title }}"
+                                                    style="height: 400px; object-fit: cover; cursor: pointer;">
+                                            </a>
                                         </div>
                                     @endforeach
                                 </div>
@@ -57,8 +62,13 @@
                                 </div>
                             </div>
                         @else
-                            <img src="{{ asset('storage/' . $campaign->images[0]) }}" class="img-fluid rounded"
-                                alt="{{ $campaign->title }}" style="width: 100%; height: 400px; object-fit: cover;">
+                            <a href="{{ asset('storage/' . $campaign->images[0]) }}" class="glightbox d-block"
+                                data-gallery="admin-campaign-images" data-title="{{ $campaign->title }}"
+                                data-description="صورة الحملة - لوحة التحكم">
+                                <img src="{{ asset('storage/' . $campaign->images[0]) }}" class="img-fluid rounded"
+                                    alt="{{ $campaign->title }}"
+                                    style="width: 100%; height: 400px; object-fit: cover; cursor: pointer;">
+                            </a>
                         @endif
                     </div>
                 </div>

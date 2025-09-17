@@ -102,9 +102,13 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             @if ($campaign->images && count($campaign->images) > 0)
-                                                <img src="{{ asset('storage/' . $campaign->images[0]) }}" alt="Campaign"
-                                                    class="rounded me-3" width="50" height="50"
-                                                    style="object-fit: cover;">
+                                                <a href="{{ asset('storage/' . $campaign->images[0]) }}" class="glightbox"
+                                                    data-gallery="admin-campaigns" data-title="{{ $campaign->title }}"
+                                                    data-description="{{ Str::limit($campaign->description, 200) }}">
+                                                    <img src="{{ asset('storage/' . $campaign->images[0]) }}" alt="Campaign"
+                                                        class="rounded me-3" width="50" height="50"
+                                                        style="object-fit: cover; cursor: pointer;">
+                                                </a>
                                             @else
                                                 <div class="bg-primary d-flex align-items-center justify-content-center rounded me-3"
                                                     style="width: 50px; height: 50px;">
