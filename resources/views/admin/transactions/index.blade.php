@@ -84,6 +84,7 @@
                     <tr>
                         <th>المستخدم</th>
                         <th>نوع المعاملة</th>
+                        <th>حالة المعاملة</th>
                         <th>المبلغ</th>
                         <th>الرصيد السابق</th>
                         <th>الرصيد الجديد</th>
@@ -127,14 +128,35 @@
                             @endif
                         </td>
                         <td>
-                            @if($transaction->type === 'charge')
-                                <span class="text-success fw-bold">+{{ number_format($transaction->amount, 2) }} ر.س</span>
+                            @php
+                                $status = $transaction->status;
+                                $badgeConfig = match($status) {
+                                    'completed' => ['class' => 'success', 'icon' => 'bi bi-check-circle-fill'],
+                                    'failed'    => ['class' => 'danger',  'icon' => 'bi bi-x-circle-fill'],
+                                    default     => ['class' => 'secondary', 'icon' => 'bi bi-info-circle-fill'],
+                                };
+                            @endphp
+
+                            <span class="badge bg-{{ $badgeConfig['class'] }} d-flex align-items-center gap-1" style="font-size: 0.9rem;">
+                                <i class="{{ $badgeConfig['icon'] }}"></i>
+                                {{ ucfirst($status) }}
+                            </span>
+                        </td>
+
+
+                        <td>
+                            @if($transaction->status === 'completed' && $transaction->description == "شحن المحفظة")
+                                <span class="text-success fw-bold">+{{ number_format($transaction->amount, 2) }} ج</span>
                             @else
-                                <span class="text-danger fw-bold">-{{ number_format($transaction->amount, 2) }} ر.س</span>
+                                @if($transaction->status != 'completed' && $transaction->description == "شحن المحفظة")
+                                    <span class="text-secondary fw-bold">{{ number_format($transaction->amount, 2) }} ج</span>
+                                @else
+                                    <span class="text-danger fw-bold">-{{ number_format($transaction->amount, 2) }} ج</span>
+                                @endif
                             @endif
                         </td>
-                        <td>{{ number_format($transaction->previous_balance, 2) }} ر.س</td>
-                        <td>{{ number_format($transaction->new_balance, 2) }} ر.س</td>
+                        <td>{{ number_format($transaction->previous_balance, 2) }} ج</td>
+                        <td>{{ number_format($transaction->new_balance, 2) }} ج</td>
                         <td>
                             @if($transaction->description)
                                 {{ \Illuminate\Support\Str::limit($transaction->description, 50) }}

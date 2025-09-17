@@ -20,7 +20,6 @@ class DonationController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric|min:1',
-            'is_anonymous' => 'boolean',
         ], [
             'amount.required' => 'مبلغ التبرع مطلوب',
             'amount.numeric' => 'مبلغ التبرع يجب أن يكون رقماً',
@@ -29,8 +28,7 @@ class DonationController extends Controller
 
         $user = Auth::user();
         $amount = $request->amount;
-        $isAnonymous = $request->boolean('is_anonymous');
-
+        $isAnonymous = $request->has('is_anonymous') && $request->is_anonymous == 'on';
         // Check if user has sufficient balance
         if ($user->wallet_balance < $amount) {
             return response()->json([

@@ -30,9 +30,8 @@ class HomeController extends Controller
             'total_campaigns' => Campaign::active()->count(),
             'total_donors' => User::whereHas('donations')->count(),
             'total_donations' => Donation::completed()->sum('amount'),
-            'completed_campaigns' => Campaign::where('current_amount', '>=', 'target_amount')->count(),
+            'completed_campaigns' => Campaign::whereColumn('current_amount', '>=', 'target_amount')->count(),
         ];
-
         return view('home', compact('priorityCampaigns', 'campaigns', 'stats'));
     }
 }
