@@ -3,28 +3,209 @@
 @section('title', 'الرئيسية - نبض الحياة')
 
 @section('content')
-    <!-- Main Slider -->
+    <!-- Main Slider - Enhanced Large Size -->
     @if ($sliders->count() > 0)
-        <div id="mainSlider" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="5000">
+        <div id="mainSlider" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="6000">
             <style>
-                .carousel-item {
-                    transition: transform 0.8s ease-in-out;
+                /* Enhanced Large Slider Styles */
+                #mainSlider {
+                    height: 100vh;
+                    /* Full viewport height */
+                    max-height: 800px;
+                    /* Maximum height for very large screens */
+                    min-height: 600px;
+                    /* Minimum height for smaller screens */
+                    overflow: hidden;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
                 }
 
-                .carousel-caption {
-                    bottom: 20%;
+                #mainSlider .carousel-item {
+                    height: 100vh;
+                    max-height: 800px;
+                    min-height: 600px;
+                    transition: transform 1s ease-in-out;
+                    position: relative;
                 }
 
-                .carousel-control-prev,
-                .carousel-control-next {
-                    width: 5%;
+                #mainSlider .carousel-item img {
+                    width: 100% !important;
+                    height: 100% !important;
+                    object-fit: cover !important;
+                    /* Ensures full coverage while maintaining aspect ratio */
+                    object-position: center center !important;
+                    filter: brightness(0.8);
+                    /* Slight darkening for better text readability */
                 }
 
-                .carousel-indicators button {
-                    width: 12px;
-                    height: 12px;
+                #mainSlider .carousel-caption {
+                    bottom: 25%;
+                    left: 10%;
+                    right: 10%;
+                    text-align: center;
+                    z-index: 10;
+                }
+
+                #mainSlider .carousel-caption .bg-dark {
+                    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%) !important;
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 20px !important;
+                    padding: 2rem !important;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+                }
+
+                #mainSlider .carousel-control-prev,
+                #mainSlider .carousel-control-next {
+                    width: 8%;
+                    height: 100%;
+                    background: linear-gradient(90deg, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+                    border: none;
+                    opacity: 0.8;
+                    transition: all 0.3s ease;
+                }
+
+                #mainSlider .carousel-control-next {
+                    background: linear-gradient(-90deg, rgba(0, 0, 0, 0.3) 0%, transparent 100%);
+                }
+
+                #mainSlider .carousel-control-prev:hover,
+                #mainSlider .carousel-control-next:hover {
+                    opacity: 1;
+                    background: linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+                }
+
+                #mainSlider .carousel-control-next:hover {
+                    background: linear-gradient(-90deg, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+                }
+
+                #mainSlider .carousel-control-prev-icon,
+                #mainSlider .carousel-control-next-icon {
+                    width: 3rem;
+                    height: 3rem;
+                    background-size: 100% 100%;
+                    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+                }
+
+                #mainSlider .carousel-indicators {
+                    bottom: 5%;
+                    margin-bottom: 0;
+                }
+
+                #mainSlider .carousel-indicators button {
+                    width: 15px;
+                    height: 15px;
                     border-radius: 50%;
-                    margin: 0 5px;
+                    margin: 0 8px;
+                    background: rgba(255, 255, 255, 0.5);
+                    border: 2px solid rgba(255, 255, 255, 0.8);
+                    transition: all 0.3s ease;
+                }
+
+                #mainSlider .carousel-indicators button.active {
+                    background: #ff4d57;
+                    border-color: #fff;
+                    transform: scale(1.2);
+                    box-shadow: 0 0 10px rgba(255, 77, 87, 0.5);
+                }
+
+                /* Fallback gradient backgrounds - Enhanced */
+                #mainSlider .fallback-bg {
+                    width: 100% !important;
+                    height: 100% !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                #mainSlider .fallback-bg::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+                    z-index: 1;
+                }
+
+                #mainSlider .fallback-bg i {
+                    font-size: 12rem !important;
+                    opacity: 0.2 !important;
+                    z-index: 2;
+                    position: relative;
+                }
+
+                /* Responsive adjustments */
+                @media (max-width: 768px) {
+                    #mainSlider {
+                        height: 70vh;
+                        max-height: 500px;
+                        min-height: 400px;
+                    }
+
+                    #mainSlider .carousel-item {
+                        height: 70vh;
+                        max-height: 500px;
+                        min-height: 400px;
+                    }
+
+                    #mainSlider .carousel-caption {
+                        bottom: 15%;
+                        left: 5%;
+                        right: 5%;
+                    }
+
+                    #mainSlider .carousel-caption .bg-dark {
+                        padding: 1.5rem !important;
+                        border-radius: 15px !important;
+                    }
+
+                    #mainSlider .carousel-caption h2 {
+                        font-size: 1.8rem !important;
+                    }
+
+                    #mainSlider .carousel-caption p {
+                        font-size: 1rem !important;
+                    }
+
+                    #mainSlider .carousel-control-prev,
+                    #mainSlider .carousel-control-next {
+                        width: 12%;
+                    }
+
+                    #mainSlider .fallback-bg i {
+                        font-size: 8rem !important;
+                    }
+                }
+
+                @media (max-width: 576px) {
+                    #mainSlider {
+                        height: 60vh;
+                        max-height: 400px;
+                        min-height: 350px;
+                    }
+
+                    #mainSlider .carousel-item {
+                        height: 60vh;
+                        max-height: 400px;
+                        min-height: 350px;
+                    }
+
+                    #mainSlider .carousel-caption h2 {
+                        font-size: 1.5rem !important;
+                    }
+
+                    #mainSlider .carousel-caption p {
+                        font-size: 0.9rem !important;
+                        display: none;
+                        /* Hide description on very small screens */
+                    }
+
+                    #mainSlider .fallback-bg i {
+                        font-size: 6rem !important;
+                    }
                 }
             </style>
             <div class="carousel-indicators">
@@ -37,47 +218,170 @@
             <div class="carousel-inner">
                 @foreach ($sliders as $index => $slider)
                     <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                        <div class="position-relative">
+                        <div class="position-relative w-100 h-100">
                             @if (file_exists(public_path('storage/' . $slider->image)))
-                                <img src="{{ asset('storage/' . $slider->image) }}" class="d-block w-100"
-                                    alt="{{ $slider->title }}" style="height: 500px; object-fit: cover;">
+                                <img src="{{ asset('storage/' . $slider->image) }}" class="d-block w-100 h-100"
+                                    alt="{{ $slider->title }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                                    style="object-fit: cover; object-position: center;">
                             @else
-                                <!-- Fallback gradient background -->
-                                <div class="d-block w-100"
-                                    style="height: 500px; background: linear-gradient(135deg,
-                                    @if ($index % 3 == 0) #ff4d57 0%, #31a354 100%
-                                    @elseif($index % 3 == 1) #31a354 0%, #ff4d57 100%
-                                    @else #ff4d57 0%, #e6e6e6 100% @endif
-                                    ); display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-heart-fill text-white" style="font-size: 8rem; opacity: 0.3;"></i>
+                                <!-- Enhanced Fallback gradient background -->
+                                <div class="fallback-bg"
+                                    style="background: linear-gradient(135deg,
+                                    @if ($index % 4 == 0) #ff4d57 0%, #31a354 50%, #007bff 100%
+                                    @elseif($index % 4 == 1) #31a354 0%, #ff4d57 50%, #6f42c1 100%
+                                    @elseif($index % 4 == 2) #007bff 0%, #ff4d57 50%, #31a354 100%
+                                    @else #6f42c1 0%, #31a354 50%, #ff4d57 100% @endif
+                                    );">
+                                    <i class="bi bi-heart-fill text-white"></i>
                                 </div>
                             @endif
-                            <div class="carousel-caption d-none d-md-block">
+
+                            <!-- Enhanced Caption with better positioning -->
+                            <div class="carousel-caption d-block">
                                 <div class="bg-dark bg-opacity-50 p-4 rounded">
-                                    <h2 class="display-5 fw-bold">{{ $slider->title }}</h2>
+                                    <h2 class="display-4 fw-bold text-white mb-3"
+                                        style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+                                        {{ $slider->title }}
+                                    </h2>
                                     @if ($slider->description)
-                                        <p class="lead">{{ $slider->description }}</p>
+                                        <p class="lead text-white mb-4"
+                                            style="text-shadow: 1px 1px 2px rgba(0,0,0,0.7); font-size: 1.2rem;">
+                                            {{ $slider->description }}
+                                        </p>
                                     @endif
                                     @if ($slider->button_text && $slider->button_link)
-                                        <a href="{{ $slider->button_link }}" class="btn btn-primary btn-lg">
+                                        <a href="{{ $slider->button_link }}"
+                                            class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-lg"
+                                            style="font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease;">
+                                            <i class="bi bi-arrow-left-circle me-2"></i>
                                             {{ $slider->button_text }}
                                         </a>
                                     @endif
                                 </div>
                             </div>
+
+                            <!-- Overlay for better text readability -->
+                            <div class="position-absolute top-0 start-0 w-100 h-100"
+                                style="background: linear-gradient(45deg, rgba(0,0,0,0.3) 0%, transparent 50%, rgba(0,0,0,0.2) 100%); pointer-events: none;">
+                            </div>
                         </div>
                     </div>
                 @endforeach
             </div>
+            <!-- Enhanced Navigation Controls -->
             <button class="carousel-control-prev" type="button" data-bs-target="#mainSlider" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
+                <span class="visually-hidden">السابق</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#mainSlider" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
+                <span class="visually-hidden">التالي</span>
             </button>
+
+            <!-- Progress Bar -->
+            <div class="position-absolute bottom-0 start-0 w-100"
+                style="height: 4px; background: rgba(255,255,255,0.2); z-index: 15;">
+                <div id="sliderProgress" class="h-100 bg-primary" style="width: 0%; transition: width 6s linear;"></div>
+            </div>
         </div>
+
+        <!-- Enhanced JavaScript for better slider experience -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const slider = document.getElementById('mainSlider');
+                const progressBar = document.getElementById('sliderProgress');
+
+                if (slider && progressBar) {
+                    let currentSlide = 0;
+                    const totalSlides = {{ $sliders->count() }};
+                    let progressInterval;
+
+                    // Initialize progress bar
+                    function startProgress() {
+                        progressBar.style.width = '0%';
+                        progressBar.style.transition = 'width 6s linear';
+                        setTimeout(() => {
+                            progressBar.style.width = '100%';
+                        }, 100);
+                    }
+
+                    // Reset progress bar
+                    function resetProgress() {
+                        progressBar.style.transition = 'none';
+                        progressBar.style.width = '0%';
+                    }
+
+                    // Start initial progress
+                    startProgress();
+
+                    // Handle slide events
+                    slider.addEventListener('slide.bs.carousel', function(e) {
+                        resetProgress();
+                        currentSlide = e.to;
+                    });
+
+                    slider.addEventListener('slid.bs.carousel', function(e) {
+                        startProgress();
+                    });
+
+                    // Pause on hover
+                    slider.addEventListener('mouseenter', function() {
+                        progressBar.style.animationPlayState = 'paused';
+                    });
+
+                    slider.addEventListener('mouseleave', function() {
+                        progressBar.style.animationPlayState = 'running';
+                    });
+
+                    // Touch/swipe support enhancement
+                    let startX = 0;
+                    let startY = 0;
+
+                    slider.addEventListener('touchstart', function(e) {
+                        startX = e.touches[0].clientX;
+                        startY = e.touches[0].clientY;
+                    });
+
+                    slider.addEventListener('touchend', function(e) {
+                        if (!startX || !startY) return;
+
+                        let endX = e.changedTouches[0].clientX;
+                        let endY = e.changedTouches[0].clientY;
+
+                        let diffX = startX - endX;
+                        let diffY = startY - endY;
+
+                        // Only trigger if horizontal swipe is more significant than vertical
+                        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                            if (diffX > 0) {
+                                // Swipe left - next slide
+                                bootstrap.Carousel.getInstance(slider).next();
+                            } else {
+                                // Swipe right - previous slide
+                                bootstrap.Carousel.getInstance(slider).prev();
+                            }
+                        }
+
+                        startX = 0;
+                        startY = 0;
+                    });
+                }
+
+                // Preload next images for better performance
+                const images = slider.querySelectorAll('img[loading="lazy"]');
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.loading = 'eager';
+                            observer.unobserve(img);
+                        }
+                    });
+                });
+
+                images.forEach(img => imageObserver.observe(img));
+            });
+        </script>
     @else
         <!-- Default Hero Section if no sliders -->
         <div class="container">
@@ -163,13 +467,13 @@
                         </div>
 
                         @if ($priorityCampaigns->count() > 1)
-                            <button class="carousel-control-prev" type="button" data-bs-target="#priorityCampaignsCarousel"
-                                data-bs-slide="prev">
+                            <button class="carousel-control-prev" type="button"
+                                data-bs-target="#priorityCampaignsCarousel" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">السابق</span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#priorityCampaignsCarousel"
-                                data-bs-slide="next">
+                            <button class="carousel-control-next" type="button"
+                                data-bs-target="#priorityCampaignsCarousel" data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="visually-hidden">التالي</span>
                             </button>
