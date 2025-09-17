@@ -19,6 +19,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- GLightbox CSS - Beautiful Image Lightbox -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+
     <!-- Custom CSS -->
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <!-- Custom CSS -->
@@ -294,6 +298,171 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- GLightbox JS - Beautiful Image Lightbox -->
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+    <!-- Global Lightbox Initialization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize GLightbox for all images
+            const lightbox = GLightbox({
+                selector: '.glightbox',
+                touchNavigation: true,
+                loop: true,
+                autoplayVideos: false,
+                plyr: {
+                    css: 'https://cdn.plyr.io/3.6.8/plyr.css',
+                    js: 'https://cdn.plyr.io/3.6.8/plyr.js',
+                    config: {
+                        ratio: '16:9',
+                        youtube: {
+                            noCookie: true,
+                            rel: 0,
+                            showinfo: 0,
+                            iv_load_policy: 3
+                        },
+                        vimeo: {
+                            byline: false,
+                            portrait: false,
+                            title: false,
+                            speed: true,
+                            transparent: false
+                        }
+                    }
+                },
+                skin: 'clean',
+                closeButton: true,
+                closeOnOutsideClick: true,
+                openEffect: 'zoom',
+                closeEffect: 'zoom',
+                slideEffect: 'slide',
+                moreText: 'عرض المزيد',
+                moreLength: 60,
+                cssEfects: {
+                    fade: {
+                        in: 'fadeIn',
+                        out: 'fadeOut'
+                    },
+                    zoom: {
+                        in: 'zoomIn',
+                        out: 'zoomOut'
+                    },
+                    slide: {
+                        in: 'slideInRight',
+                        out: 'slideOutLeft'
+                    },
+                    slideBack: {
+                        in: 'slideInLeft',
+                        out: 'slideOutRight'
+                    },
+                    none: {
+                        in: 'none',
+                        out: 'none'
+                    }
+                },
+                svg: {
+                    close: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
+                    next: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"></polyline></svg>',
+                    prev: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"></polyline></svg>'
+                }
+            });
+
+            // Add custom styles for better Arabic support
+            const style = document.createElement('style');
+            style.textContent = `
+                /* Enhanced GLightbox Styles for Arabic Support */
+                .glightbox-clean .gslide-description {
+                    direction: rtl;
+                    text-align: right;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                }
+
+                .glightbox-clean .gslide-title {
+                    direction: rtl;
+                    text-align: right;
+                    font-weight: 600;
+                    font-size: 1.2rem;
+                    margin-bottom: 0.5rem;
+                }
+
+                .glightbox-clean .gnext,
+                .glightbox-clean .gprev {
+                    background: rgba(0,0,0,0.7);
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
+                }
+
+                .glightbox-clean .gnext:hover,
+                .glightbox-clean .gprev:hover {
+                    background: rgba(255,77,87,0.9);
+                    transform: scale(1.1);
+                }
+
+                .glightbox-clean .gclose {
+                    background: rgba(255,77,87,0.9);
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
+                }
+
+                .glightbox-clean .gclose:hover {
+                    background: rgba(220,38,38,0.9);
+                    transform: scale(1.1);
+                }
+
+                .glightbox-clean .gslide-media {
+                    border-radius: 10px;
+                    overflow: hidden;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                }
+
+                .glightbox-clean .goverlay {
+                    background: rgba(0,0,0,0.9);
+                    backdrop-filter: blur(10px);
+                }
+
+                /* Loading animation */
+                .glightbox-clean .gloader {
+                    border: 3px solid rgba(255,255,255,0.3);
+                    border-top: 3px solid #ff4d57;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    animation: spin 1s linear infinite;
+                }
+
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+
+                /* Counter styles */
+                .glightbox-clean .gslide-number {
+                    background: rgba(255,77,87,0.9);
+                    color: white;
+                    padding: 5px 12px;
+                    border-radius: 20px;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    position: absolute;
+                    top: 20px;
+                    left: 20px;
+                    z-index: 999;
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
 
     @stack('scripts')
 </body>
