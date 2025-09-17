@@ -234,20 +234,28 @@ class ReportsController extends Controller
 
         if ($format === 'csv') {
             $headers = [
-                'Content-Type' => 'text/csv',
+                'Content-Type' => 'text/csv; charset=UTF-8',
                 'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
             ];
 
             $callback = function () use ($donations) {
                 $file = fopen('php://output', 'w');
+
+                // Add BOM for UTF-8 encoding to support Arabic
+                fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+                // Use UTF-8 encoding for Arabic headers
                 fputcsv($file, ['ID', 'المتبرع', 'الحملة', 'المبلغ', 'مجهول', 'التاريخ']);
 
                 foreach ($donations as $donation) {
                     fputcsv($file, [
                         $donation->id,
-                        $donation->is_anonymous ? 'مجهول' : $donation->user->name,
+                        $donation->is_anonymous ? 'متبرع مجهول' : $donation->user->name,
                         $donation->campaign->title,
-                        $donation->amount,
+                        number_format($donation->amount, 2) . ' ج.م',
                         $donation->is_anonymous ? 'نعم' : 'لا',
                         $donation->created_at->format('Y-m-d H:i:s'),
                     ]);
@@ -271,21 +279,28 @@ class ReportsController extends Controller
 
         if ($format === 'csv') {
             $headers = [
-                'Content-Type' => 'text/csv',
+                'Content-Type' => 'text/csv; charset=UTF-8',
                 'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
             ];
 
             $callback = function () use ($campaigns) {
                 $file = fopen('php://output', 'w');
+
+                // Add BOM for UTF-8 encoding to support Arabic
+                fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
                 fputcsv($file, ['ID', 'العنوان', 'المنشئ', 'الهدف', 'المحصل', 'النسبة', 'التبرعات', 'الحالة', 'التاريخ']);
 
                 foreach ($campaigns as $campaign) {
                     fputcsv($file, [
                         $campaign->id,
                         $campaign->title,
-                        $campaign->creator->name,
-                        $campaign->target_amount,
-                        $campaign->current_amount,
+                        $campaign->creator ? $campaign->creator->name : 'غير محدد',
+                        number_format($campaign->target_amount, 2) . ' ج.م',
+                        number_format($campaign->current_amount, 2) . ' ج.م',
                         round($campaign->progress_percentage, 2) . '%',
                         $campaign->donations_count,
                         $campaign->is_active ? 'نشطة' : 'غير نشطة',
@@ -303,40 +318,73 @@ class ReportsController extends Controller
 
     private function exportUsers($format)
     {
-        $users = User::select('users.*')
+        $users = User::select(
+            'users.id',
+            'users.name',
+            'users.mobile',
+            'users.wallet_balance',
+            'users.is_admin',
+            'users.created_at'
+        )
             ->selectRaw('COUNT(donations.id) as donations_count')
             ->selectRaw('COALESCE(SUM(donations.amount), 0) as total_donated')
             ->leftJoin('donations', function ($join) {
                 $join->on('users.id', '=', 'donations.user_id')
                     ->where('donations.status', '=', 'completed');
             })
-            ->groupBy('users.id')
+            ->groupBy(
+                'users.id',
+                'users.name',
+                'users.mobile',
+                'users.wallet_balance',
+                'users.is_admin',
+                'users.created_at'
+            )
             ->get();
 
         $filename = 'users_' . date('Y-m-d') . '.' . $format;
 
         if ($format === 'csv') {
             $headers = [
-                'Content-Type' => 'text/csv',
+                'Content-Type' => 'text/csv; charset=UTF-8',
                 'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+                'Pragma' => 'no-cache',
+                'Expires' => '0',
             ];
 
             $callback = function () use ($users) {
                 $file = fopen('php://output', 'w');
-                fputcsv($file, ['ID', 'الاسم', 'الهاتف', 'رصيد المحفظة', 'إجمالي التبرعات', 'عدد التبرعات', 'أدمن', 'تاريخ التسجيل']);
 
+                // Add BOM for UTF-8 encoding to support Arabic
+                fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+                // Header row
+                fputcsv($file, [
+                    'ID',
+                    'الاسم',
+                    'الهاتف',
+                    'رصيد المحفظة',
+                    'إجمالي التبرعات',
+                    'عدد التبرعات',
+                    'أدمن',
+                    'تاريخ التسجيل'
+                ]);
+
+                // Data rows
                 foreach ($users as $user) {
                     fputcsv($file, [
                         $user->id,
                         $user->name,
                         $user->mobile,
-                        $user->wallet_balance,
-                        $user->total_donated,
+                        number_format($user->wallet_balance, 2) . ' ج.م',
+                        number_format($user->total_donated, 2) . ' ج.م',
                         $user->donations_count,
                         $user->is_admin ? 'نعم' : 'لا',
                         $user->created_at->format('Y-m-d H:i:s'),
                     ]);
                 }
+
                 fclose($file);
             };
 
