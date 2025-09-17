@@ -1,69 +1,106 @@
 @extends('layouts.admin')
 
-@section('title', 'التقارير - لوحة التحكم')
+@section('title', 'التقارير والإحصائيات المتقدمة')
 
 @section('content')
+    <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>التقارير والإحصائيات</h1>
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-chart-bar me-2"></i>
+            التقارير والإحصائيات المتقدمة
+        </h1>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-download me-1"></i>
+                تصدير البيانات
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item"
+                        href="{{ route('admin.reports.export', ['type' => 'donations', 'format' => 'csv']) }}">
+                        <i class="fas fa-file-csv me-2"></i>التبرعات (CSV)
+                    </a></li>
+                <li><a class="dropdown-item"
+                        href="{{ route('admin.reports.export', ['type' => 'campaigns', 'format' => 'csv']) }}">
+                        <i class="fas fa-file-csv me-2"></i>الحملات (CSV)
+                    </a></li>
+                <li><a class="dropdown-item"
+                        href="{{ route('admin.reports.export', ['type' => 'users', 'format' => 'csv']) }}">
+                        <i class="fas fa-file-csv me-2"></i>المستخدمين (CSV)
+                    </a></li>
+            </ul>
+        </div>
     </div>
 
-    <!-- Quick Stats -->
+    <!-- Overview Cards -->
     <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card stats-card bg-primary text-white">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4>{{ \App\Models\User::count() }}</h4>
-                            <p class="mb-0">إجمالي المستخدمين</p>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                إجمالي الحملات
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalCampaigns) }}</div>
                         </div>
-                        <div class="align-self-center">
-                            <i class="bi bi-people" style="font-size: 2rem;"></i>
+                        <div class="col-auto">
+                            <i class="fas fa-bullhorn fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stats-card bg-success text-white">
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4>{{ \App\Models\Campaign::count() }}</h4>
-                            <p class="mb-0">إجمالي الحملات</p>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                إجمالي التبرعات
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalAmount, 2) }} ج.م
+                            </div>
                         </div>
-                        <div class="align-self-center">
-                            <i class="bi bi-heart-fill" style="font-size: 2rem;"></i>
+                        <div class="col-auto">
+                            <i class="fas fa-donate fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stats-card bg-info text-white">
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4>{{ \App\Models\Donation::count() }}</h4>
-                            <p class="mb-0">إجمالي التبرعات</p>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                عدد المستخدمين
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalUsers) }}</div>
                         </div>
-                        <div class="align-self-center">
-                            <i class="bi bi-gift" style="font-size: 2rem;"></i>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stats-card bg-warning text-white">
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h4>@currency(\App\Models\Donation::sum('amount'))</h4>
-                            <p class="mb-0">إجمالي المبلغ المتبرع</p>
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                رصيد المحافظ
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($totalWalletBalance, 2) }}
+                                ج.م</div>
                         </div>
-                        <div class="align-self-center">
-                            <i class="bi bi-currency-dollar" style="font-size: 2rem;"></i>
+                        <div class="col-auto">
+                            <i class="fas fa-wallet fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -71,191 +108,317 @@
         </div>
     </div>
 
+    <!-- Charts Row -->
     <div class="row">
-        <div class="col-md-6">
-            <!-- Top Campaigns -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">أفضل الحملات (حسب المبلغ المحصل)</h5>
+        <!-- Monthly Donations Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">التبرعات الشهرية (آخر 12 شهر)</h6>
                 </div>
                 <div class="card-body">
-                    @php
-                        $topCampaigns = \App\Models\Campaign::orderBy('current_amount', 'desc')->take(5)->get();
-                    @endphp
-
-                    @if ($topCampaigns->count() > 0)
-                        <div class="list-group list-group-flush">
-                            @foreach ($topCampaigns as $index => $campaign)
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge bg-primary rounded-pill me-3">{{ $index + 1 }}</span>
-                                        <div>
-                                            <h6 class="mb-1">{{ \Illuminate\Support\Str::limit($campaign->title, 40) }}
-                                            </h6>
-                                            <small class="text-muted">{{ $campaign->creator->name }}</small>
-                                        </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <span class="badge bg-success fs-6">@currency($campaign->current_amount)</span>
-                                        <br>
-                                        <small
-                                            class="text-muted">{{ number_format($campaign->progress_percentage, 1) }}%</small>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="text-muted text-center">لا توجد حملات</p>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Top Donors -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">أكثر المتبرعين نشاطاً</h5>
-                </div>
-                <div class="card-body">
-                    @php
-                        $topDonors = \App\Models\User::withSum('donations', 'amount')
-                            ->withCount('donations')
-                            ->having('donations_sum_amount', '>', 0)
-                            ->orderBy('donations_sum_amount', 'desc')
-                            ->take(5)
-                            ->get();
-                    @endphp
-
-                    @if ($topDonors->count() > 0)
-                        <div class="list-group list-group-flush">
-                            @foreach ($topDonors as $index => $donor)
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge bg-warning rounded-pill me-3">{{ $index + 1 }}</span>
-                                        <div class="d-flex align-items-center">
-                                            @if ($donor->profile_image)
-                                                <img src="{{ asset('storage/' . $donor->profile_image) }}" alt="Profile"
-                                                    class="rounded-circle me-2" width="32" height="32"
-                                                    style="object-fit: cover;">
-                                            @else
-                                                <div class="bg-secondary d-flex align-items-center justify-content-center rounded-circle me-2"
-                                                    style="width: 32px; height: 32px;">
-                                                    <i class="bi bi-person text-white"></i>
-                                                </div>
-                                            @endif
-                                            <div>
-                                                <h6 class="mb-1">{{ $donor->name }}</h6>
-                                                <small class="text-muted">{{ $donor->donations_count }} تبرع</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span class="badge bg-success fs-6">@currency($donor->donations_sum_amount)</span>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="text-muted text-center">لا يوجد متبرعين</p>
-                    @endif
+                    <div class="chart-area">
+                        <canvas id="monthlyDonationsChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <!-- Recent Activity -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">النشاط الأخير</h5>
+        <!-- Campaign Status Pie Chart -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">حالة الحملات</h6>
                 </div>
                 <div class="card-body">
-                    @php
-                        $recentDonations = \App\Models\Donation::with(['user', 'campaign'])
-                            ->latest()
-                            ->take(8)
-                            ->get();
-                    @endphp
-
-                    @if ($recentDonations->count() > 0)
-                        <div class="list-group list-group-flush">
-                            @foreach ($recentDonations as $donation)
-                                <div class="list-group-item">
-                                    <div class="d-flex justify-content-between align-items-start">
-                                        <div class="d-flex align-items-center">
-                                            @if ($donation->is_anonymous)
-                                                <div class="bg-secondary d-flex align-items-center justify-content-center rounded-circle me-3"
-                                                    style="width: 32px; height: 32px;">
-                                                    <i class="bi bi-eye-slash text-white"></i>
-                                                </div>
-                                                <div>
-                                                    <h6 class="mb-1">متبرع مجهول</h6>
-                                                    <small class="text-muted">تبرع لحملة:
-                                                        {{ \Illuminate\Support\Str::limit($donation->campaign->title, 30) }}</small>
-                                                </div>
-                                            @else
-                                                @if ($donation->user->profile_image)
-                                                    <img src="{{ asset('storage/' . $donation->user->profile_image) }}"
-                                                        alt="Profile" class="rounded-circle me-3" width="32"
-                                                        height="32" style="object-fit: cover;">
-                                                @else
-                                                    <div class="bg-primary d-flex align-items-center justify-content-center rounded-circle me-3"
-                                                        style="width: 32px; height: 32px;">
-                                                        <i class="bi bi-person text-white"></i>
-                                                    </div>
-                                                @endif
-                                                <div>
-                                                    <h6 class="mb-1">{{ $donation->user->name }}</h6>
-                                                    <small class="text-muted">تبرع لحملة:
-                                                        {{ \Illuminate\Support\Str::limit($donation->campaign->title, 30) }}</small>
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <div class="text-end">
-                                            <span class="badge bg-success">@currency($donation->amount)</span>
-                                            <br>
-                                            <small class="text-muted">{{ $donation->created_at->diffForHumans() }}</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <p class="text-muted text-center">لا يوجد نشاط حديث</p>
-                    @endif
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="campaignStatusChart"></canvas>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Monthly Stats -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">إحصائيات الشهر الحالي</h5>
+    <!-- Daily Donations Chart -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">التبرعات اليومية (آخر 30 يوم)</h6>
                 </div>
                 <div class="card-body">
-                    @php
-                        $currentMonth = now()->startOfMonth();
-                        $monthlyUsers = \App\Models\User::where('created_at', '>=', $currentMonth)->count();
-                        $monthlyCampaigns = \App\Models\Campaign::where('created_at', '>=', $currentMonth)->count();
-                        $monthlyDonations = \App\Models\Donation::where('created_at', '>=', $currentMonth)->count();
-                        $monthlyAmount = \App\Models\Donation::where('created_at', '>=', $currentMonth)->sum('amount');
-                    @endphp
+                    <div class="chart-bar">
+                        <canvas id="dailyDonationsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <div class="row text-center">
-                        <div class="col-6 mb-3">
-                            <h4 class="text-primary">{{ $monthlyUsers }}</h4>
-                            <small class="text-muted">مستخدم جديد</small>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <h4 class="text-success">{{ $monthlyCampaigns }}</h4>
-                            <small class="text-muted">حملة جديدة</small>
-                        </div>
-                        <div class="col-6">
-                            <h4 class="text-info">{{ $monthlyDonations }}</h4>
-                            <small class="text-muted">تبرع</small>
-                        </div>
-                        <div class="col-6">
-                            <h4 class="text-warning">@currency($monthlyAmount)</h4>
-                            <small class="text-muted">مبلغ التبرعات</small>
-                        </div>
+    <!-- Top Campaigns and Donors -->
+    <div class="row">
+        <!-- Top Campaigns -->
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">أفضل الحملات</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>الحملة</th>
+                                    <th>المنشئ</th>
+                                    <th>التبرعات</th>
+                                    <th>المبلغ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($topCampaigns as $campaign)
+                                    <tr>
+                                        <td>
+                                            <a href="{{ route('admin.reports.campaign-details', $campaign->id) }}"
+                                                class="text-decoration-none">
+                                                {{ Str::limit($campaign->title, 30) }}
+                                            </a>
+                                        </td>
+                                        <td>{{ $campaign->creator->name ?? 'غير محدد' }}</td>
+                                        <td>{{ $campaign->donations_count }}</td>
+                                        <td>{{ number_format($campaign->current_amount, 2) }} ج.م</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Donors -->
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">أفضل المتبرعين</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>المتبرع</th>
+                                    <th>عدد التبرعات</th>
+                                    <th>إجمالي التبرعات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($topDonors as $donor)
+                                    <tr>
+                                        <td>
+                                            <a href="{{ route('admin.reports.user-details', $donor->id) }}"
+                                                class="text-decoration-none">
+                                                {{ $donor->name }}
+                                            </a>
+                                        </td>
+                                        <td>{{ $donor->donations_count }}</td>
+                                        <td>{{ number_format($donor->total_donated, 2) }} ج.م</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anonymity Stats and Payment Methods -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">إحصائيات الخصوصية</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="anonymityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallet Transactions -->
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">معاملات المحفظة</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>نوع المعاملة</th>
+                                    <th>عدد المعاملات</th>
+                                    <th>إجمالي المبلغ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($walletTransactions as $transaction)
+                                    <tr>
+                                        <td>
+                                            <i class="{{ $transaction->icon }} {{ $transaction->color }} me-2"></i>
+                                            {{ $transaction->type_ar }}
+                                        </td>
+                                        <td>{{ number_format($transaction->count) }}</td>
+                                        <td>{{ number_format($transaction->total, 2) }} ج.م</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Monthly Donations Chart
+        const monthlyCtx = document.getElementById('monthlyDonationsChart').getContext('2d');
+        const monthlyChart = new Chart(monthlyCtx, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode(
+                    $monthlyDonations->map(function ($item) {
+                        return sprintf('%04d-%02d', $item->year, $item->month);
+                    }),
+                ) !!},
+                datasets: [{
+                    label: 'عدد التبرعات',
+                    data: {!! json_encode($monthlyDonations->pluck('count')) !!},
+                    borderColor: 'rgb(75, 192, 192)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    tension: 0.1,
+                    yAxisID: 'y'
+                }, {
+                    label: 'إجمالي المبلغ (ج.م)',
+                    data: {!! json_encode($monthlyDonations->pluck('total')) !!},
+                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    tension: 0.1,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                    }
+                }
+            }
+        });
+
+        // Campaign Status Chart
+        const statusCtx = document.getElementById('campaignStatusChart').getContext('2d');
+        const statusChart = new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['نشطة', 'غير نشطة', 'مكتملة', 'مميزة'],
+                datasets: [{
+                    data: [
+                        {{ $campaignStats['active'] }},
+                        {{ $campaignStats['inactive'] }},
+                        {{ $campaignStats['completed'] }},
+                        {{ $campaignStats['priority'] }}
+                    ],
+                    backgroundColor: [
+                        '#28a745',
+                        '#dc3545',
+                        '#17a2b8',
+                        '#ffc107'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Daily Donations Chart
+        const dailyCtx = document.getElementById('dailyDonationsChart').getContext('2d');
+        const dailyChart = new Chart(dailyCtx, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($dailyDonations->pluck('date')) !!},
+                datasets: [{
+                    label: 'عدد التبرعات',
+                    data: {!! json_encode($dailyDonations->pluck('count')) !!},
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Anonymity Chart
+        const anonymityCtx = document.getElementById('anonymityChart').getContext('2d');
+        const anonymityChart = new Chart(anonymityCtx, {
+            type: 'pie',
+            data: {
+                labels: ['تبرعات علنية', 'تبرعات مجهولة'],
+                datasets: [{
+                    data: [
+                        {{ $anonymityStats['public'] }},
+                        {{ $anonymityStats['anonymous'] }}
+                    ],
+                    backgroundColor: [
+                        '#28a745',
+                        '#6c757d'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+@endpush

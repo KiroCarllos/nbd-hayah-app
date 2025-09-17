@@ -107,7 +107,8 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     ]);
 
     // Reports
-    Route::get('reports', function () {
-        return view('admin.reports.index');
-    })->name('admin.reports.index');
+    Route::get('reports', [App\Http\Controllers\ReportsController::class, 'index'])->name('admin.reports.index');
+    Route::get('reports/campaign/{id}', [App\Http\Controllers\ReportsController::class, 'campaignDetails'])->name('admin.reports.campaign-details');
+    Route::get('reports/user/{id}', [App\Http\Controllers\ReportsController::class, 'userDetails'])->name('admin.reports.user-details');
+    Route::get('reports/export', [App\Http\Controllers\ReportsController::class, 'export'])->name('admin.reports.export');
 });
