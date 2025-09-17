@@ -285,7 +285,7 @@
                 <div class="card text-center">
                     <div class="card-body">
                         <i class="bi bi-currency-dollar text-warning display-4 mb-3"></i>
-                        <h5 class="card-title">@currency($stats['total_donations'])</h5>
+                        <h5 class="card-title">{{ $stats['total_donations'] }}</h5>
                         <p class="card-text">إجمالي التبرعات</p>
                     </div>
                 </div>
