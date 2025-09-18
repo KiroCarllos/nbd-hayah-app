@@ -726,14 +726,6 @@
                                                 </a>
 
                                                 <div class="d-flex align-items-center">
-                                                    <div class="me-3">
-                                                        <small class="text-muted d-block">المنشئ</small>
-                                                        <small class="fw-bold">
-                                                            <i class="bi bi-person-circle me-1"></i>
-                                                            {{ $campaign->creator->name }}
-                                                        </small>
-                                                    </div>
-
                                                     @auth
                                                         <button class="btn btn-outline-danger btn-sm"
                                                             onclick="toggleFavorite({{ $campaign->id }})"
@@ -994,10 +986,7 @@
                                                 <i class="bi bi-eye me-1"></i>
                                                 عرض
                                             </a>
-                                            <small class="text-muted">
-                                                <i class="bi bi-person me-1"></i>
-                                                {{ $campaign->creator->name }}
-                                            </small>
+
                                         </div>
                                     </div>
                                 </div>

@@ -41,7 +41,7 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $profileImagePath = null;
+        $profileImagePath = 'default.png';
 
         if ($request->hasFile('profile_image')) {
             $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');

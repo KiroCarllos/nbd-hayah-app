@@ -80,11 +80,8 @@ class ProfileController extends Controller
                 return back()->withErrors(['current_password' => 'كلمة المرور الحالية غير صحيحة']);
             }
         }
-
-        // Handle profile image upload
         if ($request->hasFile('profile_image')) {
-            // Delete old image if exists
-            if ($user->profile_image) {
+            if ($user->profile_image && $user->profile_image != "default.png") {
                 Storage::disk('public')->delete($user->profile_image);
             }
 

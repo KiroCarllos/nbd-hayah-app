@@ -64,10 +64,7 @@
                                         <i class="bi bi-eye me-1"></i>
                                         عرض التفاصيل
                                     </a>
-                                    <small class="text-muted">
-                                        <i class="bi bi-person me-1"></i>
-                                        {{ $campaign->creator->name }}
-                                    </small>
+
                                 </div>
                             </div>
                         </div>

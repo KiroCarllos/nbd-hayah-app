@@ -107,23 +107,21 @@
                                             <td>
                                                 @if ($donation->is_anonymous)
                                                     <div class="d-flex align-items-center">
-                                                        <div class="bg-secondary d-flex align-items-center justify-content-center rounded-circle me-3"
-                                                            style="width: 32px; height: 32px;">
-                                                            <i class="bi bi-eye-slash text-white"></i>
-                                                        </div>
+                                                        <img src="{{ asset('secret.jpg') }}" alt="متبرع مجهول"
+                                                            class="rounded-circle me-3" width="32" height="32"
+                                                            style="object-fit: cover;">
                                                         <span>متبرع مجهول</span>
                                                     </div>
                                                 @else
                                                     <div class="d-flex align-items-center">
-                                                        @if ($donation->user->profile_image)
+                                                        @if ($donation->user->profile_image && $donation->user->profile_image !== 'default.png')
                                                             <img src="{{ asset('storage/' . $donation->user->profile_image) }}"
                                                                 alt="Profile" class="rounded-circle me-3" width="32"
                                                                 height="32" style="object-fit: cover;">
                                                         @else
-                                                            <div class="bg-primary d-flex align-items-center justify-content-center rounded-circle me-3"
-                                                                style="width: 32px; height: 32px;">
-                                                                <i class="bi bi-person text-white"></i>
-                                                            </div>
+                                                            <img src="{{ asset('default.png') }}" alt="صورة افتراضية"
+                                                                class="rounded-circle me-3" width="32" height="32"
+                                                                style="object-fit: cover;">
                                                         @endif
                                                         <div>
                                                             <strong>{{ $donation->user->name }}</strong>
@@ -223,14 +221,12 @@
                 <div class="card-body">
                     <p><strong>منشئ الحملة:</strong></p>
                     <div class="d-flex align-items-center mb-3">
-                        @if ($campaign->creator->profile_image)
+                        @if ($campaign->creator->profile_image && $campaign->creator->profile_image !== 'default.png')
                             <img src="{{ asset('storage/' . $campaign->creator->profile_image) }}" alt="Creator"
                                 class="rounded-circle me-3" width="50" height="50" style="object-fit: cover;">
                         @else
-                            <div class="bg-primary d-flex align-items-center justify-content-center rounded-circle me-3"
-                                style="width: 50px; height: 50px;">
-                                <i class="bi bi-person text-white"></i>
-                            </div>
+                            <img src="{{ asset('default.png') }}" alt="صورة افتراضية" class="rounded-circle me-3"
+                                width="50" height="50" style="object-fit: cover;">
                         @endif
                         <div>
                             <strong>{{ $campaign->creator->name }}</strong>
