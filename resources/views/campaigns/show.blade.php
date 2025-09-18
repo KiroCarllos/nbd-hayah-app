@@ -67,10 +67,6 @@
                         </div>
 
                         <div class="mb-3">
-                            <small class="text-muted">
-                                <i class="bi bi-person me-1"></i>
-                                بواسطة: {{ $campaign->creator->name }}
-                            </small>
                             @if ($campaign->end_date)
                                 <small class="text-muted ms-3">
                                     <i class="bi bi-calendar me-1"></i>
@@ -94,11 +90,18 @@
                                 <div
                                     class="d-flex justify-content-between align-items-center py-2 {{ !$loop->last ? 'border-bottom' : '' }}">
                                     <div class="d-flex align-items-center">
-                                        @if ($donation->user->profile_image && !$donation->is_anonymous)
+                                        @if ($donation->is_anonymous)
+                                            <img src="{{ asset('secret.jpg') }}" alt="متبرع مجهول"
+                                                class="rounded-circle me-2" width="30" height="30"
+                                                style="object-fit: cover;">
+                                        @elseif ($donation->user->profile_image && $donation->user->profile_image !== 'default.png')
                                             <img src="{{ asset('storage/' . $donation->user->profile_image) }}"
-                                                alt="Profile" class="rounded-circle me-2" width="30" height="30">
+                                                alt="Profile" class="rounded-circle me-2" width="30" height="30"
+                                                style="object-fit: cover;">
                                         @else
-                                            <i class="bi bi-person-circle me-2" style="font-size: 1.5rem;"></i>
+                                            <img src="{{ asset('default.png') }}" alt="صورة افتراضية"
+                                                class="rounded-circle me-2" width="30" height="30"
+                                                style="object-fit: cover;">
                                         @endif
                                         <div>
                                             <strong>{{ $donation->is_anonymous ? 'متبرع مجهول' : $donation->user->name }}</strong>

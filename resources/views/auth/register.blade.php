@@ -78,17 +78,19 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label for="profile_image" class="form-label">الصورة الشخصية <span
-                                                    class="text-danger">*</span></label>
+                                            <label for="profile_image" class="form-label">الصورة الشخصية
+                                                <span class="text-muted">(اختياري)</span></label>
                                             <input type="file"
                                                 class="form-control @error('profile_image') is-invalid @enderror"
-                                                id="profile_image" name="profile_image" accept="image/*" required>
+                                                id="profile_image" name="profile_image" accept="image/*">
                                             @error('profile_image')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
-                                            <div class="form-text">الحد الأقصى: 2 ميجابايت. الأنواع المدعومة: JPG, PNG, GIF
+                                            <div class="form-text">
+                                                <i class="bi bi-info-circle me-1"></i>
+                                                الحد الأقصى: 2 ميجابايت. الأنواع المدعومة: JPG, PNG, GIF<br>
                                             </div>
                                         </div>
                                     </div>

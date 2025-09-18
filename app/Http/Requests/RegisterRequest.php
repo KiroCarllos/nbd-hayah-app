@@ -26,7 +26,7 @@ class RegisterRequest extends FormRequest
             'email' => 'required|string|email|max:255|unique:users',
             'mobile' => 'required|string|max:20|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
@@ -42,7 +42,6 @@ class RegisterRequest extends FormRequest
             'password.required' => 'كلمة المرور مطلوبة',
             'password.min' => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل',
             'password.confirmed' => 'تأكيد كلمة المرور غير متطابق',
-            'profile_image.required' => 'الصورة الشخصية مطلوبة',
             'profile_image.image' => 'يجب أن يكون الملف صورة',
             'profile_image.mimes' => 'نوع الصورة غير مدعوم',
             'profile_image.max' => 'حجم الصورة كبير جداً',
