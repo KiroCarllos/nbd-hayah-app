@@ -59,17 +59,25 @@
                                     </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary w-100 py-3 fw-semibold">
-                                    <i class="bi bi-box-arrow-in-right me-2"></i>
-                                    تسجيل الدخول
+                                <button type="submit" class="btn btn-primary w-100 py-3 fw-semibold" id="loginBtn">
+                                    <span class="btn-text">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                                        تسجيل الدخول
+                                    </span>
+                                    <span class="btn-loading d-none">
+                                        جاري تسجيل الدخول...
+                                        <i class="bi bi-heart-fill me-2"></i>
+                                    </span>
                                 </button>
+
                             </form>
 
                             <div class="text-center mt-4">
                                 <p class="text-muted mb-0">ليس لديك حساب؟</p>
                                 <a href="{{ route('register') }}" class="btn btn-outline-primary mt-2">
-                                    <i class="bi bi-person-plus me-2"></i>
                                     إنشاء حساب جديد
+                                    <i class="bi bi-person-plus me-2"></i>
+
                                 </a>
                             </div>
                         </div>
@@ -87,3 +95,31 @@
         </div>
     </div>
 @endsection
+
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const loginBtn = document.getElementById('loginBtn');
+            const btnText = loginBtn.querySelector('.btn-text');
+            const btnLoading = loginBtn.querySelector('.btn-loading');
+
+            form.addEventListener('submit', function(e) {
+                // أولاً اتأكد أن الفورم صحيح
+                if (!form.checkValidity()) {
+                    return; // لو فيه أخطاء خليه يعرضها
+                }
+
+                // تعطيل الزر
+                loginBtn.disabled = true;
+
+                // إخفاء النص الأساسي
+                btnText.classList.add('d-none');
+
+                // إظهار نص "جاري تسجيل الدخول"
+                btnLoading.classList.remove('d-none');
+            });
+        });
+    </script>
+@endpush

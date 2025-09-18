@@ -132,11 +132,19 @@
                                 </div>
 
                                 <div class="d-grid">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-person-plus me-2"></i>
-                                        إنشاء الحساب
+                                    <button type="submit" class="btn btn-primary" id="registerBtn">
+                                        <span class="btn-text">
+                                            إنشاء الحساب
+                                            <i class="bi bi-person-plus me-2"></i>
+                                        </span>
+                                        <span class="btn-loading d-none">
+                                            جاري إنشاء الحساب...
+                                            <i class="bi bi-heart-fill me-2"></i>
+
+                                        </span>
                                     </button>
                                 </div>
+
                             </form>
 
                             <div class="text-center mt-3">
@@ -161,6 +169,30 @@
                         };
                         reader.readAsDataURL(file);
                     }
+                });
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.querySelector('form');
+                    const registerBtn = document.getElementById('registerBtn');
+                    const btnText = registerBtn.querySelector('.btn-text');
+                    const btnLoading = registerBtn.querySelector('.btn-loading');
+
+                    form.addEventListener('submit', function(e) {
+                        // أولاً: تأكد من أن الفورم صالح
+                        if (!form.checkValidity()) {
+                            return; // لو فيه أخطاء خليه يعرضها
+                        }
+
+                        // تعطيل الزر بعد الضغط
+                        registerBtn.disabled = true;
+
+                        // إخفاء النص الأساسي
+                        btnText.classList.add('d-none');
+
+                        // إظهار نص التحميل
+                        btnLoading.classList.remove('d-none');
+                    });
                 });
             </script>
         @endpush
