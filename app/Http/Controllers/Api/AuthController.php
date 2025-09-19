@@ -85,7 +85,6 @@ class AuthController extends Controller
             'password.min' => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل',
             'password.confirmed' => 'تأكيد كلمة المرور غير متطابق',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
