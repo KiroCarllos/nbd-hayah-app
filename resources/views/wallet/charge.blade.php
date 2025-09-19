@@ -69,11 +69,13 @@
                             </div>
 
                             <!-- Terms -->
+
                             <div class="mb-3">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="terms" required>
                                     <label class="form-check-label" for="terms">
-                                        أوافق على <a href="#" target="_blank">شروط وأحكام</a> استخدام المحفظة
+                                        أوافق على <a href="{{ route('terms') }}" target="_blank">شروط وأحكام</a> استخدام
+                                        المحفظة
                                         الإلكترونية
                                     </label>
                                 </div>

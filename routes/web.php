@@ -121,3 +121,21 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('reports/user/{id}', [App\Http\Controllers\ReportsController::class, 'userDetails'])->name('admin.reports.user-details');
     Route::get('reports/export', [App\Http\Controllers\ReportsController::class, 'export'])->name('admin.reports.export');
 });
+
+// Legal Pages (Public)
+Route::get('/privacy', function () {
+    return view('privacy');
+})->name('privacy');
+
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
+
+// Mobile App Legal Pages (without layout)
+Route::get('/mobile/privacy', function () {
+    return view('mobile.privacy');
+})->name('mobile.privacy');
+
+Route::get('/mobile/terms', function () {
+    return view('mobile.terms');
+})->name('mobile.terms');
