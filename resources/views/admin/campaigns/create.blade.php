@@ -66,16 +66,16 @@
                         </div>
 
                         <!-- Creator -->
-                        <div class="mb-3">
+                        <div class="mb-3 d-none">
                             <label for="creator_id" class="form-label">منشئ الحملة <span
                                     class="text-danger">*</span></label>
-                            <select class="form-select @error('creator_id') is-invalid @enderror" id="creator_id"
+                            <select  class="form-select  @error('creator_id') is-invalid @enderror" id="creator_id"
                                 name="creator_id" required>
                                 <option value="">اختر المستخدم</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}"
-                                        {{ old('creator_id') == $user->id ? 'selected' : '' }}>
-                                        {{ $user->name }} ({{ $user->mobile }})
+                                    <option value="{{ auth()->id() }}" selected>
+{{--                                        {{ old('creator_id') == $user->id ? 'selected' : '' }}>--}}
+{{--                                        {{ $user->name }} ({{ $user->mobile }})--}}
                                     </option>
                                 @endforeach
                             </select>
