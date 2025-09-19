@@ -237,8 +237,8 @@
                                 <li><a href="#">مركز المساعدة</a></li>
                                 <li><a href="#">الأسئلة الشائعة</a></li>
                                 <li><a href="#">اتصل بنا</a></li>
-                                <li><a href="#">سياسة الخصوصية</a></li>
-                                <li><a href="#">الشروط والأحكام</a></li>
+                                <li><a href="{{ route('privacy') }}">سياسة الخصوصية</a></li>
+                                <li><a href="{{ route('terms') }}">الشروط والأحكام</a></li>
                             </ul>
                         </div>
                     </div>

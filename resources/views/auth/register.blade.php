@@ -127,8 +127,9 @@
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" id="terms" required>
                                         <label class="form-check-label" for="terms">
-                                            أوافق على <a href="#" target="_blank">الشروط والأحكام</a> و <a
-                                                href="#" target="_blank">سياسة الخصوصية</a>
+                                            أوافق على <a href="{{ route('terms') }}" target="_blank">الشروط والأحكام</a>
+                                            و
+                                            <a href="{{ route('privacy') }}" target="_blank">سياسة الخصوصية</a>
                                         </label>
                                     </div>
                                 </div>
