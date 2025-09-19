@@ -136,7 +136,7 @@
                                 @endif
                                 <li><a class="dropdown-item" href="{{ route('profile.show') }}">الملف الشخصي</a></li>
                                 <li><a class="dropdown-item" href="{{ route('wallet.index') }}">المحفظة
-                                        (@currency(auth()->user()->wallet_balance))
+                                        (@currency(auth()->user()?->wallet_balance))
                                     </a></li>
                                 <li><a class="dropdown-item" href="{{ route('donations.index') }}">تبرعاتي</a></li>
                                 <li><a class="dropdown-item" href="{{ route('favorites.index') }}">المفضلة</a></li>
@@ -461,6 +461,389 @@
                 }
             `;
             document.head.appendChild(style);
+        });
+    </script>
+
+    <!-- Quick Donation Floating Button -->
+    @auth
+        <div id="quickDonateBtn" class="quick-donate-btn">
+            <i class="bi bi-lightning-fill"></i>
+        </div>
+
+        <!-- Quick Donation Modal -->
+        <div class="modal fade" id="quickDonateModal" tabindex="-1" aria-labelledby="quickDonateModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="quickDonateModalLabel">
+                            <i class="bi bi-lightning-fill me-2"></i>
+                            تبرع سريع
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="quickDonateForm">
+                            @csrf
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">اختر مبلغ التبرع:</label>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-4">
+                                        <button type="button" class="btn btn-outline-primary w-100 amount-btn"
+                                            data-amount="50">50 ج.م</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="button" class="btn btn-outline-primary w-100 amount-btn"
+                                            data-amount="100">100 ج.م</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="button" class="btn btn-outline-primary w-100 amount-btn"
+                                            data-amount="200">200 ج.م</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="button" class="btn btn-outline-primary w-100 amount-btn"
+                                            data-amount="500">500 ج.م</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="button" class="btn btn-outline-primary w-100 amount-btn"
+                                            data-amount="1000">1000 ج.م</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button type="button" class="btn btn-outline-primary w-100 amount-btn"
+                                            data-amount="10000">10000 ج.م</button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customAmount" class="form-label">أو أدخل مبلغاً مخصصاً:</label>
+                                    <input type="number" class="form-control" id="customAmount" name="amount"
+                                        placeholder="أدخل المبلغ" min="1" step="0.01">
+                                    <div id="amountFeedback" class="invalid-feedback"></div>
+                                    <div class="form-text">
+                                        الحد الأدنى: 1 ج.م
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="isAnonymous"
+                                        name="is_anonymous">
+                                    <label class="form-check-label" for="isAnonymous">
+                                        تبرع مجهول
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="donationMessage" class="form-label">رسالة (اختياري):</label>
+                                <textarea class="form-control" id="donationMessage" name="message" rows="3"
+                                    placeholder="اكتب رسالة تشجيعية..."></textarea>
+                            </div>
+
+                            <div class="alert alert-info d-flex justify-content-between align-items-center">
+                                <div>
+                                    <i class="bi bi-wallet2 me-2"></i>
+                                    رصيدك الحالي: <strong>{{ number_format(auth()->user()->wallet_balance, 2) }}
+                                        ج.م</strong>
+                                </div>
+                                <a href="{{ route('wallet.charge') }}" class="btn btn-sm btn-outline-primary"
+                                    target="_blank">
+                                    <i class="bi bi-plus-circle me-1"></i>شحن المحفظة
+                                </a>
+                            </div>
+
+                            <div id="insufficientBalanceAlert" class="alert alert-warning d-none">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        <strong>رصيد غير كافي!</strong>
+                                        <span id="balanceMessage"></span>
+                                    </div>
+                                    <a href="{{ route('wallet.charge') }}" class="btn btn-sm btn-warning"
+                                        target="_blank">
+                                        <i class="bi bi-lightning-fill me-1"></i>شحن فوري
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                        <button type="button" class="btn btn-primary" id="submitQuickDonate">
+                            <i class="bi bi-heart-fill me-2"></i>
+                            تبرع الآن
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endauth
+
+    <style>
+        .quick-donate-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #31a354, #fe4d57);
+            auth()->user()?->wallet_balance border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+
+        .quick-donate-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(0, 123, 255, 0.6);
+        }
+
+        .quick-donate-btn i {
+            color: white;
+            font-size: 24px;
+            animation: lightning 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 4px 20px rgba(0, 123, 255, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 4px 20px rgba(0, 123, 255, 0.8);
+            }
+
+            100% {
+                box-shadow: 0 4px 20px rgba(0, 123, 255, 0.4);
+            }
+        }
+
+        @keyframes lightning {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-5deg);
+            }
+
+            75% {
+                transform: rotate(5deg);
+            }
+        }
+
+        .amount-btn.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            border-bottom: none;
+        }
+
+        .modal-footer {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .amount-btn.disabled {
+            cursor: not-allowed !important;
+            position: relative;
+        }
+
+        .amount-btn.disabled::after {
+            content: '🔒';
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-size: 12px;
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        .form-control.is-valid {
+            border-color: #198754;
+            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Quick donate button click
+            document.getElementById('quickDonateBtn').addEventListener('click', function() {
+                new bootstrap.Modal(document.getElementById('quickDonateModal')).show();
+            });
+
+            // Amount button selection
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                const amount = parseFloat(btn.dataset.amount);
+                const currentBalance = {{ auth()->user()?->wallet_balance }};
+
+                // Disable button if amount exceeds balance
+                if (amount > currentBalance) {
+                    btn.classList.add('disabled');
+                    btn.style.opacity = '0.5';
+                    btn.title =
+                        `رصيد غير كافي. تحتاج ${amount.toLocaleString()} ج.م ولديك ${currentBalance.toLocaleString()} ج.م`;
+                }
+
+                btn.addEventListener('click', function() {
+                    // Check if button is disabled
+                    if (this.classList.contains('disabled')) {
+                        alert(
+                            `رصيد المحفظة غير كافي!\nالمبلغ المطلوب: ${amount.toLocaleString()} ج.م\nرصيدك الحالي: ${currentBalance.toLocaleString()} ج.م\n\nيرجى شحن المحفظة أولاً`
+                        );
+                        return;
+                    }
+
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove(
+                        'active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    // Set the amount in custom input
+                    document.getElementById('customAmount').value = this.dataset.amount;
+                });
+            });
+
+            // Custom amount input
+            document.getElementById('customAmount').addEventListener('input', function() {
+                // Remove active class from all amount buttons when typing custom amount
+                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+
+                const amount = parseFloat(this.value);
+                const currentBalance = {{ auth()->user()?->wallet_balance }};
+                const submitBtn = document.getElementById('submitQuickDonate');
+
+                // Real-time validation
+                const feedback = document.getElementById('amountFeedback');
+
+                const balanceAlert = document.getElementById('insufficientBalanceAlert');
+                const balanceMessage = document.getElementById('balanceMessage');
+
+                if (amount && amount > 0) {
+                    if (amount > currentBalance) {
+                        this.classList.add('is-invalid');
+                        this.classList.remove('is-valid');
+                        feedback.textContent =
+                            `رصيد المحفظة غير كافي. رصيدك الحالي: ${currentBalance.toLocaleString()} ج.م`;
+                        balanceMessage.textContent =
+                            ` تحتاج ${(amount - currentBalance).toLocaleString()} ج.م إضافية`;
+                        balanceAlert.classList.remove('d-none');
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML =
+                            '<i class="bi bi-exclamation-triangle me-2"></i>رصيد غير كافي';
+                    } else if (amount > 100000) {
+                        this.classList.add('is-invalid');
+                        this.classList.remove('is-valid');
+                        feedback.textContent = 'الحد الأقصى للتبرع هو 100,000 ج.م';
+                        balanceAlert.classList.add('d-none');
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML =
+                            '<i class="bi bi-exclamation-triangle me-2"></i>مبلغ كبير جداً';
+                    } else {
+                        this.classList.remove('is-invalid');
+                        this.classList.add('is-valid');
+                        feedback.textContent = '';
+                        balanceAlert.classList.add('d-none');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="bi bi-heart-fill me-2"></i>تبرع الآن';
+                    }
+                } else {
+                    this.classList.remove('is-invalid', 'is-valid');
+                    feedback.textContent = '';
+                    balanceAlert.classList.add('d-none');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="bi bi-heart-fill me-2"></i>تبرع الآن';
+                }
+            });
+
+            // Submit quick donation
+            document.getElementById('submitQuickDonate').addEventListener('click', function() {
+                const form = document.getElementById('quickDonateForm');
+                const formData = new FormData(form);
+                const submitBtn = this;
+                const amountInput = document.getElementById('customAmount');
+                const amount = parseFloat(amountInput.value);
+                const currentBalance = {{ auth()->user()?->wallet_balance }};
+
+                // Validate amount
+                if (!amount || amount <= 0) {
+                    alert('يرجى إدخال مبلغ صحيح للتبرع');
+                    return;
+                }
+
+                if (amount > 100000) {
+                    alert('الحد الأقصى للتبرع هو 100,000 ج.م');
+                    return;
+                }
+
+                // Check wallet balance
+                if (amount > currentBalance) {
+                    alert(
+                        `رصيد المحفظة غير كافي!\nالمبلغ المطلوب: ${amount.toLocaleString()} ج.م\nرصيدك الحالي: ${currentBalance.toLocaleString()} ج.م\n\nيرجى شحن المحفظة أولاً`
+                    );
+                    return;
+                }
+
+                // Disable button and show loading
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>جاري التبرع...';
+
+                fetch('{{ route('quick-donate.store') }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success message
+                            alert(data.message);
+                            // Close modal
+                            bootstrap.Modal.getInstance(document.getElementById('quickDonateModal'))
+                                .hide();
+                            // Reset form
+                            form.reset();
+                            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove(
+                                'active'));
+                            // Update wallet balance if displayed
+                            location.reload();
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('حدث خطأ أثناء التبرع. يرجى المحاولة مرة أخرى.');
+                    })
+                    .finally(() => {
+                        // Re-enable button
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="bi bi-heart-fill me-2"></i>تبرع الآن';
+                    });
+            });
         });
     </script>
 

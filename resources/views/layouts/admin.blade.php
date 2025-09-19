@@ -107,7 +107,14 @@
                             <a class="nav-link {{ request()->routeIs('admin.donations.*') ? 'active' : '' }}"
                                 href="{{ route('admin.donations.index') }}">
                                 <i class="bi bi-gift me-2"></i>
-                                إدارة التبرعات
+                                تبرعات الحملات
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.general-donations.*') ? 'active' : '' }}"
+                                href="{{ route('admin.general-donations.index') }}">
+                                <i class="bi bi-lightning-fill me-2 text-warning"></i>
+                                التبرعات العامة السريعة
                             </a>
                         </li>
                         <li class="nav-item">

@@ -55,6 +55,16 @@ class User extends Authenticatable
         return $this->hasMany(Donation::class);
     }
 
+    public function campaignDonations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
+    public function generalDonations()
+    {
+        return $this->hasMany(GeneralDonation::class);
+    }
+
     public function walletTransactions()
     {
         return $this->hasMany(WalletTransaction::class);

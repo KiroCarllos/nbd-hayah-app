@@ -53,6 +53,10 @@
                                     <div>
                                         <h4>{{ $stats['total_donations'] }}</h4>
                                         <p class="mb-0">إجمالي التبرعات</p>
+                                        <small class="opacity-75">
+                                            {{ $stats['campaign_donations'] }} للحملات • {{ $stats['general_donations'] }}
+                                            عامة
+                                        </small>
                                     </div>
                                     <div class="align-self-center">
                                         <i class="bi bi-heart-fill" style="font-size: 2rem;"></i>
@@ -177,9 +181,9 @@
                 </div>
 
                 <!-- Recent Donations -->
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">آخر التبرعات</h5>
+                        <h5 class="mb-0">آخر التبرعات للحملات</h5>
                         <a href="{{ route('donations.index') }}" class="btn btn-sm btn-outline-primary">عرض الكل</a>
                     </div>
                     <div class="card-body">
@@ -234,7 +238,72 @@
                                 </table>
                             </div>
                         @else
-                            <p class="text-muted text-center">لم تقم بأي تبرعات بعد</p>
+                            <p class="text-muted text-center">لم تقم بأي تبرعات للحملات بعد</p>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Recent General Donations -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-lightning-fill text-warning me-2"></i>
+                            آخر التبرعات العامة السريعة
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        @if ($recent_general_donations->count() > 0)
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>التاريخ</th>
+                                            <th>المبلغ</th>
+                                            <th>النوع</th>
+                                            <th>الرسالة</th>
+                                            <th>الحالة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($recent_general_donations as $donation)
+                                            <tr>
+                                                <td><small>{{ $donation->created_at->format('Y/m/d H:i') }}</small></td>
+                                                <td><span class="badge bg-warning text-dark">@currency($donation->amount)</span></td>
+                                                <td>
+                                                    @if ($donation->is_anonymous)
+                                                        <span class="badge bg-secondary">مجهول</span>
+                                                    @else
+                                                        <span class="badge bg-info">علني</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($donation->message)
+                                                        <small
+                                                            class="text-muted">{{ \Illuminate\Support\Str::limit($donation->message, 30) }}</small>
+                                                    @else
+                                                        <small class="text-muted">-</small>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($donation->status == 'completed')
+                                                        <span class="badge bg-success">مكتمل</span>
+                                                    @elseif ($donation->status == 'pending')
+                                                        <span class="badge bg-warning">معلق</span>
+                                                    @else
+                                                        <span class="badge bg-danger">فاشل</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center py-4">
+                                <i class="bi bi-lightning text-muted" style="font-size: 3rem;"></i>
+                                <p class="text-muted mt-2">لم تقم بأي تبرعات عامة سريعة بعد</p>
+                                <p class="text-muted small">استخدم أيقونة البرق العائمة للتبرع السريع</p>
+                            </div>
                         @endif
                     </div>
                 </div>
