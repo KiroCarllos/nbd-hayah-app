@@ -74,6 +74,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'mobile' => 'required|string|unique:users,mobile|regex:/^01[0-9]{9}$/',
+            'email' => 'required',
             'password' => 'required|string|min:8|confirmed',
         ], [
             'name.required' => 'الاسم مطلوب',
@@ -96,6 +97,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'mobile' => $request->mobile,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             'wallet_balance' => 0,
         ]);
