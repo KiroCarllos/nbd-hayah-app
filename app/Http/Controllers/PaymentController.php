@@ -21,7 +21,7 @@ class PaymentController extends Controller
     public function redirectToPaymentPage(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:1|max:10000',
+            'amount' => 'required|numeric|min:1',
         ]);
 
         $user = Auth::user();

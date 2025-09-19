@@ -206,7 +206,7 @@
                                     <label for="amount" class="form-label">مبلغ التبرع ({!! \App\Helpers\CurrencyHelper::getSymbol() !!})</label>
                                     <input type="number" class="form-control" id="amount" name="amount" min="1"
                                         max="{{ auth()->user()->wallet_balance }}" required>
-                                    <div class="form-text">الحد الأقصى: @currency(auth()->user()->wallet_balance)</div>
+                                    <div class="form-text">الحد الأقصى: @currency(auth()->user()?->wallet_balance)</div>
                                 </div>
 
                                 <div class="mb-3">

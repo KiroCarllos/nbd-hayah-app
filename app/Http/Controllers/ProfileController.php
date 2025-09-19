@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Donation;
+use App\Models\GeneralDonation;
 use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +22,14 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         // Get user statistics
+        $campaignDonations = Donation::where('user_id', $user->id)->where('status', 'completed');
+        $generalDonations = GeneralDonation::where('user_id', $user->id)->where('status', 'completed');
+
         $stats = [
-            'total_donations' => Donation::where('user_id', $user->id)->where('status', 'completed')->count(),
-            'total_donated_amount' => Donation::where('user_id', $user->id)->where('status', 'completed')->sum('amount'),
+            'total_donations' => $campaignDonations->count() + $generalDonations->count(),
+            'total_donated_amount' => $campaignDonations->sum('amount') + $generalDonations->sum('amount'),
+            'campaign_donations' => $campaignDonations->count(),
+            'general_donations' => $generalDonations->count(),
             'total_wallet_transactions' => WalletTransaction::where('user_id', $user->id)->count(),
             'total_charged_amount' => WalletTransaction::where('user_id', $user->id)->where('type', 'credit')->where('status', 'completed')->sum('amount'),
         ];
@@ -34,14 +40,20 @@ class ProfileController extends Controller
             ->limit(10)
             ->get();
 
-        // Recent donations
+        // Recent campaign donations
         $recent_donations = Donation::where('user_id', $user->id)
             ->with(['campaign'])
             ->orderBy('created_at', 'desc')
-            ->limit(10)
+            ->limit(5)
             ->get();
 
-        return view('profile.show', compact('user', 'stats', 'recent_transactions', 'recent_donations'));
+        // Recent general donations
+        $recent_general_donations = GeneralDonation::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('profile.show', compact('user', 'stats', 'recent_transactions', 'recent_donations', 'recent_general_donations'));
     }
 
     public function edit()

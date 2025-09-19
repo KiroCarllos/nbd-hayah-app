@@ -15,7 +15,7 @@
                         <!-- Current Balance -->
                         <div class="alert alert-info text-center">
                             <i class="bi bi-wallet2 me-2"></i>
-                            رصيدك الحالي: <strong>@currency(auth()->user()->wallet_balance)</strong>
+                            رصيدك الحالي: <strong>@currency(auth()->user()?->wallet_balance)</strong>
                         </div>
 
                         <form method="POST" action="{{ route('wallet.charge.process') }}">
@@ -25,14 +25,14 @@
                                 <label for="amount" class="form-label">مبلغ الشحن (ج.م) <span
                                         class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('amount') is-invalid @enderror"
-                                    id="amount" name="amount" value="{{ old('amount') }}" min="1" max="10000"
-                                    step="0.01" required autofocus>
+                                    id="amount" name="amount" value="{{ old('amount') }}" min="1" step="0.01"
+                                    required autofocus>
                                 @error('amount')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
-                                <div class="form-text">الحد الأدنى: 1 ج.م | الحد الأقصى: 10,000 ج.م</div>
+                                <div class="form-text">الحد الأدنى: 1 ج.م</div>
                             </div>
 
                             <!-- Quick Amount Buttons -->
