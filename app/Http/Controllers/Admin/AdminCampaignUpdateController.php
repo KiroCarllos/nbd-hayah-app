@@ -78,7 +78,7 @@ class AdminCampaignUpdateController extends Controller
         CampaignUpdate::create([
             'campaign_id' => $campaign->id,
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => $request->get("content"),
             'type' => $request->type,
             'is_important' => $request->boolean('is_important', false),
             'images' => $images,
@@ -170,7 +170,7 @@ class AdminCampaignUpdateController extends Controller
 
         $update->update([
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => $request->get("content"),
             'type' => $request->type,
             'is_important' => $request->boolean('is_important'),
             'images' => array_values($currentImages),
