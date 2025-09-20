@@ -94,10 +94,10 @@ class AdminCampaignUpdateController extends Controller
      */
     public function show(Campaign $campaign, CampaignUpdate $update)
     {
-        // Ensure the update belongs to the campaign
-        if ($update->campaign_id !== $campaign->id) {
-            abort(404);
-        }
+//        // Ensure the update belongs to the campaign
+//        if ($update->campaign_id !== $campaign->id) {
+//            abort(404);
+//        }
 
         $update->load(['creator']);
         return view('admin.campaign-updates.show', compact('campaign', 'update'));
@@ -109,9 +109,9 @@ class AdminCampaignUpdateController extends Controller
     public function edit(Campaign $campaign, CampaignUpdate $update)
     {
         // Ensure the update belongs to the campaign
-        if ($update->campaign_id !== $campaign->id) {
-            abort(404);
-        }
+//        if ($update->campaign_id !== $campaign->id) {
+//            abort(404);
+//        }
 
         return view('admin.campaign-updates.edit', compact('campaign', 'update'));
     }
@@ -122,9 +122,9 @@ class AdminCampaignUpdateController extends Controller
     public function update(Request $request, Campaign $campaign, CampaignUpdate $update)
     {
         // Ensure the update belongs to the campaign
-        if ($update->campaign_id !== $campaign->id) {
-            abort(404);
-        }
+//        if ($update->campaign_id !== $campaign->id) {
+//            abort(404);
+//        }
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -186,9 +186,9 @@ class AdminCampaignUpdateController extends Controller
     public function destroy(Campaign $campaign, CampaignUpdate $update)
     {
         // Ensure the update belongs to the campaign
-        if ($update->campaign_id !== $campaign->id) {
-            abort(404);
-        }
+//        if ($update->campaign_id !== $campaign->id) {
+//            abort(404);
+//        }
 
         // Delete update images
         if ($update->images) {
