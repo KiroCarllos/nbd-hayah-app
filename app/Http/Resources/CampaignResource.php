@@ -56,6 +56,7 @@ class CampaignResource extends JsonResource
             'remaining_amount' => (float) $this->remaining_amount,
             'progress_percentage' => (float) $this->progress_percentage,
             'is_active' => (bool) $this->is_active,
+            'end_date' => $this->end_date,
             'is_priority' => (bool) $this->is_priority,
             'images' => $images,
             'creator' => new UserResource($this->whenLoaded('creator')),
