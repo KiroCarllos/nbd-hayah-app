@@ -79,6 +79,73 @@
                     </div>
                 </div>
 
+                <!-- Campaign Updates -->
+                @if ($campaign->updates->count() > 0)
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">آخر التحديثات</h5>
+                        </div>
+                        <div class="card-body">
+                            @foreach ($campaign->updates->take(5) as $update)
+                                <div class="border-bottom py-3 {{ $loop->last ? 'border-bottom-0' : '' }}">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge bg-info me-2">{{ $update->type_name }}</span>
+                                            @if ($update->is_important)
+                                                <span class="badge bg-danger me-2">مهم</span>
+                                            @endif
+                                        </div>
+                                        <small class="text-muted">{{ $update->created_at->diffForHumans() }}</small>
+                                    </div>
+                                    <h6 class="mb-2">{{ $update->title }}</h6>
+                                    <p class="mb-2 text-muted">{{ Str::limit($update->content, 150) }}</p>
+
+                                    @if ($update->images && count($update->images) > 0)
+                                        <div class="mb-2">
+                                            <div class="row">
+                                                @foreach ($update->images as $index => $image)
+                                                    @if ($index < 3)
+                                                        <div class="col-4">
+                                                            <a href="{{ asset('storage/' . $image) }}" class="glightbox"
+                                                                data-gallery="update-{{ $update->id }}-images"
+                                                                data-title="{{ $update->title }}">
+                                                                <img src="{{ asset('storage/' . $image) }}"
+                                                                    class="img-fluid rounded" alt="صورة التحديث"
+                                                                    style="height: 80px; object-fit: cover; width: 100%;">
+                                                            </a>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                                @if (count($update->images) > 3)
+                                                    <div class="col-4 d-flex align-items-center justify-content-center">
+                                                        <small class="text-muted">+{{ count($update->images) - 3 }} صور
+                                                            أخرى</small>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="bi bi-person me-1"></i>
+                                            بواسطة: {{ $update->creator->name }}
+                                        </small>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            @if ($campaign->updates->count() > 5)
+                                <div class="text-center mt-3">
+                                    <small class="text-muted">
+                                        يوجد {{ $campaign->updates->count() - 5 }} تحديثات أخرى
+                                    </small>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Recent Donations -->
                 @if ($campaign->donations->count() > 0)
                     <div class="card mt-4">

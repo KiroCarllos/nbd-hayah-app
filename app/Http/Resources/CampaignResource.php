@@ -21,6 +21,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(property="images", type="array", @OA\Items(type="string"), example={"http://example.com/image1.jpg", "http://example.com/image2.jpg"}),
  *     @OA\Property(property="creator", ref="#/components/schemas/UserResource"),
  *     @OA\Property(property="donations_count", type="integer", example=25),
+ *     @OA\Property(property="updates_count", type="integer", example=5),
+ *     @OA\Property(property="latest_update", ref="#/components/schemas/CampaignUpdateResource"),
  *     @OA\Property(property="is_favorited", type="boolean", example=false),
  *     @OA\Property(property="created_at", type="string", format="date-time", example="2023-01-01T00:00:00Z"),
  *     @OA\Property(property="updated_at", type="string", format="date-time", example="2023-01-01T00:00:00Z")
@@ -58,6 +60,8 @@ class CampaignResource extends JsonResource
             'images' => $images,
             'creator' => new UserResource($this->whenLoaded('creator')),
             'donations_count' => $this->donations_count ?? $this->donations()->count(),
+            'updates_count' => $this->updates_count ?? $this->updates()->count(),
+            'latest_update' => new CampaignUpdateResource($this->whenLoaded('latestUpdate')),
             'is_favorited' => $this->when(
                 auth('sanctum')->check(),
                 function () {

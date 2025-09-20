@@ -66,6 +66,16 @@ class Campaign extends Model
         return $this->hasMany(UserFavoriteCampaign::class);
     }
 
+    public function updates()
+    {
+        return $this->hasMany(CampaignUpdate::class);
+    }
+
+    public function latestUpdate()
+    {
+        return $this->hasOne(CampaignUpdate::class)->latest();
+    }
+
     // Accessors & Mutators
     public function getProgressPercentageAttribute()
     {

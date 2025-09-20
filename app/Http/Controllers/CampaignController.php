@@ -19,7 +19,7 @@ class CampaignController extends Controller
 
     public function show(Campaign $campaign)
     {
-        $campaign->load(['creator', 'donations.user']);
+        $campaign->load(['creator', 'donations.user', 'updates.creator']);
 
         return view('campaigns.show', compact('campaign'));
     }

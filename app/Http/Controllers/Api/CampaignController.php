@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CampaignResource;
+use App\Http\Resources\CampaignUpdateResource;
 use App\Models\Campaign;
+use App\Models\CampaignUpdate;
+use App\Models\UserFavoriteCampaign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -66,8 +69,8 @@ class CampaignController extends Controller
         $priority = $request->get('priority');
 
         $query = Campaign::active()
-            ->with(['creator', 'donations'])
-            ->withCount('donations');
+            ->with(['creator', 'donations', 'latestUpdate.creator'])
+            ->withCount(['donations', 'updates']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -220,8 +223,8 @@ class CampaignController extends Controller
      */
     public function show($id)
     {
-        $campaign = Campaign::with(['creator', 'donations.user'])
-            ->withCount('donations')
+        $campaign = Campaign::with(['creator', 'donations.user', 'latestUpdate.creator'])
+            ->withCount(['donations', 'updates'])
             ->find($id);
 
         if (!$campaign) {
@@ -360,6 +363,141 @@ class CampaignController extends Controller
                 'per_page' => $campaigns->perPage(),
                 'total' => $campaigns->total(),
             ]
+        ]);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/campaigns/{id}/updates",
+     *     summary="الحصول على تحديثات الحملة",
+     *     tags={"Campaigns"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         @OA\Schema(type="integer", default=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         @OA\Schema(type="integer", default=10, maximum=50)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="تحديثات الحملة",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/CampaignUpdateResource")),
+     *             @OA\Property(
+     *                 property="meta",
+     *                 type="object",
+     *                 @OA\Property(property="current_page", type="integer", example=1),
+     *                 @OA\Property(property="last_page", type="integer", example=5),
+     *                 @OA\Property(property="per_page", type="integer", example=10),
+     *                 @OA\Property(property="total", type="integer", example=50)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="الحملة غير موجودة",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="الحملة غير موجودة")
+     *         )
+     *     )
+     * )
+     */
+    public function getUpdates($id, Request $request)
+    {
+        $campaign = Campaign::active()->find($id);
+        if (!$campaign) {
+            return response()->json([
+                'success' => false,
+                'message' => 'الحملة غير موجودة'
+            ], 404);
+        }
+
+        $perPage = min($request->get('per_page', 10), 50);
+
+        $updates = $campaign->updates()
+            ->with(['creator'])
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => CampaignUpdateResource::collection($updates->items()),
+            'meta' => [
+                'current_page' => $updates->currentPage(),
+                'last_page' => $updates->lastPage(),
+                'per_page' => $updates->perPage(),
+                'total' => $updates->total(),
+            ]
+        ]);
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/campaigns/{id}/updates/{updateId}",
+     *     summary="الحصول على تحديث محدد للحملة",
+     *     tags={"Campaigns"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Parameter(
+     *         name="updateId",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="تفاصيل التحديث",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="data", ref="#/components/schemas/CampaignUpdateResource")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="الحملة أو التحديث غير موجود",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="التحديث غير موجود")
+     *         )
+     *     )
+     * )
+     */
+    public function getUpdate($id, $updateId)
+    {
+        $campaign = Campaign::active()->find($id);
+        if (!$campaign) {
+            return response()->json([
+                'success' => false,
+                'message' => 'الحملة غير موجودة'
+            ], 404);
+        }
+
+        $update = $campaign->updates()->with(['creator'])->find($updateId);
+        if (!$update) {
+            return response()->json([
+                'success' => false,
+                'message' => 'التحديث غير موجود'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => new CampaignUpdateResource($update)
         ]);
     }
 }

@@ -26,6 +26,8 @@ Route::post('/login', [AuthController::class, 'login']);
 // Public campaigns routes
 Route::get('/campaigns', [CampaignController::class, 'index']);
 Route::get('/campaigns/{id}', [CampaignController::class, 'show']);
+Route::get('/campaigns/{id}/updates', [CampaignController::class, 'getUpdates']);
+Route::get('/campaigns/{id}/updates/{updateId}', [CampaignController::class, 'getUpdate']);
 
 // Statistics endpoint
 Route::get('/statistics', function () {

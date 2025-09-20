@@ -86,6 +86,17 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         'destroy' => 'admin.campaigns.destroy',
     ]);
 
+    // Campaign Updates management
+    Route::resource('campaigns.updates', \App\Http\Controllers\Admin\AdminCampaignUpdateController::class)->names([
+        'index' => 'admin.campaign-updates.index',
+        'create' => 'admin.campaign-updates.create',
+        'store' => 'admin.campaign-updates.store',
+        'show' => 'admin.campaign-updates.show',
+        'edit' => 'admin.campaign-updates.edit',
+        'update' => 'admin.campaign-updates.update',
+        'destroy' => 'admin.campaign-updates.destroy',
+    ]);
+
     // User management
     Route::resource('users', AdminUserController::class)->names([
         'index' => 'admin.users.index',
