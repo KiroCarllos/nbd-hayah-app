@@ -70,7 +70,7 @@
                         </div>
 
                         <!-- Creator -->
-                        <div class="mb-3">
+                        <div class="mb-3 d-none">
                             <label for="creator_id" class="form-label">منشئ الحملة <span
                                     class="text-danger">*</span></label>
                             <select class="form-select @error('creator_id') is-invalid @enderror" id="creator_id"
