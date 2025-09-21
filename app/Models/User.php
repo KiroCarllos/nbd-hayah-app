@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'mobile',
+        'device_token',
         'profile_image',
         'wallet_balance',
         'is_admin',

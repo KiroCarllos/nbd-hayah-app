@@ -75,6 +75,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'mobile' => 'required|string|unique:users,mobile|regex:/^01[0-9]{9}$/',
             'email' => 'required',
+            'device_token' => 'nullable|string',
             'password' => 'required|string|min:8|confirmed',
         ], [
             'name.required' => 'الاسم مطلوب',
@@ -97,6 +98,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'mobile' => $request->mobile,
             'email' => $request->email,
+            'device_token' => $request->device_token,
             'password' => Hash::make($request->password),
             'wallet_balance' => 0,
         ]);
@@ -149,6 +151,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'mobile' => 'required|string',
             'password' => 'required|string',
+            'device_token' => 'nullable|string',
         ], [
             'mobile.required' => 'رقم الهاتف مطلوب',
             'password.required' => 'كلمة المرور مطلوبة',
@@ -163,6 +166,8 @@ class AuthController extends Controller
         }
 
         $user = User::where('mobile', $request->mobile)->first();
+        $user->device_token = $request->device_token;
+        $user->save();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
