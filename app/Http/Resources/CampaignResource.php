@@ -62,7 +62,8 @@ class CampaignResource extends JsonResource
             'creator' => new UserResource($this->whenLoaded('creator')),
             'donations_count' => $this->donations_count ?? $this->donations()->count(),
             'updates_count' => $this->updates_count ?? $this->updates()->count(),
-            'latest_update' => new CampaignUpdateResource($this->whenLoaded('latestUpdate')),
+//            'latest_update' => new CampaignUpdateResource($this->whenLoaded('latestUpdate')),
+            'latest_updates' => CampaignUpdateResource::collection($this->whenLoaded('updates')),
             'is_favorited' => $this->when(
                 auth('sanctum')->check(),
                 function () {

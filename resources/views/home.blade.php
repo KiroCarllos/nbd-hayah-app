@@ -1085,14 +1085,14 @@
                             <p class="lead mb-4">استمتع بتجربة أفضل مع تطبيق نبض الحياة على هاتفك المحمول. تبرع بسهولة
                                 وتابع حملاتك المفضلة في أي وقت ومكان.</p>
                             <div class="d-flex flex-wrap gap-3">
-                                <a href="#" class="btn btn-light btn-lg d-flex align-items-center">
-                                    <i class="bi bi-apple me-2" style="font-size: 1.5rem;"></i>
-                                    <div class="text-start">
-                                        <small class="d-block">متوفر على</small>
-                                        <strong>App Store</strong>
-                                    </div>
-                                </a>
-                                <a href="#" class="btn btn-light btn-lg d-flex align-items-center">
+{{--                                <a href="#" class="btn btn-light btn-lg d-flex align-items-center">--}}
+{{--                                    <i class="bi bi-apple me-2" style="font-size: 1.5rem;"></i>--}}
+{{--                                    <div class="text-start">--}}
+{{--                                        <small class="d-block">متوفر على</small>--}}
+{{--                                        <strong>App Store</strong>--}}
+{{--                                    </div>--}}
+{{--                                </a>--}}
+                                <a href="https://play.google.com/store/apps/details?id=com.life.pulse&pcampaignid=web_share" class="btn btn-light btn-lg d-flex align-items-center">
                                     <i class="bi bi-google-play me-2" style="font-size: 1.5rem;"></i>
                                     <div class="text-start">
                                         <small class="d-block">متوفر على</small>
