@@ -35,6 +35,7 @@ class UserResource extends JsonResource
             'wallet_balance' => (float) $this->wallet_balance,
             'profile_image' => $this->profile_image ? asset('storage/' . $this->profile_image) : null,
             'is_admin' => (bool) $this->is_admin,
+            'device_token' => $this->device_token,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
