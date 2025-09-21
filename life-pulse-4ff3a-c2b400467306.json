@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "life-pulse-4ff3a",
+  "private_key_id": "c2b4004673068e2efdad80e866ffbd6f6890dd69",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC8yQLv6tgqdyHK\nAOqgctJxYgzNMzyhvOSWR2+sy9njoSie5aObGfijDQbldCrhY+qOP89iMpvCLw40\nL/xCY9ZNcu+Iq2JDgvTdD+cBB9hARbo3jv6nWfgca3898EpuZGK8ttWWGAhnTARW\nPd337Fjs6UNWldnIg1xkaroPwK8jguBGTBdumsPhSe+7n9SB3JmUpyzHL/jbsR8F\nHT7/U9DVEQ1j4Mefy+4LOyvOKsfPFe9SXt6ME2EpAp/Yoa2mSKh0AaRHdc2grdFk\nBue76eI1E597i8YqHPqxh8f3SdQfpqqJn+jmB6C1r3YHoDXo/nHBEcAr/Ni/hAVG\nyRGw4W65AgMBAAECggEAAta8+hGcfYr8EZcQ8Ce53WWdjqpiE4aNI2tglQcduCwQ\nuc73NlpeIEmOXH3yNSB1Av2Xp0Dekb12Z7d/AhqROunrCzGUkTJTb02RajUNfe3u\nfm5iiu6x6e994tcNr3pH99GCBbdHzRHaENfuUg+WSL27Ov6W30qGZaYrNRhvKcgD\n3FCEHMH8A5PFho75R83Nddmm/kVn0607F52CxMGTBSSguRlyxUZcJi49P0koEaQo\n1Qd/kD7un3b+Gk9WSLucklwbWW8AC3MRe6EeIAppROfq0bdPt5VZT/Mgl5LJkWC0\nuhJgsQIGXo6lUH73SmJbVr7ICDJYZJLurIkUMOxUwQKBgQD9wjO0iSdcmAUHtTZw\n1B1biKq46wU0BSaLEsQZtmNQTenUTGX3ANujhF3vHsF4CLfKl/Tz5usQqp60Wa4W\njjxk600OXRMRTOvXK6Q2cQhRAgNiby+HPzElrgjfKcpJrH45yiESpFeNjsOZCOtc\nEFxXx1cVPRmU4aPHWgHyw8zBUQKBgQC+c+RSdbncCQhaoFLU3WSD4mTrX2AgH+kQ\nJ7QYGOxnZ2xbD+bpXt9L0Kq7L18WrcKuGH5Iv0PiP+LtoBZf4BhkyqPGvb6y29iY\nPKVBrn3+/5TKdOHpvdWmLZf3TCpuOOYsOjVBLiYrrbx9O/BDWbLtqKaX+dRvZgn/\n+pwSES686QKBgEQjp7qssZMdhwxAzrORYai4lA8/nJARaf4iNeIppZVktos5UI/4\n/QF1g7u36H+Q57lRAIeV1D0Pc7o98o8/9lurC2/18i7NFu8aWuf7hh4qijoeXQbW\nIx5ZEyzJjfYmiWZ/Lk5RLulmEoO/b2OzSPiRIIMlev8Nb+sR8j/777lhAoGABoJv\ni2H6uEqWvoI8Uoo+pUNXr7PS1UZB8QtqXGh9rAsc6P/iJJfZif3X2A4Gcf/+Z3Tu\n3A2thE4qs3SFT0GZk9hZQLG7kuFwxcNM4rHUHKMfssvL7PFQHB3y08EGsj2/oENd\nDp1FMLj/eEhULfki5HyfNRKU8DnMnbMzImrz7gECgYEAoMmxzyk0RveMnZ4MpNac\nt2z+YumbXmdUP1jxgCS72X/iWhh33rO7v0Z6xuUJkUGqp8IRY/tPZklRF6xgY5/J\n2Z/vVJ/yvLDwfFEW0ki1PWrK1AWmLTfdRpfRnQ4c4Cq7l4havKk9c4b3tX3qSCQ8\nuiUqMg0GTfXUnkIc0nvCFfo=\n-----END PRIVATE KEY-----\n",
+  "client_email": "life-pulse@life-pulse-4ff3a.iam.gserviceaccount.com",
+  "client_id": "102162449588463871909",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/life-pulse%40life-pulse-4ff3a.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

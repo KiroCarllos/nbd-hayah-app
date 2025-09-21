@@ -14,6 +14,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuickDonationController;
 use App\Http\Controllers\WalletController;
+use App\Services\FirebaseFcm;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +30,20 @@ use Illuminate\Support\Facades\Route;
 
 // Home route
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/testFCM', function (){
+    $fcm = new FirebaseFcm();
+    // حط هنا الـ Device Token الخاص بالموبايل اللي هتجرب عليه
+    $deviceToken = request()->get("device_token");
+
+    // تجربة إرسال إشعار
+    $response = $fcm->sendToDevice(
+        $deviceToken,
+        'تجربة إشعار',
+        'ده إشعار تجريبي من السيرفر',
+    );
+
+    return response()->json($response);
+});
 
 // Campaign routes
 Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
