@@ -73,6 +73,7 @@ return [
             'replace_placeholders' => true,
         ],
 
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
@@ -124,8 +125,12 @@ return [
         ],
 
         'emergency' => [
-            'path' => storage_path('logs/laravel-' . date('Y-m-d') . '.log'),
+            'driver' => 'daily',
+            'path' => storage_path('logs/laravel-emergency.log'),
+            'level' => 'debug',
+            'days' => 14,
         ],
+
     ],
 
 ];
