@@ -8,7 +8,7 @@
         <div>
             <a href="{{ route('admin.campaign-updates.index', $campaign) }}" class="btn btn-success me-2">
                 <i class="bi bi-chat-square-text me-2"></i>
-                التحديثات ({{ $campaign->updates()->count() }})
+                اخر تطورات الحالة ({{ $campaign->updates()->count() }})
             </a>
             <a href="{{ route('admin.campaigns.edit', $campaign) }}" class="btn btn-primary me-2">
                 <i class="bi bi-pencil me-2"></i>
