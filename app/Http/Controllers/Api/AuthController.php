@@ -107,13 +107,11 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        if ($user->device_token) {
-            $fcm = FCM::sendToDevice(
-                $user->device_token,
-                'مرحبًا بك في نبض الحياة! 🌟',
-                "وجودك معنا يفتح بابًا جديدًا للأمل لمن هم بحاجة إليه."
-            );
-        }
+        $fcm = FCM::sendToDevice(
+            $user->device_token,
+            'مرحبًا بك في نبض الحياة! 🌟',
+            "وجودك معنا يفتح بابًا جديدًا للأمل لمن هم بحاجة إليه."
+        );
         return response()->json([
             'success' => true,
             'message' => 'تم التسجيل بنجاح',
