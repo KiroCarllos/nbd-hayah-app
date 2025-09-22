@@ -27,22 +27,32 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+use Google\Auth\Credentials\ServiceAccountCredentials;
 
 // Home route
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/testFCM', function (){
-    $fcm = new FirebaseFcm();
-    // حط هنا الـ Device Token الخاص بالموبايل اللي هتجرب عليه
-    $deviceToken = request()->get("device_token");
+    try {
 
-    // تجربة إرسال إشعار
-    $response = $fcm->sendToDevice(
-        $deviceToken,
-        'تجربة إشعار',
-        'ده إشعار تجريبي من السيرفر',
-    );
+        $scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
+        $jsonKey = json_decode(file_get_contents(base_path('life-pulse-4ff3a.json')), true);
+        $creds = new ServiceAccountCredentials($scopes, $jsonKey);
 
-    return response()->json($response);
+        try {
+            $token = $creds->fetchAuthToken();
+            dd($token);
+        } catch (\Throwable $ex) {
+            dd($ex->getMessage(), $ex->getTraceAsString());
+        }
+
+        $serviceAccount = base_path('life-pulse-4ff3a.json');
+        $firebase = (new Factory)->withServiceAccount($serviceAccount);
+        $auth = $firebase->createAuth();
+
+        return response()->json(['message' => 'Firebase connected successfully!']);
+    } catch (\Throwable $ex) {
+        return response()->json(['error' => $ex->getMessage()], 500);
+    }
 });
 
 // Campaign routes

@@ -15,7 +15,7 @@ class FirebaseFcm
 
     public function __construct(LoggerInterface $logger = null)
     {
-        $this->serviceAccountPath = base_path('firebase-service-account.json');
+        $this->serviceAccountPath = base_path('life-pulse-4ff3a.json');
         $this->logger = $logger;
         $this->http = new Client([
             'timeout' => 10,
