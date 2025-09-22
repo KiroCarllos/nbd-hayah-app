@@ -14,7 +14,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuickDonationController;
 use App\Http\Controllers\WalletController;
-use App\Services\FirebaseFcm;
+use App\Services\FCM;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,10 +31,10 @@ use Google\Auth\Credentials\ServiceAccountCredentials;
 
 // Home route
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/testFCM', function (FirebaseFcm $fcm){
+Route::get('/testFCM', function (){
     $deviceToken = request()->get('device_token');
 
-    $response = $fcm->sendToDevice(
+    $response = FCM::sendToDevice(
         $deviceToken,
         'تجربة إشعار',
         'ده إشعار تجريبي من السيرفر'

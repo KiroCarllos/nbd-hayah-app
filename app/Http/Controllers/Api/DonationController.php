@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DonationResource;
 use App\Models\Campaign;
 use App\Models\Donation;
+use App\Services\FCM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -152,6 +153,12 @@ class DonationController extends Controller
             DB::commit();
 
             $donation->load(['campaign.creator']);
+
+            $fcm = FCM::sendToDevice(
+                $user->device_token,
+                'تم التبرع بنجاح 💚',
+                "شكرًا لأنك كنت سببًا في إنقاذ حياة شخص ما اليوم."
+            );
 
             return response()->json([
                 'success' => true,

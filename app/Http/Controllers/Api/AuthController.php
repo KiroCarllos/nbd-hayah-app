@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\FCM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -105,6 +107,13 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        if ($user->device_token) {
+            $fcm = FCM::sendToDevice(
+                $user->device_token,
+                'مرحبًا بك في نبض الحياة! 🌟',
+                "وجودك معنا يفتح بابًا جديدًا للأمل لمن هم بحاجة إليه."
+            );
+        }
         return response()->json([
             'success' => true,
             'message' => 'تم التسجيل بنجاح',
