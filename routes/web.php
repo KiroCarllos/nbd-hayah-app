@@ -31,16 +31,13 @@ use Google\Auth\Credentials\ServiceAccountCredentials;
 
 // Home route
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/testFCM', function (){
-    $fcm = new FirebaseFcm();
-    // حط هنا الـ Device Token الخاص بالموبايل اللي هتجرب عليه
-    $deviceToken = request()->get("device_token");
+Route::get('/testFCM', function (FirebaseFcm $fcm){
+    $deviceToken = request()->get('device_token');
 
-    // تجربة إرسال إشعار
     $response = $fcm->sendToDevice(
         $deviceToken,
         'تجربة إشعار',
-        'ده إشعار تجريبي من السيرفر',
+        'ده إشعار تجريبي من السيرفر'
     );
 
     return response()->json($response);
