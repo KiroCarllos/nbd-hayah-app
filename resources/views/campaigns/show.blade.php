@@ -291,7 +291,7 @@
                     @if (auth()->user()->wallet_balance > 0)
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                            <button type="button" class="btn btn-primary" onclick="submitDonation()">
+                            <button type="button" class="btn btn-primary" id="confirmDonationBtn">
                                 <i class="bi bi-heart-fill me-2"></i>
                                 تأكيد التبرع
                             </button>
@@ -302,7 +302,11 @@
         </div>
     @endauth
 
+    <!-- Include Wallet Password Modal -->
+    @include('components.wallet-password-modal')
+
     @push('scripts')
+        <script src="{{ asset('js/wallet-password.js') }}"></script>
         <script>
             function toggleFavorite(campaignId, button) {
                 // Disable button during request
@@ -372,10 +376,25 @@
                 modal.show();
             }
 
-            function submitDonation() {
+            // Confirm donation button click handler
+            document.getElementById('confirmDonationBtn')?.addEventListener('click', function() {
                 const form = document.getElementById('donationForm');
                 const formData = new FormData(form);
-                const submitBtn = document.querySelector('#donationModal .btn-primary');
+                const amount = formData.get('amount');
+
+                if (!amount || amount <= 0) {
+                    alert('يرجى إدخال مبلغ صحيح');
+                    return;
+                }
+
+                // Verify wallet password before proceeding
+                verifyWalletPassword(function() {
+                    submitDonationForm(form, formData);
+                }, 'التبرع للحملة');
+            });
+
+            function submitDonationForm(form, formData) {
+                const submitBtn = document.getElementById('confirmDonationBtn');
 
                 // Show loading state
                 const originalText = submitBtn.innerHTML;
@@ -393,9 +412,15 @@
                     .then(data => {
                         if (data.success) {
                             alert(data.message);
+                            // Close modal
+                            bootstrap.Modal.getInstance(document.getElementById('donationModal')).hide();
                             location.reload();
                         } else {
-                            alert(data.error || 'حدث خطأ، يرجى المحاولة مرة أخرى');
+                            if (data.requires_wallet_password) {
+                                alert('يجب التحقق من كلمة مرور المحفظة أولاً');
+                            } else {
+                                alert(data.error || 'حدث خطأ، يرجى المحاولة مرة أخرى');
+                            }
                             // Reset button
                             submitBtn.innerHTML = originalText;
                             submitBtn.disabled = false;

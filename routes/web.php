@@ -14,6 +14,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuickDonationController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\WalletPasswordController;
 use App\Services\FCM;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +32,7 @@ use Google\Auth\Credentials\ServiceAccountCredentials;
 
 // Home route
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/testFCM', function (){
+Route::get('/testFCM', function () {
     $deviceToken = request()->get('device_token');
 
     $response = FCM::sendToDevice(
@@ -63,6 +64,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
     Route::get('/wallet/charge', [WalletController::class, 'showChargeForm'])->name('wallet.charge');
     Route::post('/wallet/charge', [WalletController::class, 'charge'])->name('wallet.charge.process');
+
+    // Wallet password routes
+    Route::get('/wallet/has-password', [WalletPasswordController::class, 'hasPassword'])->name('wallet.has-password');
+    Route::post('/wallet/verify-password', [WalletPasswordController::class, 'verifyPassword'])->name('wallet.verify-password');
+    Route::post('/wallet/set-password', [WalletPasswordController::class, 'setPassword'])->name('wallet.set-password');
+    Route::post('/wallet/change-password', [WalletPasswordController::class, 'changePassword'])->name('wallet.change-password');
+    Route::post('/wallet/clear-verification', [WalletPasswordController::class, 'clearVerification'])->name('wallet.clear-verification');
 
     // Donation routes
     Route::post('/campaigns/{campaign}/donate', [DonationController::class, 'donate'])->name('campaigns.donate');

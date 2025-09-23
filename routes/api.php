@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\ReportsController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WalletController;
+use App\Http\Controllers\Api\WalletPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,6 +68,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/wallet', [WalletController::class, 'index']);
     Route::post('/wallet/charge', [WalletController::class, 'charge']);
     Route::get('/wallet/transactions', [WalletController::class, 'transactions']);
+
+    // Wallet password routes
+    Route::get('/wallet/has-password', [WalletPasswordController::class, 'hasPassword']);
+    Route::post('/wallet/verify-password', [WalletPasswordController::class, 'verifyPassword']);
+    Route::post('/wallet/set-password', [WalletPasswordController::class, 'setPassword']);
+    Route::post('/wallet/change-password', [WalletPasswordController::class, 'changePassword']);
 
     // Reports routes - تقارير شاملة للتطبيق المحمول
     Route::get('/reports/dashboard', [ReportsController::class, 'dashboard']);           // إحصائيات لوحة التحكم الشاملة

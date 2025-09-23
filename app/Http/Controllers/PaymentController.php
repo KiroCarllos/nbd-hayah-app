@@ -26,6 +26,20 @@ class PaymentController extends Controller
         ]);
 
         $user = Auth::user();
+
+        // Check if wallet password is verified for wallet charging
+        if ($user->hasWalletPassword() && !\App\Http\Controllers\WalletPasswordController::isWalletPasswordVerified()) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'يجب التحقق من كلمة مرور المحفظة أولاً',
+                    'requires_wallet_password' => true
+                ], 403);
+            }
+
+            return redirect()->back()->with('error', 'يجب التحقق من كلمة مرور المحفظة أولاً');
+        }
+
         $amount = $request->amount;
         $invoiceNo = 'WLT_' . $user->id . '_' . time();
 

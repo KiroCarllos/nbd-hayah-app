@@ -82,7 +82,7 @@
                             </div>
 
                             <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary btn-lg">
+                                <button type="button" class="btn btn-primary btn-lg" id="chargeWalletBtn">
                                     <i class="bi bi-credit-card me-2"></i>
                                     متابعة للدفع
                                 </button>
@@ -125,33 +125,43 @@
         </div>
     </div>
 
+    <!-- Include Wallet Password Modal -->
+    @include('components.wallet-password-modal')
+
     @push('scripts')
+        <script src="{{ asset('js/wallet-password.js') }}"></script>
         <script>
             function setAmount(amount) {
                 document.getElementById('amount').value = amount;
             }
 
-            // Form validation
-            document.querySelector('form').addEventListener('submit', function(e) {
+            // Charge wallet button click handler
+            document.getElementById('chargeWalletBtn').addEventListener('click', function() {
                 const amount = parseFloat(document.getElementById('amount').value);
                 const terms = document.getElementById('terms').checked;
 
                 if (!amount || amount < 1 || amount > 10000) {
-                    e.preventDefault();
                     alert('يرجى إدخال مبلغ صحيح بين 1 و 10,000 ريال');
                     return;
                 }
 
                 if (!terms) {
-                    e.preventDefault();
                     alert('يرجى الموافقة على الشروط والأحكام');
                     return;
                 }
 
-                // Show loading state
-                const submitBtn = this.querySelector('button[type="submit"]');
-                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>جاري التحويل...';
-                submitBtn.disabled = true;
+                // Verify wallet password before proceeding
+                verifyWalletPassword(function() {
+                    // Submit the form after successful verification
+                    const form = document.querySelector('form');
+                    const submitBtn = document.getElementById('chargeWalletBtn');
+
+                    // Show loading state
+                    submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>جاري التحويل...';
+                    submitBtn.disabled = true;
+
+                    form.submit();
+                }, 'شحن المحفظة');
             });
         </script>
     @endpush

@@ -29,6 +29,15 @@ class DonationController extends Controller
         $user = Auth::user();
         $amount = $request->amount;
         $isAnonymous = $request->has('is_anonymous') && $request->is_anonymous == 'on';
+
+        // Check if wallet password is verified
+        if ($user->hasWalletPassword() && !\App\Http\Controllers\WalletPasswordController::isWalletPasswordVerified()) {
+            return response()->json([
+                'error' => 'يجب التحقق من كلمة مرور المحفظة أولاً',
+                'requires_wallet_password' => true
+            ], 403);
+        }
+
         // Check if user has sufficient balance
         if ($user->wallet_balance < $amount) {
             return response()->json([
@@ -77,6 +86,9 @@ class DonationController extends Controller
             // Update campaign current amount
             $campaign->current_amount += $amount;
             $campaign->save();
+
+            // Clear wallet password verification after successful transaction
+            session()->forget(['wallet_password_verified', 'wallet_password_verified_at']);
 
             DB::commit();
 

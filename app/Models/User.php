@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -25,6 +26,7 @@ class User extends Authenticatable
         'device_token',
         'profile_image',
         'wallet_balance',
+        'wallet_password',
         'is_admin',
     ];
 
@@ -35,6 +37,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'wallet_password',
         'remember_token',
     ];
 
@@ -46,6 +49,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'wallet_password' => 'hashed',
         'wallet_balance' => 'decimal:2',
         'is_admin' => 'boolean',
     ];
@@ -80,5 +84,27 @@ class User extends Authenticatable
     public function favorites()
     {
         return $this->hasMany(UserFavoriteCampaign::class);
+    }
+
+    // Wallet password methods
+    public function hasWalletPassword()
+    {
+        return !is_null($this->wallet_password);
+    }
+
+    public function checkWalletPassword($password)
+    {
+        if (!$this->hasWalletPassword()) {
+            return false;
+        }
+
+        return Hash::check($password, $this->wallet_password);
+    }
+
+    public function setWalletPassword($password)
+    {
+        $this->wallet_password = Hash::make($password);
+        // $this->wallet_password = $password;
+        $this->save();
     }
 }
