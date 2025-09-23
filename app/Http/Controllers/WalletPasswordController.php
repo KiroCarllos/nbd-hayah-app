@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+
 use Illuminate\Support\Facades\Validator;
 
 class WalletPasswordController extends Controller
@@ -33,9 +33,10 @@ class WalletPasswordController extends Controller
     public function verifyPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'wallet_password' => 'required|string',
+            'wallet_password' => 'required|string|digits:6',
         ], [
             'wallet_password.required' => 'كلمة مرور المحفظة مطلوبة',
+            'wallet_password.digits' => 'كلمة مرور المحفظة يجب أن تكون 6 أرقام فقط',
         ]);
 
         if ($validator->fails()) {
@@ -77,11 +78,11 @@ class WalletPasswordController extends Controller
     public function setPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'new_wallet_password' => 'required|string|min:6',
+            'new_wallet_password' => 'required|string|digits:6',
             'confirm_wallet_password' => 'required|string|same:new_wallet_password',
         ], [
             'new_wallet_password.required' => 'كلمة مرور المحفظة الجديدة مطلوبة',
-            'new_wallet_password.min' => 'كلمة مرور المحفظة يجب أن تكون 6 أحرف على الأقل',
+            'new_wallet_password.digits' => 'كلمة مرور المحفظة يجب أن تكون 6 أرقام فقط',
             'confirm_wallet_password.required' => 'تأكيد كلمة مرور المحفظة مطلوب',
             'confirm_wallet_password.same' => 'كلمة مرور المحفظة غير متطابقة',
         ]);
@@ -112,13 +113,14 @@ class WalletPasswordController extends Controller
     public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'current_wallet_password' => 'required|string',
-            'new_wallet_password' => 'required|string|min:6',
+            'current_wallet_password' => 'required|string|digits:6',
+            'new_wallet_password' => 'required|string|digits:6',
             'confirm_wallet_password' => 'required|string|same:new_wallet_password',
         ], [
             'current_wallet_password.required' => 'كلمة مرور المحفظة الحالية مطلوبة',
+            'current_wallet_password.digits' => 'كلمة مرور المحفظة يجب أن تكون 6 أرقام فقط',
             'new_wallet_password.required' => 'كلمة مرور المحفظة الجديدة مطلوبة',
-            'new_wallet_password.min' => 'كلمة مرور المحفظة يجب أن تكون 6 أحرف على الأقل',
+            'new_wallet_password.digits' => 'كلمة مرور المحفظة يجب أن تكون 6 أرقام فقط',
             'confirm_wallet_password.required' => 'تأكيد كلمة مرور المحفظة مطلوب',
             'confirm_wallet_password.same' => 'كلمة مرور المحفظة غير متطابقة',
         ]);

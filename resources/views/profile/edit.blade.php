@@ -174,8 +174,8 @@
                                                     <i class="bi bi-lock"></i>
                                                 </span>
                                                 <input type="password" class="form-control" id="current_wallet_password"
-                                                    name="current_wallet_password" placeholder="أدخل كلمة المرور الحالية"
-                                                    required>
+                                                    name="current_wallet_password" placeholder="123456"
+                                                    pattern="[0-9]{6}" maxlength="6" required>
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     id="toggleCurrentWalletPassword">
                                                     <i class="bi bi-eye" id="toggleCurrentWalletPasswordIcon"></i>
@@ -194,7 +194,7 @@
                                                 </span>
                                                 <input type="password" class="form-control"
                                                     id="new_wallet_password_change" name="new_wallet_password"
-                                                    placeholder="أدخل كلمة المرور الجديدة" required minlength="6">
+                                                    placeholder="123456" pattern="[0-9]{6}" maxlength="6" required>
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     id="toggleNewWalletPasswordChange">
                                                     <i class="bi bi-eye" id="toggleNewWalletPasswordChangeIcon"></i>
@@ -213,8 +213,8 @@
                                             <i class="bi bi-lock-fill"></i>
                                         </span>
                                         <input type="password" class="form-control" id="confirm_wallet_password_change"
-                                            name="confirm_wallet_password" placeholder="أعد إدخال كلمة المرور الجديدة"
-                                            required minlength="6">
+                                            name="confirm_wallet_password" placeholder="123456" pattern="[0-9]{6}"
+                                            maxlength="6" required>
                                         <button class="btn btn-outline-secondary" type="button"
                                             id="toggleConfirmWalletPasswordChange">
                                             <i class="bi bi-eye" id="toggleConfirmWalletPasswordChangeIcon"></i>
@@ -252,14 +252,14 @@
                                                     <i class="bi bi-lock"></i>
                                                 </span>
                                                 <input type="password" class="form-control" id="new_wallet_password_set"
-                                                    name="new_wallet_password" placeholder="أدخل كلمة مرور قوية" required
-                                                    minlength="6">
+                                                    name="new_wallet_password" placeholder="123456" pattern="[0-9]{6}"
+                                                    maxlength="6" required>
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     id="toggleNewWalletPasswordSet">
                                                     <i class="bi bi-eye" id="toggleNewWalletPasswordSetIcon"></i>
                                                 </button>
                                             </div>
-                                            <div class="form-text">يجب أن تكون كلمة المرور 6 أحرف على الأقل</div>
+                                            <div class="form-text">يجب أن تكون كلمة المرور 6 أرقام فقط</div>
                                             <div class="invalid-feedback" id="newWalletPasswordSetError"></div>
                                         </div>
                                     </div>
@@ -273,7 +273,7 @@
                                                 </span>
                                                 <input type="password" class="form-control"
                                                     id="confirm_wallet_password_set" name="confirm_wallet_password"
-                                                    placeholder="أعد إدخال كلمة المرور" required minlength="6">
+                                                    placeholder="123456" pattern="[0-9]{6}" maxlength="6" required>
                                                 <button class="btn btn-outline-secondary" type="button"
                                                     id="toggleConfirmWalletPasswordSet">
                                                     <i class="bi bi-eye" id="toggleConfirmWalletPasswordSetIcon"></i>
@@ -370,7 +370,7 @@
             setupWalletPasswordToggle('toggleConfirmWalletPasswordChange', 'confirm_wallet_password_change',
                 'toggleConfirmWalletPasswordChangeIcon');
             setupWalletPasswordToggle('toggleNewWalletPasswordSet', 'new_wallet_password_set',
-            'toggleNewWalletPasswordSetIcon');
+                'toggleNewWalletPasswordSetIcon');
             setupWalletPasswordToggle('toggleConfirmWalletPasswordSet', 'confirm_wallet_password_set',
                 'toggleConfirmWalletPasswordSetIcon');
 
@@ -396,9 +396,9 @@
 
                     let hasError = false;
 
-                    if (newPassword.length < 6) {
+                    if (!/^\d{6}$/.test(newPassword)) {
                         document.getElementById('newWalletPasswordChangeError').textContent =
-                            'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                            'كلمة المرور يجب أن تكون 6 أرقام فقط';
                         document.getElementById('new_wallet_password_change').classList.add('is-invalid');
                         hasError = true;
                     }
@@ -474,9 +474,9 @@
 
                     let hasError = false;
 
-                    if (newPassword.length < 6) {
+                    if (!/^\d{6}$/.test(newPassword)) {
                         document.getElementById('newWalletPasswordSetError').textContent =
-                            'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                            'كلمة المرور يجب أن تكون 6 أرقام فقط';
                         document.getElementById('new_wallet_password_set').classList.add('is-invalid');
                         hasError = true;
                     }

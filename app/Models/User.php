@@ -6,7 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -49,7 +48,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'wallet_password' => 'hashed',
         'wallet_balance' => 'decimal:2',
         'is_admin' => 'boolean',
     ];
@@ -98,13 +96,12 @@ class User extends Authenticatable
             return false;
         }
 
-        return Hash::check($password, $this->wallet_password);
+        return $this->wallet_password === $password;
     }
 
     public function setWalletPassword($password)
     {
-        $this->wallet_password = Hash::make($password);
-        // $this->wallet_password = $password;
+        $this->wallet_password = $password;
         $this->save();
     }
 }

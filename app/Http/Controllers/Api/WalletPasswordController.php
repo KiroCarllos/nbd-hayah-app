@@ -79,9 +79,10 @@ class WalletPasswordController extends Controller
     public function verifyPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'wallet_password' => 'required|string',
+            'wallet_password' => 'required|string|digits:6',
         ], [
             'wallet_password.required' => 'كلمة مرور المحفظة مطلوبة',
+            'wallet_password.digits' => 'كلمة مرور المحفظة يجب أن تكون 6 أرقام فقط',
         ]);
 
         if ($validator->fails()) {
@@ -123,8 +124,8 @@ class WalletPasswordController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="new_wallet_password", type="string", example="123456"),
-     *             @OA\Property(property="confirm_wallet_password", type="string", example="123456")
+     *             @OA\Property(property="new_wallet_password", type="string", example="123456", description="كلمة مرور المحفظة الجديدة (6 أرقام)"),
+     *             @OA\Property(property="confirm_wallet_password", type="string", example="123456", description="تأكيد كلمة مرور المحفظة")
      *         )
      *     ),
      *     @OA\Response(
@@ -140,11 +141,11 @@ class WalletPasswordController extends Controller
     public function setPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'new_wallet_password' => 'required|string|min:6',
+            'new_wallet_password' => 'required|string|digits:6',
             'confirm_wallet_password' => 'required|string|same:new_wallet_password',
         ], [
             'new_wallet_password.required' => 'كلمة مرور المحفظة الجديدة مطلوبة',
-            'new_wallet_password.min' => 'كلمة مرور المحفظة يجب أن تكون 6 أحرف على الأقل',
+            'new_wallet_password.digits' => 'كلمة مرور المحفظة يجب أن تكون 6 أرقام فقط',
             'confirm_wallet_password.required' => 'تأكيد كلمة مرور المحفظة مطلوب',
             'confirm_wallet_password.same' => 'كلمة مرور المحفظة غير متطابقة',
         ]);
@@ -175,9 +176,9 @@ class WalletPasswordController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="current_wallet_password", type="string", example="123456"),
-     *             @OA\Property(property="new_wallet_password", type="string", example="654321"),
-     *             @OA\Property(property="confirm_wallet_password", type="string", example="654321")
+     *             @OA\Property(property="current_wallet_password", type="string", example="123456", description="كلمة مرور المحفظة الحالية (6 أرقام)"),
+     *             @OA\Property(property="new_wallet_password", type="string", example="654321", description="كلمة مرور المحفظة الجديدة (6 أرقام)"),
+     *             @OA\Property(property="confirm_wallet_password", type="string", example="654321", description="تأكيد كلمة مرور المحفظة")
      *         )
      *     ),
      *     @OA\Response(
@@ -193,13 +194,14 @@ class WalletPasswordController extends Controller
     public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'current_wallet_password' => 'required|string',
-            'new_wallet_password' => 'required|string|min:6',
+            'current_wallet_password' => 'required|string|digits:6',
+            'new_wallet_password' => 'required|string|digits:6',
             'confirm_wallet_password' => 'required|string|same:new_wallet_password',
         ], [
             'current_wallet_password.required' => 'كلمة مرور المحفظة الحالية مطلوبة',
+            'current_wallet_password.digits' => 'كلمة مرور المحفظة يجب أن تكون 6 أرقام فقط',
             'new_wallet_password.required' => 'كلمة مرور المحفظة الجديدة مطلوبة',
-            'new_wallet_password.min' => 'كلمة مرور المحفظة يجب أن تكون 6 أحرف على الأقل',
+            'new_wallet_password.digits' => 'كلمة مرور المحفظة يجب أن تكون 6 أرقام فقط',
             'confirm_wallet_password.required' => 'تأكيد كلمة مرور المحفظة مطلوب',
             'confirm_wallet_password.same' => 'كلمة مرور المحفظة غير متطابقة',
         ]);
