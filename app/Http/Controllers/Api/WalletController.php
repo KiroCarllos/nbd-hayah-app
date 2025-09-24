@@ -94,14 +94,18 @@ class WalletController extends Controller
         $user = auth()->user();
         $amount = $request->amount;
 
+
+
+        $invoiceNo = 'WLT_' . $user->id . '_' . time();
         // Create wallet transaction record
         $transaction = WalletTransaction::create([
             'user_id' => $user->id,
             'amount' => $amount,
             'description' => 'شحن المحفظة',
-            'type' => 'charge',
+            'type' => 'credit',
             'status' => 'pending',
-            'transaction_id' => 'TXN' . time() . rand(1000, 9999),
+            'reference' => $invoiceNo,
+            'payment_data' => null,
         ]);
 
         // Here you would integrate with URWAY payment gateway
