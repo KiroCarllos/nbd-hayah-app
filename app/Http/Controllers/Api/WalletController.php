@@ -98,6 +98,7 @@ class WalletController extends Controller
         $transaction = WalletTransaction::create([
             'user_id' => $user->id,
             'amount' => $amount,
+            'description' => 'شحن المحفظة',
             'type' => 'charge',
             'status' => 'pending',
             'transaction_id' => 'TXN' . time() . rand(1000, 9999),
