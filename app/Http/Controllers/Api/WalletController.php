@@ -345,4 +345,14 @@ class WalletController extends Controller
 //        }
 
     }
+    private function getServerIp()
+    {
+        $serverIp = $_SERVER['SERVER_ADDR'] ?? '127.0.0.1';
+
+        if ($serverIp === '127.0.0.1' || $serverIp === '::1') {
+            $serverIp = '127.0.0.1'; // For development
+        }
+
+        return $serverIp;
+    }
 }
