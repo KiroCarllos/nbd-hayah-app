@@ -25,11 +25,11 @@ class WalletPasswordManager {
 
         try {
             // Check if user has wallet password
-            const response = await fetch("/api/wallet/has-password", {
+            const response = await fetch("/wallet/has-password", {
                 method: "GET",
                 headers: {
-                    Authorization: `Bearer ${this.getAuthToken()}`,
                     Accept: "application/json",
+                    "X-CSRF-TOKEN": this.csrfToken,
                 },
             });
 
@@ -82,10 +82,9 @@ class WalletPasswordManager {
         try {
             const formData = new FormData(form);
 
-            const response = await fetch("/api/wallet/verify-password", {
+            const response = await fetch("/wallet/verify-password", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${this.getAuthToken()}`,
                     Accept: "application/json",
                     "X-CSRF-TOKEN": this.csrfToken,
                 },
@@ -134,10 +133,9 @@ class WalletPasswordManager {
         try {
             const formData = new FormData(form);
 
-            const response = await fetch("/api/wallet/set-password", {
+            const response = await fetch("/wallet/set-password", {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${this.getAuthToken()}`,
                     Accept: "application/json",
                     "X-CSRF-TOKEN": this.csrfToken,
                 },
@@ -172,11 +170,10 @@ class WalletPasswordManager {
 
     /**
      * Get authentication token (for API calls)
+     * Not needed for web routes as they use session-based auth
      */
     getAuthToken() {
-        // This should be implemented based on your auth system
-        // For now, return null (will work for web routes with session)
-        return localStorage.getItem("auth_token") || null;
+        return null;
     }
 
     /**

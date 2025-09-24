@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DonationResource;
 use App\Models\Campaign;
 use App\Models\Donation;
+use App\Models\WalletTransaction;
 use App\Services\FCM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -142,6 +143,7 @@ class DonationController extends Controller
                 'is_anonymous' => $request->get('is_anonymous', false),
                 'status' => 'completed',
                 'payment_method' => 'wallet',
+                'transaction_reference' => 'DON_' . $campaign->id . '_' . $user->id . '_' . time(),
             ]);
 
             // Update user wallet
@@ -159,6 +161,21 @@ class DonationController extends Controller
                 'تم التبرع بنجاح 💚',
                 "شكرًا لأنك كنت سببًا في إنقاذ حياة شخص ما اليوم."
             );
+
+            // Create wallet transaction record
+            WalletTransaction::create([
+                'user_id' => $user->id,
+                'type' => 'debit',
+                'amount' => $amount,
+                'description' => 'تبرع للحملة: ' . $campaign->title,
+                'reference' => $donation->transaction_reference,
+                'status' => 'completed',
+                'payment_data' => [
+                    'campaign_id' => $campaign->id,
+                    'donation_id' => $donation->id,
+                    'is_anonymous' => $request->get('is_anonymous', false),
+                ],
+            ]);
 
             return response()->json([
                 'success' => true,

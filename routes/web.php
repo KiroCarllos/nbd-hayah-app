@@ -71,6 +71,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/wallet/set-password', [WalletPasswordController::class, 'setPassword'])->name('wallet.set-password');
     Route::post('/wallet/change-password', [WalletPasswordController::class, 'changePassword'])->name('wallet.change-password');
     Route::post('/wallet/clear-verification', [WalletPasswordController::class, 'clearVerification'])->name('wallet.clear-verification');
+    Route::get('/wallet/password/verify', [WalletPasswordController::class, 'showVerifyForm'])->name('wallet.password.verify-form');
+
+
 
     // Donation routes
     Route::post('/campaigns/{campaign}/donate', [DonationController::class, 'donate'])->name('campaigns.donate');

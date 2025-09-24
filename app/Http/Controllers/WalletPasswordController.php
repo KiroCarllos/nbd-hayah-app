@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class WalletPasswordController extends Controller
@@ -20,7 +20,6 @@ class WalletPasswordController extends Controller
     public function hasPassword()
     {
         $user = Auth::user();
-
         return response()->json([
             'success' => true,
             'has_password' => $user->hasWalletPassword()
@@ -38,7 +37,6 @@ class WalletPasswordController extends Controller
             'wallet_password.required' => 'كلمة مرور المحفظة مطلوبة',
             'wallet_password.digits' => 'كلمة مرور المحفظة يجب أن تكون 6 أرقام فقط',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -64,7 +62,22 @@ class WalletPasswordController extends Controller
         }
 
         // Store verification in session for a short time (5 minutes)
-        session(['wallet_password_verified' => true, 'wallet_password_verified_at' => now()]);
+        session([
+            'wallet_password_verified' => true,
+            'wallet_password_verified_at' => now(),
+            'wallet_password_user_id' => $user->id
+        ]);
+
+        // Also store in cache as backup
+        cache()->put("wallet_verified_{$user->id}", true, now()->addMinutes(5));
+
+        // Log for debugging
+        Log::info('Wallet password verified successfully', [
+            'user_id' => $user->id,
+            'session_verified' => session('wallet_password_verified'),
+            'session_verified_at' => session('wallet_password_verified_at'),
+            'cache_verified' => cache()->get("wallet_verified_{$user->id}"),
+        ]);
 
         return response()->json([
             'success' => true,
@@ -162,18 +175,29 @@ class WalletPasswordController extends Controller
      */
     public static function isWalletPasswordVerified()
     {
-        if (!session('wallet_password_verified')) {
+        $user = Auth::user();
+        if (!$user) {
             return false;
         }
 
-        $verifiedAt = session('wallet_password_verified_at');
-        if (!$verifiedAt || now()->diffInMinutes($verifiedAt) > 5) {
-            // Clear expired verification
-            session()->forget(['wallet_password_verified', 'wallet_password_verified_at']);
-            return false;
+        // Check session first
+        if (session('wallet_password_verified') && session('wallet_password_user_id') == $user->id) {
+            $verifiedAt = session('wallet_password_verified_at');
+            if ($verifiedAt && now()->diffInMinutes($verifiedAt) <= 5) {
+                return true;
+            }
         }
 
-        return true;
+        // Check cache as backup
+        if (cache()->get("wallet_verified_{$user->id}")) {
+            return true;
+        }
+
+        // Clear expired verification
+        session()->forget(['wallet_password_verified', 'wallet_password_verified_at', 'wallet_password_user_id']);
+        cache()->forget("wallet_verified_{$user->id}");
+
+        return false;
     }
 
     /**
@@ -181,11 +205,35 @@ class WalletPasswordController extends Controller
      */
     public function clearVerification()
     {
-        session()->forget(['wallet_password_verified', 'wallet_password_verified_at']);
+        $user = Auth::user();
+
+        session()->forget(['wallet_password_verified', 'wallet_password_verified_at', 'wallet_password_user_id']);
+
+        if ($user) {
+            cache()->forget("wallet_verified_{$user->id}");
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'تم إلغاء التحقق من كلمة مرور المحفظة'
+        ]);
+    }
+
+    /**
+     * Show wallet password verification form
+     */
+    public function showVerifyForm()
+    {
+        $user = auth()->user();
+
+        if (!$user->hasWalletPassword()) {
+            return redirect()->route('wallet.charge')->with('error', 'لا توجد كلمة مرور للمحفظة');
+        }
+
+        return view('wallet.verify-password', [
+            'return_url' => session('return_url'),
+            'return_data' => session('return_data'),
+            'message' => session('message')
         ]);
     }
 }

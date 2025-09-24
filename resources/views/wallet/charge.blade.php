@@ -82,7 +82,7 @@
                             </div>
 
                             <div class="d-grid gap-2">
-                                <button type="button" class="btn btn-primary btn-lg" id="chargeWalletBtn">
+                                <button type="submit" class="btn btn-primary btn-lg" id="chargeWalletBtn">
                                     <i class="bi bi-credit-card me-2"></i>
                                     متابعة للدفع
                                 </button>
@@ -135,33 +135,27 @@
                 document.getElementById('amount').value = amount;
             }
 
-            // Charge wallet button click handler
-            document.getElementById('chargeWalletBtn').addEventListener('click', function() {
+            // Simple form validation - let backend handle wallet password
+            document.querySelector('form').addEventListener('submit', function(e) {
                 const amount = parseFloat(document.getElementById('amount').value);
                 const terms = document.getElementById('terms').checked;
 
                 if (!amount || amount < 1 || amount > 10000) {
+                    e.preventDefault();
                     alert('يرجى إدخال مبلغ صحيح بين 1 و 10,000 ريال');
                     return;
                 }
 
                 if (!terms) {
+                    e.preventDefault();
                     alert('يرجى الموافقة على الشروط والأحكام');
                     return;
                 }
 
-                // Verify wallet password before proceeding
-                verifyWalletPassword(function() {
-                    // Submit the form after successful verification
-                    const form = document.querySelector('form');
-                    const submitBtn = document.getElementById('chargeWalletBtn');
-
-                    // Show loading state
-                    submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>جاري التحويل...';
-                    submitBtn.disabled = true;
-
-                    form.submit();
-                }, 'شحن المحفظة');
+                // Show loading state
+                const submitBtn = document.getElementById('chargeWalletBtn');
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>جاري التحويل...';
+                submitBtn.disabled = true;
             });
         </script>
     @endpush

@@ -150,19 +150,24 @@ class WalletController extends Controller
      */
     public function transactions(Request $request)
     {
-        $transactions = auth()->user()->walletTransactions()
-            ->latest()
-            ->paginate(10);
+//        if(auth()->user()){
+            $transactions = auth()->user()->walletTransactions()
+                ->latest()
+                ->paginate(10);
 
-        return response()->json([
-            'success' => true,
-            'data' => $transactions->items(),
-            'meta' => [
-                'current_page' => $transactions->currentPage(),
-                'last_page' => $transactions->lastPage(),
-                'per_page' => $transactions->perPage(),
-                'total' => $transactions->total(),
-            ]
-        ]);
+            return response()->json([
+                'success' => true,
+                'data' => $transactions->items(),
+                'meta' => [
+                    'current_page' => $transactions->currentPage(),
+                    'last_page' => $transactions->lastPage(),
+                    'per_page' => $transactions->perPage(),
+                    'total' => $transactions->total(),
+                ]
+            ]);
+//        }else{
+//            return response()->json(['success' =>false
+//        }
+
     }
 }

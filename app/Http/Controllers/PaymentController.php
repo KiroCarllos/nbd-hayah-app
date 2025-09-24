@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\WalletTransaction;
 use App\Services\FCM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\WalletPasswordController;
 
 class PaymentController extends Controller
 {
@@ -27,17 +27,24 @@ class PaymentController extends Controller
 
         $user = Auth::user();
 
-        // Check if wallet password is verified for wallet charging
-        if ($user->hasWalletPassword() && !\App\Http\Controllers\WalletPasswordController::isWalletPasswordVerified()) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'يجب التحقق من كلمة مرور المحفظة أولاً',
-                    'requires_wallet_password' => true
-                ], 403);
-            }
+        // Log for debugging
+        Log::info('Payment request received', [
+            'user_id' => $user->id,
+            'amount' => $request->amount,
+            'session_id' => session()->getId(),
+            'user_authenticated' => Auth::check(),
+        ]);
 
-            return redirect()->back()->with('error', 'يجب التحقق من كلمة مرور المحفظة أولاً');
+        // Check if user has wallet password and needs verification
+        if ($user->hasWalletPassword()) {
+            // Check if wallet password is already verified in this session
+            if (!WalletPasswordController::isWalletPasswordVerified()) {
+                // Redirect to wallet password verification with return URL
+                return redirect()->route('wallet.password.verify-form')
+                    ->with('return_url', route('wallet.charge.process'))
+                    ->with('return_data', $request->all())
+                    ->with('message', 'يرجى إدخال كلمة مرور المحفظة للمتابعة');
+            }
         }
 
         $amount = $request->amount;
