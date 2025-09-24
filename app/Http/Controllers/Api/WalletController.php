@@ -12,6 +12,14 @@ use Illuminate\Support\Facades\Validator;
 
 class WalletController extends Controller
 {
+    private $terminalId = 'wesal';
+    private $password = 'urway@123';
+    private $merchantKey = 'a705c31a3011f11b4d5d05b4424b003722941122fa0ca153cced622358f175f7';
+    private $currency = 'SAR';
+    private $country = 'SA';
+    private $paymentUrl = 'https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest';
+
+
     /**
      * @OA\Get(
      *     path="/wallet",
