@@ -847,6 +847,100 @@
         });
     </script>
 
+    <!-- Share Campaign Function -->
+    <script>
+        function shareCampaign(campaignUrl, campaignTitle) {
+            // Check if Web Share API is supported
+            if (navigator.share) {
+                navigator.share({
+                    title: campaignTitle,
+                    text: `ساهم معنا في هذه الحملة الخيرية: ${campaignTitle}`,
+                    url: campaignUrl
+                }).then(() => {
+                    console.log('تم مشاركة الحملة بنجاح');
+                }).catch((error) => {
+                    console.log('خطأ في المشاركة:', error);
+                    // Fallback to copy to clipboard
+                    copyToClipboard(campaignUrl, campaignTitle);
+                });
+            } else {
+                // Fallback: Copy to clipboard
+                copyToClipboard(campaignUrl, campaignTitle);
+            }
+        }
+
+        function copyToClipboard(url, title) {
+            // Create temporary textarea element
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = url;
+            document.body.appendChild(tempTextArea);
+
+            // Select and copy the text
+            tempTextArea.select();
+            tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+
+            try {
+                document.execCommand('copy');
+                // Show success message
+                showShareMessage('تم نسخ رابط الحملة بنجاح!', 'success');
+            } catch (err) {
+                console.error('فشل في نسخ الرابط:', err);
+                showShareMessage('فشل في نسخ الرابط', 'error');
+            }
+
+            // Remove temporary element
+            document.body.removeChild(tempTextArea);
+        }
+
+        function showShareMessage(message, type) {
+            // Create toast notification
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type === 'success' ? 'success' : 'danger'} position-fixed`;
+            toast.style.cssText = `
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                min-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                border-radius: 8px;
+                animation: slideInRight 0.3s ease-out;
+            `;
+
+            toast.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-${type === 'success' ? 'check-circle-fill' : 'exclamation-triangle-fill'} me-2"></i>
+                    <span>${message}</span>
+                    <button type="button" class="btn-close ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+
+            document.body.appendChild(toast);
+
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 3000);
+        }
+
+        // Add CSS animation for toast
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
     @stack('scripts')
 </body>
 

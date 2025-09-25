@@ -57,13 +57,21 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <h1 class="card-title">{{ $campaign->title }}</h1>
-                            @auth
-                                <button
-                                    class="favorite-btn position-static {{ $campaign->isFavoritedBy(auth()->id()) ? 'active' : '' }}"
-                                    onclick="toggleFavorite({{ $campaign->id }}, this)">
-                                    <i class="bi bi-heart{{ $campaign->isFavoritedBy(auth()->id()) ? '-fill' : '' }}"></i>
+                            <div class="d-flex gap-2">
+                                <!-- Share Button -->
+                                <button class="btn btn-outline-primary btn-sm"
+                                    onclick="shareCampaign('{{ route('campaigns.show', $campaign) }}', '{{ $campaign->title }}')"
+                                    title="مشاركة الحملة">
+                                    <i class="bi bi-share"></i>
                                 </button>
-                            @endauth
+                                @auth
+                                    <button
+                                        class="favorite-btn position-static {{ $campaign->isFavoritedBy(auth()->id()) ? 'active' : '' }}"
+                                        onclick="toggleFavorite({{ $campaign->id }}, this)">
+                                        <i class="bi bi-heart{{ $campaign->isFavoritedBy(auth()->id()) ? '-fill' : '' }}"></i>
+                                    </button>
+                                @endauth
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -223,18 +231,28 @@
                         </div>
 
                         @auth
-                            <div class="d-grid">
+                            <div class="d-grid gap-2">
                                 <button class="btn btn-primary btn-lg" onclick="showDonationModal()">
                                     <i class="bi bi-heart-fill me-2"></i>
                                     تبرع الآن
                                 </button>
+                                <button class="btn btn-outline-secondary"
+                                    onclick="shareCampaign('{{ route('campaigns.show', $campaign) }}', '{{ $campaign->title }}')">
+                                    <i class="bi bi-share me-2"></i>
+                                    مشاركة الحملة
+                                </button>
                             </div>
                         @else
-                            <div class="d-grid">
+                            <div class="d-grid gap-2">
                                 <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
                                     <i class="bi bi-box-arrow-in-right me-2"></i>
                                     سجل دخولك للتبرع
                                 </a>
+                                <button class="btn btn-outline-secondary"
+                                    onclick="shareCampaign('{{ route('campaigns.show', $campaign) }}', '{{ $campaign->title }}')">
+                                    <i class="bi bi-share me-2"></i>
+                                    مشاركة الحملة
+                                </button>
                             </div>
                         @endauth
                     </div>

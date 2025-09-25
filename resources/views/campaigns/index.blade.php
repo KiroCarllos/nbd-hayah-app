@@ -65,6 +65,12 @@
                                         عرض التفاصيل
                                     </a>
 
+                                    <!-- Share Button -->
+                                    <button class="btn btn-outline-secondary btn-sm"
+                                        onclick="shareCampaign('{{ route('campaigns.show', $campaign) }}', '{{ $campaign->title }}')"
+                                        title="مشاركة الحملة">
+                                        <i class="bi bi-share"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
