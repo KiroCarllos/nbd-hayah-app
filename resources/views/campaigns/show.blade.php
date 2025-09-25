@@ -230,31 +230,66 @@
                             </div>
                         </div>
 
-                        @auth
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-primary btn-lg" onclick="showDonationModal()">
-                                    <i class="bi bi-heart-fill me-2"></i>
-                                    تبرع الآن
-                                </button>
-                                <button class="btn btn-outline-secondary"
-                                    onclick="shareCampaign('{{ route('campaigns.show', $campaign) }}', '{{ $campaign->title }}')">
-                                    <i class="bi bi-share me-2"></i>
-                                    مشاركة الحملة
-                                </button>
-                            </div>
+                        <!-- Campaign Status Badge -->
+                        <div class="mb-3 text-center">
+                            <span class="badge {{ $campaign->getStatusBadgeClass() }} fs-6 px-3 py-2">
+                                {{ $campaign->getStatusText() }}
+                            </span>
+                        </div>
+
+                        @if ($campaign->canAcceptDonations())
+                            @auth
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary btn-lg" onclick="showDonationModal()">
+                                        <i class="bi bi-heart-fill me-2"></i>
+                                        تبرع الآن
+                                    </button>
+                                    <button class="btn btn-outline-secondary"
+                                        onclick="shareCampaign('{{ route('campaigns.show', $campaign) }}', '{{ $campaign->title }}')">
+                                        <i class="bi bi-share me-2"></i>
+                                        مشاركة الحملة
+                                    </button>
+                                </div>
+                            @else
+                                <div class="d-grid gap-2">
+                                    <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                                        سجل دخولك للتبرع
+                                    </a>
+                                    <button class="btn btn-outline-secondary"
+                                        onclick="shareCampaign('{{ route('campaigns.show', $campaign) }}', '{{ $campaign->title }}')">
+                                        <i class="bi bi-share me-2"></i>
+                                        مشاركة الحملة
+                                    </button>
+                                </div>
+                            @endauth
                         @else
+                            <!-- Campaign cannot accept donations -->
                             <div class="d-grid gap-2">
-                                <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
-                                    <i class="bi bi-box-arrow-in-right me-2"></i>
-                                    سجل دخولك للتبرع
-                                </a>
+                                @if ($campaign->isCompleted())
+                                    <div class="alert alert-success text-center mb-3">
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+                                        تم الوصول للهدف المطلوب! شكراً لجميع المتبرعين
+                                    </div>
+                                @elseif($campaign->hasEnded())
+                                    <div class="alert alert-warning text-center mb-3">
+                                        <i class="bi bi-clock-history me-2"></i>
+                                        انتهت فترة التبرع لهذه الحملة
+                                    </div>
+                                @elseif($campaign->isInactive())
+                                    <div class="alert alert-secondary text-center mb-3">
+                                        <i class="bi bi-pause-circle me-2"></i>
+                                        هذه الحملة غير نشطة حالياً
+                                    </div>
+                                @endif
+
                                 <button class="btn btn-outline-secondary"
                                     onclick="shareCampaign('{{ route('campaigns.show', $campaign) }}', '{{ $campaign->title }}')">
                                     <i class="bi bi-share me-2"></i>
                                     مشاركة الحملة
                                 </button>
                             </div>
-                        @endauth
+                        @endif
                     </div>
                 </div>
             </div>

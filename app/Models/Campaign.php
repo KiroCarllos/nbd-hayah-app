@@ -99,6 +99,19 @@ class Campaign extends Model
         return $query->where('is_priority', true);
     }
 
+    /**
+     * Scope to get campaigns that can accept donations
+     */
+    public function scopeCanAcceptDonations($query)
+    {
+        return $query->where('is_active', true)
+            ->where(function ($q) {
+                $q->whereNull('end_date')
+                    ->orWhere('end_date', '>', now());
+            })
+            ->whereRaw('current_amount < target_amount');
+    }
+
     // Helper methods
     public function isFavoritedBy($userId)
     {
@@ -109,5 +122,77 @@ class Campaign extends Model
         return UserFavoriteCampaign::where('user_id', $userId)
             ->where('campaign_id', $this->id)
             ->exists();
+    }
+
+    /**
+     * Check if campaign is completed (reached 100% of target amount)
+     */
+    public function isCompleted()
+    {
+        return $this->current_amount >= $this->target_amount;
+    }
+
+    /**
+     * Check if campaign has ended (past end_date)
+     */
+    public function hasEnded()
+    {
+        return $this->end_date && $this->end_date->isPast();
+    }
+
+    /**
+     * Check if campaign is inactive
+     */
+    public function isInactive()
+    {
+        return !$this->is_active;
+    }
+
+    /**
+     * Check if campaign can accept donations
+     */
+    public function canAcceptDonations()
+    {
+        return $this->is_active && !$this->isCompleted() && !$this->hasEnded();
+    }
+
+    /**
+     * Get campaign status text
+     */
+    public function getStatusText()
+    {
+        if (!$this->is_active) {
+            return 'غير نشطة';
+        }
+
+        if ($this->hasEnded()) {
+            return 'منتهية';
+        }
+
+        if ($this->isCompleted()) {
+            return 'مكتملة';
+        }
+
+        return 'نشطة';
+    }
+
+    /**
+     * Get campaign status badge class
+     */
+    public function getStatusBadgeClass()
+    {
+        if (!$this->is_active) {
+            return 'bg-secondary';
+        }
+
+        if ($this->hasEnded()) {
+            return 'bg-danger';
+        }
+
+        if ($this->isCompleted()) {
+            return 'bg-success';
+        }
+
+        return 'bg-primary';
     }
 }

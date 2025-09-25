@@ -45,10 +45,20 @@ class DonationController extends Controller
             ], 400);
         }
 
-        // Check if campaign is active
-        if (!$campaign->is_active) {
+        // Check if campaign can accept donations
+        if (!$campaign->canAcceptDonations()) {
+            $message = 'لا يمكن التبرع لهذه الحملة. ';
+
+            if (!$campaign->is_active) {
+                $message .= 'الحملة غير نشطة حالياً.';
+            } elseif ($campaign->isCompleted()) {
+                $message .= 'تم الوصول للهدف المطلوب.';
+            } elseif ($campaign->hasEnded()) {
+                $message .= 'انتهت فترة التبرع لهذه الحملة.';
+            }
+
             return response()->json([
-                'error' => 'هذه الحملة غير نشطة حالياً'
+                'error' => $message
             ], 400);
         }
 

@@ -40,7 +40,12 @@
                             @endif
 
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{{ $campaign->title }}</h5>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title mb-0">{{ $campaign->title }}</h5>
+                                    <span class="badge {{ $campaign->getStatusBadgeClass() }} ms-2">
+                                        {{ $campaign->getStatusText() }}
+                                    </span>
+                                </div>
                                 <p class="card-text flex-grow-1">{{ Str::limit($campaign->description, 100) }}</p>
 
                                 <div class="mb-3">

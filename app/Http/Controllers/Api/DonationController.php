@@ -115,12 +115,30 @@ class DonationController extends Controller
             ], 422);
         }
 
-        $campaign = Campaign::active()->find($campaignId);
+        $campaign = Campaign::find($campaignId);
         if (!$campaign) {
             return response()->json([
                 'success' => false,
-                'message' => 'الحملة غير موجودة أو غير نشطة'
+                'message' => 'الحملة غير موجودة'
             ], 404);
+        }
+
+        // Check if campaign can accept donations
+        if (!$campaign->canAcceptDonations()) {
+            $message = 'لا يمكن التبرع لهذه الحملة. ';
+
+            if (!$campaign->is_active) {
+                $message .= 'الحملة غير نشطة حالياً.';
+            } elseif ($campaign->isCompleted()) {
+                $message .= 'تم الوصول للهدف المطلوب.';
+            } elseif ($campaign->hasEnded()) {
+                $message .= 'انتهت فترة التبرع لهذه الحملة.';
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => $message
+            ], 400);
         }
 
         $user = auth()->user();
