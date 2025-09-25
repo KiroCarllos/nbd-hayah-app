@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\GeneralDonation;
 use App\Models\WalletTransaction;
+use App\Services\FCM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -57,7 +58,13 @@ class QuickDonationController extends Controller
             // Deduct from wallet
             $user->wallet_balance -= $amount;
             $user->save();
-
+            if($user->device_token){
+                $response = FCM::sendToDevice(
+                    $user->device_token,
+                    'تم التبرع بنجاح 💚',
+                    ' شكراً لك على كرمك ❤️'
+                );
+            }
             // Create wallet transaction
             WalletTransaction::create([
                 'user_id' => $user->id,
