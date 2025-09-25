@@ -48,7 +48,7 @@ class QuickDonationController extends Controller
             $donation = GeneralDonation::create([
                 'user_id' => $user->id,
                 'amount' => $amount,
-                'is_anonymous' => $request->has('is_anonymous') && $request->is_anonymous == "on",
+                'is_anonymous' => $request->has('is_anonymous') && $request->is_anonymous == 1,
                 'message' => $request->message,
                 'payment_method' => 'wallet',
                 'status' => 'completed'

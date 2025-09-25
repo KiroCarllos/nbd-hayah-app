@@ -66,7 +66,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/campaigns/{id}/donate', [DonationController::class, 'donate']);
 
     // Quick Donations
-    Route::post('/quick-donate', [QuickDonationController::class, 'store'])->name('quick-donate.store');
+    Route::post('/quick-donate', [QuickDonationController::class, 'store']);
 
 
     // Wallet routes
