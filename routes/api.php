@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CampaignController;
 use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\ReportsController;
+use App\Http\Controllers\Api\QuickDonationController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WalletController;
 use App\Http\Controllers\Api\WalletPasswordController;
@@ -63,6 +64,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Donation routes
     Route::apiResource('donations', DonationController::class)->only(['index', 'store', 'show']);
     Route::post('/campaigns/{id}/donate', [DonationController::class, 'donate']);
+
+    // Quick Donations
+    Route::post('/quick-donate', [QuickDonationController::class, 'store'])->name('quick-donate.store');
+
 
     // Wallet routes
     Route::get('/wallet', [WalletController::class, 'index']);
