@@ -175,13 +175,13 @@ class PaymentController extends Controller
                 // Update user wallet balance
                 $user = $transaction->user;
                 $user->increment('wallet_balance', $transaction->amount);
-
-                $fcm = FCM::sendToDevice(
-                    $user->device_token,
-                    'تم شحن محفظتك بنجاح ❤️',
-                    'تم شحن المحفظة بنجاح! تم إضافة ' . number_format($transaction->amount, 2) . ' ر.س إلى رصيدك'
-                );
-
+                if($user->device_token){
+                    $fcm = FCM::sendToDevice(
+                        $user->device_token,
+                        'تم شحن محفظتك بنجاح ❤️',
+                        'تم شحن المحفظة بنجاح! تم إضافة ' . number_format($transaction->amount, 2) . ' ر.س إلى رصيدك'
+                    );
+                }
                 DB::commit();
                 return redirect()->route('wallet.index')->with('success', 'تم شحن المحفظة بنجاح! تم إضافة ' . number_format($transaction->amount, 2) . ' ر.س إلى رصيدك');
             } else {
