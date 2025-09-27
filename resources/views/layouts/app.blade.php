@@ -504,6 +504,7 @@
                         <h5 class="modal-title" id="quickDonateModalLabel">
                             <i class="bi bi-lightning-fill me-2"></i>
                             تبرع سريع
+                            {{-- <small class="d-block fs-6 mt-1 opacity-75">اختر نوع التبرع والمبلغ المناسب</small> --}}
                         </h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                             aria-label="Close"></button>
@@ -511,6 +512,38 @@
                     <div class="modal-body">
                         <form id="quickDonateForm">
                             @csrf
+                            <!-- Donation Type Selection -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">نوع التبرع:</label>
+                                <div class="row g-2 mb-3">
+                                    {{-- <div class="col-6">
+                                        <input type="radio" class="btn-check" name="donation_type"
+                                            id="generalDonation" value="general" checked>
+                                        <label class="btn btn-outline-success w-100" for="generalDonation">
+                                            <i class="bi bi-heart me-2"></i>
+                                            تبرع عام
+                                        </label>
+                                    </div> --}}
+                                    <div class="col-12">
+                                        <input type="radio" class="btn-check" name="donation_type" id="urgentDonation"
+                                            value="urgent">
+                                        <label class="btn btn-outline-warning w-100" for="urgentDonation">
+                                            <i class="bi bi-exclamation-triangle me-2"></i>
+                                            أشد الحالات احتياجاً
+                                        </label>
+                                    </div>
+                                </div>
+                                <div id="donationTypeInfo" class="alert alert-info">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <span id="donationTypeText">سيتم توزيع تبرعك على الحالات العامة</span>
+                                </div>
+                                <div id="urgentCampaignInfo" class="alert alert-warning d-none">
+                                    <i class="bi bi-clock me-2"></i>
+                                    <strong>معلومة:</strong> سيتم توجيه تبرعك تلقائياً للحملة الأكثر احتياجاً والأقرب
+                                    للانتهاء
+                                </div>
+                            </div>
+
                             <div class="mb-4">
                                 <label class="form-label fw-bold">اختر مبلغ التبرع:</label>
                                 <div class="row g-2 mb-3">
@@ -790,6 +823,32 @@
             border-color: #198754;
             box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
         }
+
+        /* Donation Type Button Styles */
+        .btn-check:checked+.btn-outline-success {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+            box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+        }
+
+        .btn-check:checked+.btn-outline-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #000;
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+        }
+
+        .btn-outline-success:hover,
+        .btn-outline-warning:hover {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        #donationTypeInfo {
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
     </style>
 
     <script>
@@ -834,6 +893,26 @@
             @auth
             document.getElementById('quickDonateBtn').addEventListener('click', function() {
                 new bootstrap.Modal(document.getElementById('quickDonateModal')).show();
+            });
+
+            // Donation type change handler
+            document.querySelectorAll('input[name="donation_type"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const donationTypeText = document.getElementById('donationTypeText');
+                    const donationTypeInfo = document.getElementById('donationTypeInfo');
+                    const urgentCampaignInfo = document.getElementById('urgentCampaignInfo');
+
+                    if (this.value === 'general') {
+                        donationTypeText.textContent = 'سيتم توزيع تبرعك على الحالات العامة';
+                        donationTypeInfo.className = 'alert alert-info';
+                        urgentCampaignInfo.classList.add('d-none');
+                    } else if (this.value === 'urgent') {
+                        donationTypeText.textContent =
+                            'سيتم توجيه تبرعك للحملة الأكثر احتياجاً والأقرب للانتهاء';
+                        donationTypeInfo.className = 'alert alert-warning';
+                        urgentCampaignInfo.classList.remove('d-none');
+                    }
+                });
             });
 
             // Amount button selection
