@@ -91,6 +91,10 @@ class Campaign extends Model
     // Scopes
     public function scopeActive($query)
     {
+        return $query->where('is_active', true);
+    }
+    public function scopeWorking($query)
+    {
         return $query->where('is_active', true)
             ->where(function ($q) {
                 $q->whereNull('end_date')
