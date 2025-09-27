@@ -93,7 +93,10 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYWMH54LYJ"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
         gtag('js', new Date());
 
         gtag('config', 'G-WYWMH54LYJ');
@@ -214,11 +217,16 @@
                                 من خلال تبرعاتكم الكريمة.
                             </p>
                             <div class="footer-social">
-                                <a target="_blank" href="https://www.facebook.com" class="social-link"><i class="bi bi-facebook"></i></a>
-                                <a target="_blank" href="https://x.com" class="social-link"><i class="bi bi-twitter"></i></a>
-                                <a target="_blank" href="https://www.instagram.com" class="social-link"><i class="bi bi-instagram"></i></a>
-                                <a target="_blank" href="https://www.linkedin.com" class="social-link"><i class="bi bi-linkedin"></i></a>
-                                <a target="_blank" href="https://www.youtube.com" class="social-link"><i class="bi bi-youtube"></i></a>
+                                <a target="_blank" href="https://www.facebook.com" class="social-link"><i
+                                        class="bi bi-facebook"></i></a>
+                                <a target="_blank" href="https://x.com" class="social-link"><i
+                                        class="bi bi-twitter"></i></a>
+                                <a target="_blank" href="https://www.instagram.com" class="social-link"><i
+                                        class="bi bi-instagram"></i></a>
+                                <a target="_blank" href="https://www.linkedin.com" class="social-link"><i
+                                        class="bi bi-linkedin"></i></a>
+                                <a target="_blank" href="https://www.youtube.com" class="social-link"><i
+                                        class="bi bi-youtube"></i></a>
                             </div>
                         </div>
                     </div>
@@ -244,9 +252,9 @@
                         <div class="footer-widget">
                             <h5 class="footer-title">الدعم</h5>
                             <ul class="footer-links">
-{{--                                <li><a href="#">مركز المساعدة</a></li>--}}
-{{--                                <li><a href="#">الأسئلة الشائعة</a></li>--}}
-{{--                                <li><a href="#">اتصل بنا</a></li>--}}
+                                {{--                                <li><a href="#">مركز المساعدة</a></li> --}}
+                                {{--                                <li><a href="#">الأسئلة الشائعة</a></li> --}}
+                                {{--                                <li><a href="#">اتصل بنا</a></li> --}}
                                 <li><a href="{{ route('privacy') }}">سياسة الخصوصية</a></li>
                                 <li><a href="{{ route('terms') }}">الشروط والأحكام</a></li>
                             </ul>
@@ -297,7 +305,7 @@
                         <div class="footer-payment">
                             <span class="me-3">طرق الدفع المتاحة:</span>
                             <i class="bi bi-credit-card-2-front payment-icon"></i>
-{{--                            <i class="bi bi-paypal payment-icon"></i>--}}
+                            {{--                            <i class="bi bi-paypal payment-icon"></i> --}}
                             <i class="bi bi-bank payment-icon"></i>
                         </div>
                     </div>
@@ -474,13 +482,20 @@
         });
     </script>
 
+    <!-- Go to Top Button -->
+    <div id="goToTopBtn" class="go-to-top-btn" style="display: none;" title="العودة للأعلى">
+        <i class="bi bi-arrow-up"></i>
+    </div>
+
     <!-- Quick Donation Floating Button -->
     @auth
         <div id="quickDonateBtn" class="quick-donate-btn">
             <i class="bi bi-lightning-fill"></i>
         </div>
+    @endauth
 
-        <!-- Quick Donation Modal -->
+    <!-- Quick Donation Modal -->
+    @auth
         <div class="modal fade" id="quickDonateModal" tabindex="-1" aria-labelledby="quickDonateModalLabel"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -591,6 +606,89 @@
     @endauth
 
     <style>
+        .go-to-top-btn {
+            position: fixed;
+            bottom: {{ auth()->check() ? '110px' : '30px' }};
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #6c757d, #495057);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .go-to-top-btn.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .go-to-top-btn:hover {
+            background: linear-gradient(135deg, #495057, #343a40);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+        }
+
+        .go-to-top-btn i {
+            color: white;
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .go-to-top-btn:hover i {
+            transform: translateY(-2px);
+        }
+
+        /* Add subtle animation for go to top button */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .go-to-top-btn.show {
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .go-to-top-btn {
+                width: 45px;
+                height: 45px;
+                bottom: {{ auth()->check() ? '100px' : '20px' }};
+                right: 20px;
+            }
+
+            .go-to-top-btn i {
+                font-size: 18px;
+            }
+
+            .quick-donate-btn {
+                width: 55px;
+                height: 55px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .quick-donate-btn i {
+                font-size: 22px;
+            }
+        }
+
         .quick-donate-btn {
             position: fixed;
             bottom: 30px;
@@ -598,11 +696,10 @@
             width: 60px;
             height: 60px;
             background: linear-gradient(135deg, #31a354, #fe4d57);
-            auth()->user()?->wallet_balance border-radius: 50%;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
             cursor: pointer;
             box-shadow: 0 4px 20px rgba(0, 123, 255, 0.4);
             transition: all 0.3s ease;
@@ -697,7 +794,44 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Quick donate button click
+            const goToTopBtn = document.getElementById('goToTopBtn');
+
+            let scrollTimeout;
+
+            function toggleGoToTopButton() {
+                if (window.pageYOffset > 300) {
+                    goToTopBtn.classList.add('show');
+                    goToTopBtn.style.display = 'flex';
+                } else {
+                    goToTopBtn.classList.remove('show');
+                    setTimeout(() => {
+                        if (!goToTopBtn.classList.contains('show')) {
+                            goToTopBtn.style.display = 'none';
+                        }
+                    }, 300);
+                }
+            }
+
+            window.addEventListener('scroll', function() {
+                if (scrollTimeout) {
+                    clearTimeout(scrollTimeout);
+                }
+                scrollTimeout = setTimeout(toggleGoToTopButton, 10);
+            });
+
+            goToTopBtn.addEventListener('click', function() {
+                this.style.transform = 'translateY(-3px) scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            @auth
             document.getElementById('quickDonateBtn').addEventListener('click', function() {
                 new bootstrap.Modal(document.getElementById('quickDonateModal')).show();
             });
@@ -705,7 +839,7 @@
             // Amount button selection
             document.querySelectorAll('.amount-btn').forEach(btn => {
                 const amount = parseFloat(btn.dataset.amount);
-                const currentBalance = {{ auth()->user()?->wallet_balance }};
+                const currentBalance = {{ auth()->user()?->wallet_balance ?? 0 }};
 
                 // Disable button if amount exceeds balance
                 if (amount > currentBalance) {
@@ -854,6 +988,7 @@
                         submitBtn.innerHTML = '<i class="bi bi-heart-fill me-2"></i>تبرع الآن';
                     });
             });
+        @endauth
         });
     </script>
 
