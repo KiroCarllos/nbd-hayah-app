@@ -74,19 +74,43 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'email' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:users',
+                'regex:/^[a-z0-9]+@(gmail|yahoo|hotmail|outlook)\.com$/i'
+            ],
+            'mobile' => [
+                'required',
+                'string',
+                'max:20',
+                'unique:users',
+                'regex:/^01[0-2,5]\d{8}$/'
+            ],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
+            ],
             'name' => 'required|string|max:255',
-            'mobile' => 'required|string|unique:users,mobile|regex:/^01[0-9]{9}$/',
-            'email' => 'required',
             'device_token' => 'nullable|string',
-            'password' => 'required|string|min:8|confirmed',
         ], [
             'name.required' => 'الاسم مطلوب',
-            'mobile.required' => 'رقم الهاتف مطلوب',
-            'mobile.unique' => 'رقم الهاتف مستخدم من قبل',
-            'mobile.regex' => 'رقم الهاتف غير صحيح',
+            'email.required' => 'البريد الإلكتروني مطلوب',
+            'email.regex' => 'يجب أن يكون البريد الإلكتروني على أحد النطاقات: gmail, yahoo, hotmail, outlook',
+            'email.unique' => 'البريد الإلكتروني مستخدم من قبل',
+
+            'mobile.required' => 'رقم الموبايل مطلوب',
+            'mobile.regex' => 'رقم الموبايل غير صحيح. يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويليه 8 أرقام.',
+            'mobile.unique' => 'رقم الموبايل مستخدم من قبل',
+
             'password.required' => 'كلمة المرور مطلوبة',
             'password.min' => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل',
             'password.confirmed' => 'تأكيد كلمة المرور غير متطابق',
+            'password.regex' => 'كلمة المرور يجب أن تحتوي على حرف كبير، وحرف صغير، ورقم، ورمز خاص.',
         ]);
         if ($validator->fails()) {
             return response()->json([

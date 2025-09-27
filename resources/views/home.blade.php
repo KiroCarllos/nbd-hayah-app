@@ -956,9 +956,7 @@
                                     @endauth
 
                                     @if ($campaign->images && count($campaign->images) > 0)
-                                        <a href="{{ asset('storage/' . $campaign->images[0]) }}" class="glightbox"
-                                            data-gallery="all-campaigns" data-title="{{ $campaign->title }}"
-                                            data-description="{{ Str::limit($campaign->description, 200) }}">
+                                        <a href="{{ route('campaigns.show', $campaign) }}">
                                             <img src="{{ asset('storage/' . $campaign->images[0]) }}"
                                                 class="card-img-top" alt="{{ $campaign->title }}"
                                                 style="height: 400px; object-fit: cover; cursor: pointer;">
@@ -1065,37 +1063,37 @@
         </div>
 
         <!-- How it works -->
-        <div class="row">
-            <div class="col-12">
-                <h2 class="text-center mb-5">كيف يعمل الموقع؟</h2>
-                <div class="row">
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 80px; height: 80px;">
-                            <i class="bi bi-person-plus display-6"></i>
-                        </div>
-                        <h5>1. إنشاء حساب</h5>
-                        <p>قم بإنشاء حساب جديد بسهولة وأمان</p>
-                    </div>
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 80px; height: 80px;">
-                            <i class="bi bi-wallet2 display-6"></i>
-                        </div>
-                        <h5>2. شحن المحفظة</h5>
-                        <p>اشحن محفظتك بالمبلغ الذي تريد التبرع به</p>
-                    </div>
-                    <div class="col-md-4 text-center mb-4">
-                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 80px; height: 80px;">
-                            <i class="bi bi-heart-fill display-6"></i>
-                        </div>
-                        <h5>3. تبرع</h5>
-                        <p>اختر الحملة التي تريد دعمها وتبرع بسهولة</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+{{--        <div class="row">--}}
+{{--            <div class="col-12">--}}
+{{--                <h2 class="text-center mb-5">كيف يعمل الموقع؟</h2>--}}
+{{--                <div class="row">--}}
+{{--                    <div class="col-md-4 text-center mb-4">--}}
+{{--                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"--}}
+{{--                            style="width: 80px; height: 80px;">--}}
+{{--                            <i class="bi bi-person-plus display-6"></i>--}}
+{{--                        </div>--}}
+{{--                        <h5>1. إنشاء حساب</h5>--}}
+{{--                        <p>قم بإنشاء حساب جديد بسهولة وأمان</p>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-4 text-center mb-4">--}}
+{{--                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"--}}
+{{--                            style="width: 80px; height: 80px;">--}}
+{{--                            <i class="bi bi-wallet2 display-6"></i>--}}
+{{--                        </div>--}}
+{{--                        <h5>2. شحن المحفظة</h5>--}}
+{{--                        <p>اشحن محفظتك بالمبلغ الذي تريد التبرع به</p>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-4 text-center mb-4">--}}
+{{--                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"--}}
+{{--                            style="width: 80px; height: 80px;">--}}
+{{--                            <i class="bi bi-heart-fill display-6"></i>--}}
+{{--                        </div>--}}
+{{--                        <h5>3. تبرع</h5>--}}
+{{--                        <p>اختر الحملة التي تريد دعمها وتبرع بسهولة</p>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
 
         <!-- Mobile App Download Section -->
         <div class="row mb-5">
@@ -1261,22 +1259,22 @@
         </div>
 
         <!-- Newsletter Section -->
-        <div class="row mb-5">
-            <div class="col-12">
-                <div class="rounded-4 p-5 text-center" style="background-color: var(--light-color);">
-                    <h3 class="mb-3 text-primary-custom">ابق على اطلاع</h3>
-                    <p class="text-muted mb-4">اشترك في نشرتنا الإخبارية لتصلك آخر الحملات والأخبار</p>
-                    <div class="row justify-content-center">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <input type="email" class="form-control" placeholder="أدخل بريدك الإلكتروني">
-                                <button class="btn btn-primary" type="button">اشتراك</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+{{--        <div class="row mb-5">--}}
+{{--            <div class="col-12">--}}
+{{--                <div class="rounded-4 p-5 text-center" style="background-color: var(--light-color);">--}}
+{{--                    <h3 class="mb-3 text-primary-custom">ابق على اطلاع</h3>--}}
+{{--                    <p class="text-muted mb-4">اشترك في نشرتنا الإخبارية لتصلك آخر الحملات والأخبار</p>--}}
+{{--                    <div class="row justify-content-center">--}}
+{{--                        <div class="col-md-6">--}}
+{{--                            <div class="input-group">--}}
+{{--                                <input type="email" class="form-control" placeholder="أدخل بريدك الإلكتروني">--}}
+{{--                                <button class="btn btn-primary" type="button">اشتراك</button>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
     </div>
 
     @push('scripts')

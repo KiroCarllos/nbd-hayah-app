@@ -88,6 +88,16 @@
     </style>
 
     @stack('styles')
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYWMH54LYJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-WYWMH54LYJ');
+    </script>
 </head>
 
 <body>
@@ -204,11 +214,11 @@
                                 من خلال تبرعاتكم الكريمة.
                             </p>
                             <div class="footer-social">
-                                <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
-                                <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
-                                <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
-                                <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
-                                <a href="#" class="social-link"><i class="bi bi-youtube"></i></a>
+                                <a target="_blank" href="https://www.facebook.com" class="social-link"><i class="bi bi-facebook"></i></a>
+                                <a target="_blank" href="https://x.com" class="social-link"><i class="bi bi-twitter"></i></a>
+                                <a target="_blank" href="https://www.instagram.com" class="social-link"><i class="bi bi-instagram"></i></a>
+                                <a target="_blank" href="https://www.linkedin.com" class="social-link"><i class="bi bi-linkedin"></i></a>
+                                <a target="_blank" href="https://www.youtube.com" class="social-link"><i class="bi bi-youtube"></i></a>
                             </div>
                         </div>
                     </div>
@@ -234,9 +244,9 @@
                         <div class="footer-widget">
                             <h5 class="footer-title">الدعم</h5>
                             <ul class="footer-links">
-                                <li><a href="#">مركز المساعدة</a></li>
-                                <li><a href="#">الأسئلة الشائعة</a></li>
-                                <li><a href="#">اتصل بنا</a></li>
+{{--                                <li><a href="#">مركز المساعدة</a></li>--}}
+{{--                                <li><a href="#">الأسئلة الشائعة</a></li>--}}
+{{--                                <li><a href="#">اتصل بنا</a></li>--}}
                                 <li><a href="{{ route('privacy') }}">سياسة الخصوصية</a></li>
                                 <li><a href="{{ route('terms') }}">الشروط والأحكام</a></li>
                             </ul>
@@ -287,7 +297,7 @@
                         <div class="footer-payment">
                             <span class="me-3">طرق الدفع المتاحة:</span>
                             <i class="bi bi-credit-card-2-front payment-icon"></i>
-                            <i class="bi bi-paypal payment-icon"></i>
+{{--                            <i class="bi bi-paypal payment-icon"></i>--}}
                             <i class="bi bi-bank payment-icon"></i>
                         </div>
                     </div>
