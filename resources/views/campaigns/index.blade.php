@@ -25,16 +25,14 @@
                             @endauth
 
                             @if ($campaign->images && count($campaign->images) > 0)
-                                <a href="{{ asset('storage/' . $campaign->images[0]) }}" class="glightbox"
-                                    data-gallery="campaigns-index" data-title="{{ $campaign->title }}"
-                                    data-description="{{ Str::limit($campaign->description, 200) }}">
+                                <a href="{{ route('campaigns.show', $campaign) }}">
                                     <img src="{{ asset('storage/' . $campaign->images[0]) }}" class="card-img-top"
                                         alt="{{ $campaign->title }}"
-                                        style="height: 200px; object-fit: cover; cursor: pointer;">
+                                        style="height: 400px; object-fit: cover; cursor: pointer;">
                                 </a>
                             @else
                                 <div class="bg-primary d-flex align-items-center justify-content-center"
-                                    style="height: 200px;">
+                                    style="height: 400px;">
                                     <i class="bi bi-heart-fill text-white" style="font-size: 3rem;"></i>
                                 </div>
                             @endif

@@ -31,7 +31,7 @@ class WalletController extends Controller
     public function charge(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:1',
+            'amount' => 'required|numeric|min:1|max:1000000',
         ], [
             'amount.required' => 'مبلغ الشحن مطلوب',
             'amount.numeric' => 'مبلغ الشحن يجب أن يكون رقماً',

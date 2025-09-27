@@ -30,7 +30,7 @@ class HomeController extends Controller
 
         // Get statistics
         $totalCampaigns = Campaign::active()->count();
-        $totalUsers = User::whereHas('donations')->count();
+        $totalUsers = User::whereHas('donations')->distinct('id')->count();
         $totalDonations = Donation::count();
         $totalAmount = Donation::completed()->sum('amount');
 

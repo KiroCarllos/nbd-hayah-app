@@ -91,7 +91,12 @@ class Campaign extends Model
     // Scopes
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('is_active', true)
+            ->where(function ($q) {
+                $q->whereNull('end_date')
+                    ->orWhere('end_date', '>', now());
+            })
+            ->whereColumn('current_amount', '<', 'target_amount');
     }
 
     public function scopePriority($query)

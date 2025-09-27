@@ -30,7 +30,7 @@
                                         <input type="text"
                                             class="form-control border-start-0 ps-0 @error('mobile') is-invalid @enderror"
                                             id="mobile" name="mobile" value="{{ old('mobile') }}"
-                                            placeholder="05xxxxxxxx" required autofocus>
+                                            placeholder="01xxxxxxxxx" required autofocus>
                                         @error('mobile')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
