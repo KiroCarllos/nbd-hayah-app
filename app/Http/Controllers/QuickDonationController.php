@@ -23,7 +23,7 @@ class QuickDonationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:1|max:100000',
+            'amount' => 'required|numeric|min:1',
             'message' => 'nullable|string|max:500',
         ]);
         $user = Auth::user();
