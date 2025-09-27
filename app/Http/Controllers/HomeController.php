@@ -29,7 +29,7 @@ class HomeController extends Controller
             ->paginate(12);
 
         // Get statistics
-        $totalCampaigns = Campaign::active()->count();
+        $totalCampaigns = Campaign::working()->count();
         $totalUsers = User::whereHas('donations')->distinct('id')->count();
         $totalDonations = Donation::count();
         $totalAmount = Donation::completed()->sum('amount');
