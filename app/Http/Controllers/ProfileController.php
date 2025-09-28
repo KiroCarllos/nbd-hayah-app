@@ -67,26 +67,41 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email',
-            'mobile' => 'required|string|unique:users,mobile,' . $user->id,
+            'name' => 'required|string|min:2|max:255|regex:/^[\p{Arabic}\p{L}\s]+$/u',
+            'email' => 'nullable|email|unique:users,email,' . $user->id,
+            'mobile' => 'required|regex:/^01[0-2,5][0-9]{8}$/|unique:users,mobile,' . $user->id,
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'current_password' => 'nullable|string',
-            'password' => 'nullable|string|min:8|confirmed',
+            'current_password' => 'required_with:password|string',
+            'password' => 'nullable|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/|confirmed',
         ], [
             'name.required' => 'الاسم مطلوب',
+            'name.min' => 'الاسم يجب أن يكون حرفين على الأقل',
+            'name.regex' => 'الاسم يجب أن يحتوي على أحرف عربية أو إنجليزية فقط',
             'email.email' => 'البريد الإلكتروني غير صحيح',
+            'email.unique' => 'البريد الإلكتروني مستخدم من قبل',
             'mobile.required' => 'رقم الهاتف مطلوب',
+            'mobile.regex' => 'رقم الهاتف يجب أن يكون رقم مصري صحيح (01xxxxxxxxx)',
             'mobile.unique' => 'رقم الهاتف مستخدم من قبل',
             'profile_image.image' => 'يجب أن تكون الصورة من نوع صحيح',
             'profile_image.max' => 'حجم الصورة يجب أن يكون أقل من 2 ميجابايت',
+            'current_password.required_with' => 'كلمة المرور الحالية مطلوبة لتغيير كلمة المرور',
             'password.min' => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل',
+            'password.regex' => 'كلمة المرور يجب أن تحتوي على حرف كبير وصغير ورقم ورمز خاص',
             'password.confirmed' => 'تأكيد كلمة المرور غير متطابق',
         ]);
 
-        // Check current password if user wants to change password
-        if ($request->filled('password')) {
-            if (!$request->filled('current_password') || !Hash::check($request->current_password, $user->password)) {
+        $sensitiveDataChanged = (
+            $request->email !== $user->email ||
+            $request->mobile !== $user->mobile ||
+            $request->filled('password')
+        );
+
+        if ($sensitiveDataChanged) {
+            if (!$request->filled('current_password')) {
+                return back()->withErrors(['current_password' => 'كلمة المرور الحالية مطلوبة لتحديث البيانات الحساسة']);
+            }
+
+            if (!Hash::check($request->current_password, $user->password)) {
                 return back()->withErrors(['current_password' => 'كلمة المرور الحالية غير صحيحة']);
             }
         }

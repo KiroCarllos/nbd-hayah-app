@@ -85,16 +85,30 @@
                             <h5>تغيير كلمة المرور</h5>
                             <p class="text-muted">اتركها فارغة إذا كنت لا تريد تغيير كلمة المرور</p>
 
+                            <!-- Security Notice -->
+                            <div class="alert alert-warning" id="securityNotice" style="display: none;">
+                                <i class="bi bi-shield-exclamation me-2"></i>
+                                <strong>تنبيه أمني:</strong> كلمة المرور الحالية مطلوبة لتحديث البيانات الحساسة (البريد
+                                الإلكتروني، رقم الهاتف، أو كلمة المرور).
+                            </div>
+
                             <!-- Current Password -->
-                            <div class="mb-3">
-                                <label for="current_password" class="form-label">كلمة المرور الحالية</label>
+                            <div class="mb-3" id="currentPasswordField">
+                                <label for="current_password" class="form-label">
+                                    كلمة المرور الحالية
+                                    <span class="text-danger" id="requiredIndicator" style="display: none;">*</span>
+                                </label>
                                 <input type="password" class="form-control @error('current_password') is-invalid @enderror"
-                                    id="current_password" name="current_password">
+                                    id="current_password" name="current_password"
+                                    placeholder="أدخل كلمة المرور الحالية للتأكيد">
                                 @error('current_password')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                 @enderror
+                                <div class="form-text">
+                                    مطلوبة عند تغيير البيانات الحساسة أو كلمة المرور
+                                </div>
                             </div>
 
                             <!-- New Password -->
@@ -107,6 +121,16 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+                                <div class="form-text">
+                                    يجب أن تحتوي على 8 أحرف على الأقل، حرف كبير وصغير، رقم، ورمز خاص
+                                </div>
+                                <!-- Password Strength Indicator -->
+                                <div id="passwordStrength" class="mt-2" style="display: none;">
+                                    <div class="progress" style="height: 5px;">
+                                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <small class="text-muted" id="passwordStrengthText"></small>
+                                </div>
                             </div>
 
                             <!-- Confirm Password -->
@@ -348,6 +372,126 @@
                     currentPassword.required = false;
                 }
             });
+
+            // Require current password for sensitive data changes
+            const originalEmail = '{{ $user->email }}';
+            const originalMobile = '{{ $user->mobile }}';
+
+            function checkSensitiveDataChanges() {
+                const currentEmail = document.getElementById('email').value;
+                const currentMobile = document.getElementById('mobile').value;
+                const currentPassword = document.getElementById('current_password');
+                const passwordField = document.getElementById('password');
+                const securityNotice = document.getElementById('securityNotice');
+                const requiredIndicator = document.getElementById('requiredIndicator');
+                const currentPasswordField = document.getElementById('currentPasswordField');
+
+                const emailChanged = currentEmail !== originalEmail;
+                const mobileChanged = currentMobile !== originalMobile;
+                const passwordChanged = passwordField.value.length > 0;
+
+                const sensitiveDataChanged = emailChanged || mobileChanged || passwordChanged;
+
+                if (sensitiveDataChanged) {
+                    // Show security notice
+                    securityNotice.style.display = 'block';
+
+                    // Make current password required
+                    currentPassword.required = true;
+                    requiredIndicator.style.display = 'inline';
+
+                    // Highlight the field
+                    currentPasswordField.classList.add('border-warning');
+
+                    // Show the field
+                    currentPasswordField.style.display = 'block';
+                } else {
+                    // Hide security notice
+                    securityNotice.style.display = 'none';
+
+                    // Make current password not required
+                    currentPassword.required = false;
+                    requiredIndicator.style.display = 'none';
+
+                    // Remove highlight
+                    currentPasswordField.classList.remove('border-warning');
+
+                    // Hide the field if no password change
+                    if (!passwordChanged) {
+                        currentPasswordField.style.display = 'none';
+                    }
+                }
+            }
+
+            // Password strength checker
+            function checkPasswordStrength(password) {
+                const strengthIndicator = document.getElementById('passwordStrength');
+                const progressBar = strengthIndicator.querySelector('.progress-bar');
+                const strengthText = document.getElementById('passwordStrengthText');
+
+                if (password.length === 0) {
+                    strengthIndicator.style.display = 'none';
+                    return;
+                }
+
+                strengthIndicator.style.display = 'block';
+
+                let score = 0;
+                let feedback = [];
+
+                // Length check
+                if (password.length >= 8) score += 25;
+                else feedback.push('8 أحرف على الأقل');
+
+                // Lowercase check
+                if (/[a-z]/.test(password)) score += 25;
+                else feedback.push('حرف صغير');
+
+                // Uppercase check
+                if (/[A-Z]/.test(password)) score += 25;
+                else feedback.push('حرف كبير');
+
+                // Number check
+                if (/\d/.test(password)) score += 25;
+                else feedback.push('رقم');
+
+                // Special character check
+                if (/[@$!%*?&]/.test(password)) score += 25;
+                else feedback.push('رمز خاص');
+
+                // Update progress bar
+                progressBar.style.width = Math.min(score, 100) + '%';
+
+                // Update color and text based on strength
+                if (score < 50) {
+                    progressBar.className = 'progress-bar bg-danger';
+                    strengthText.textContent = 'ضعيفة - مطلوب: ' + feedback.join(', ');
+                    strengthText.className = 'text-danger';
+                } else if (score < 75) {
+                    progressBar.className = 'progress-bar bg-warning';
+                    strengthText.textContent = 'متوسطة - مطلوب: ' + feedback.join(', ');
+                    strengthText.className = 'text-warning';
+                } else if (score < 100) {
+                    progressBar.className = 'progress-bar bg-info';
+                    strengthText.textContent = 'جيدة - مطلوب: ' + feedback.join(', ');
+                    strengthText.className = 'text-info';
+                } else {
+                    progressBar.className = 'progress-bar bg-success';
+                    strengthText.textContent = 'قوية جداً ✓';
+                    strengthText.className = 'text-success';
+                }
+            }
+
+            // Add event listeners for sensitive fields
+            document.getElementById('email').addEventListener('input', checkSensitiveDataChanges);
+            document.getElementById('mobile').addEventListener('input', checkSensitiveDataChanges);
+            document.getElementById('password').addEventListener('input', function() {
+                checkSensitiveDataChanges();
+                checkPasswordStrength(this.value);
+            });
+
+            // Initial check
+            checkSensitiveDataChanges();
 
             // Wallet password toggle functions
             function setupWalletPasswordToggle(toggleId, inputId, iconId) {
