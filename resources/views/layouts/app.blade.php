@@ -277,7 +277,7 @@
                                     <i class="bi bi-telephone-fill"></i>
                                     <div>
                                         <strong>الهاتف:</strong><br>
-                                        <a href="tel:+201234567890">+20 123 456 7890</a>
+                                        <span>+20 123 456 7890</span>
                                     </div>
                                 </div>
                                 <div class="contact-item">
@@ -298,19 +298,19 @@
         <div class="footer-bottom">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <p class="mb-0">&copy; {{ date('Y') }} نبض الحياة. جميع الحقوق محفوظة.</p>
                     </div>
-                    <div class="col-md-6 text-md-end">
+                    {{-- <div class="col-md-6 text-md-end">
                         <div class="footer-payment">
                             <span class="me-3">طرق الدفع المتاحة:</span>
                             <i class="bi bi-credit-card-2-front payment-icon"></i>
                             {{--                            <i class="bi bi-paypal payment-icon"></i> --}}
-                            <i class="bi bi-bank payment-icon"></i>
-                        </div>
-                    </div>
+                    <i class="bi bi-bank payment-icon"></i>
                 </div>
-            </div>
+            </div> --}}
+        </div>
+        </div>
         </div>
     </footer>
 
