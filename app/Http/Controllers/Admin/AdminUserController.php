@@ -45,7 +45,7 @@ class AdminUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'nullable|email',
             'mobile' => 'required|string|unique:users,mobile,' . $user->id,
             'is_admin' => 'boolean',
             'wallet_balance' => 'numeric|min:0',

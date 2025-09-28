@@ -45,6 +45,7 @@ class AuthController extends Controller
      *         @OA\JsonContent(
      *             required={"name","mobile","password","password_confirmation"},
      *             @OA\Property(property="name", type="string", example="أحمد محمد"),
+     *             @OA\Property(property="email", type="string", format="email", example="ahmed@gmail.com", nullable=true, description="البريد الإلكتروني (اختياري)"),
      *             @OA\Property(property="mobile", type="string", example="01234567890"),
      *             @OA\Property(property="password", type="string", example="password123"),
      *             @OA\Property(property="password_confirmation", type="string", example="password123")
@@ -75,10 +76,9 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => [
-                'required',
+                'nullable',
                 'string',
                 'max:255',
-                'unique:users',
                 'regex:/^[a-z0-9]+@(gmail|yahoo|hotmail|outlook)\.com$/i'
             ],
             'mobile' => [
@@ -99,9 +99,7 @@ class AuthController extends Controller
             'device_token' => 'nullable|string',
         ], [
             'name.required' => 'الاسم مطلوب',
-            'email.required' => 'البريد الإلكتروني مطلوب',
             'email.regex' => 'يجب أن يكون البريد الإلكتروني على أحد النطاقات: gmail, yahoo, hotmail, outlook',
-            'email.unique' => 'البريد الإلكتروني مستخدم من قبل',
 
             'mobile.required' => 'رقم الموبايل مطلوب',
             'mobile.regex' => 'رقم الموبايل غير صحيح. يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويليه 8 أرقام.',

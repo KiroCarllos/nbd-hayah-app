@@ -68,16 +68,14 @@ class ProfileController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'nullable|email',
             'mobile' => 'required|string|unique:users,mobile,' . $user->id,
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'current_password' => 'nullable|string',
             'password' => 'nullable|string|min:8|confirmed',
         ], [
             'name.required' => 'الاسم مطلوب',
-            'email.required' => 'البريد الإلكتروني مطلوب',
             'email.email' => 'البريد الإلكتروني غير صحيح',
-            'email.unique' => 'البريد الإلكتروني مستخدم من قبل',
             'mobile.required' => 'رقم الهاتف مطلوب',
             'mobile.unique' => 'رقم الهاتف مستخدم من قبل',
             'profile_image.image' => 'يجب أن تكون الصورة من نوع صحيح',

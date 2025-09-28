@@ -24,12 +24,11 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
 
-            // Email regex: only gmail, yahoo, hotmail, outlook
+            // Email regex: only gmail, yahoo, hotmail, outlook (optional)
             'email' => [
-                'required',
+                'nullable',
                 'string',
                 'max:255',
-                'unique:users',
                 'regex:/^[a-z0-9]+@(gmail|yahoo|hotmail|outlook)\.com$/i'
             ],
 
@@ -60,9 +59,7 @@ class RegisterRequest extends FormRequest
         return [
             'name.required' => 'الاسم مطلوب',
 
-            'email.required' => 'البريد الإلكتروني مطلوب',
             'email.regex' => 'يجب أن يكون البريد الإلكتروني على أحد النطاقات: gmail, yahoo, hotmail, outlook',
-            'email.unique' => 'البريد الإلكتروني مستخدم من قبل',
 
             'mobile.required' => 'رقم الموبايل مطلوب',
             'mobile.regex' => 'رقم الموبايل غير صحيح. يجب أن يبدأ بـ 010 أو 011 أو 012 أو 015 ويليه 8 أرقام.',
@@ -78,5 +75,4 @@ class RegisterRequest extends FormRequest
             'profile_image.max' => 'حجم الصورة كبير جداً، الحد الأقصى 2 ميجابايت',
         ];
     }
-
 }

@@ -43,8 +43,8 @@
 
                                     <div class="col-md-6">
                                         <div class="mb-4">
-                                            <label for="email" class="form-label fw-semibold">البريد الإلكتروني <span
-                                                    class="text-danger">*</span></label>
+                                            <label for="email" class="form-label fw-semibold">البريد الإلكتروني
+                                                <small class="text-muted">(اختياري)</small></label>
                                             <div class="input-group">
                                                 <span class="input-group-text bg-light border-end-0">
                                                     <i class="bi bi-envelope text-muted"></i>
@@ -52,10 +52,12 @@
                                                 <input type="email"
                                                     class="form-control border-start-0 ps-0 @error('email') is-invalid @enderror"
                                                     id="email" name="email" value="{{ old('email') }}"
-                                                    placeholder="example@email.com" required>
+                                                    placeholder="example@email.com (اختياري)">
                                                 @error('email')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
+                                            </div>
+                                            <div class="form-text">يمكنك إضافة البريد الإلكتروني لاحقاً من الملف الشخصي
                                             </div>
                                         </div>
                                     </div>
