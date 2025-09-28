@@ -114,6 +114,9 @@ class UserController extends Controller
         if ($request->filled('mobile')) {
             $user->mobile = $request->mobile;
         }
+        if ($request->filled('email')) {
+            $user->email = $request->email;
+        }
 
         $user->save();
 
