@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DonationResource;
 use App\Models\Campaign;
 use App\Models\Donation;
+use App\Models\User;
 use App\Models\WalletTransaction;
 use App\Services\FCM;
 use Illuminate\Http\Request;
@@ -170,15 +171,29 @@ class DonationController extends Controller
             // Update campaign amount
             $campaign->increment('current_amount', $amount);
 
+            // Refresh campaign to get updated current_amount
+            $campaign->refresh();
+
+            // Check if campaign just completed
+            $campaignJustCompleted = $campaign->isCompleted();
+
             DB::commit();
 
             $donation->load(['campaign.creator']);
 
-            $fcm = FCM::sendToDevice(
-                $user->device_token,
-                'تم التبرع بنجاح 💚',
-                "شكرًا لأنك كنت سببًا في إنقاذ حياة شخص ما اليوم."
-            );
+            // Send donation success notification to donor
+            if ($user->device_token) {
+                FCM::sendToDevice(
+                    $user->device_token,
+                    'تم التبرع بنجاح 💚',
+                    "شكرًا لأنك كنت سببًا في إنقاذ حياة شخص ما اليوم."
+                );
+            }
+
+            // If campaign just completed, notify all donors
+            if ($campaignJustCompleted) {
+                $this->notifyDonorsOnCampaignCompletion($campaign);
+            }
 
             // Create wallet transaction record
             WalletTransaction::create([
@@ -257,5 +272,59 @@ class DonationController extends Controller
             'success' => true,
             'data' => new DonationResource($donation)
         ]);
+    }
+
+    /**
+     * Send completion notifications to all campaign donors
+     *
+     * @param Campaign $campaign
+     * @return void
+     */
+    protected function notifyDonorsOnCampaignCompletion(Campaign $campaign)
+    {
+        try {
+            // Get all unique donors for this campaign with their device tokens
+            $donors = User::whereHas('donations', function ($query) use ($campaign) {
+                $query->where('campaign_id', $campaign->id)
+                    ->where('status', 'completed');
+            })
+                ->whereNotNull('device_token')
+                ->where('device_token', '!=', '')
+                ->get();
+
+            // Prepare notification message
+            $title = '🎉 تم اكتمال الحملة!';
+            $body = "الحمد لله! تم اكتمال حملة \"{$campaign->title}\" بفضل تبرعك الكريم. شكراً لك على مساهمتك في إنقاذ حياة! ❤️";
+
+            $notificationData = [
+                'campaign_id' => (string)$campaign->id,
+                'campaign_title' => $campaign->title,
+                'type' => 'campaign_completed',
+                'completed_at' => now()->toDateTimeString(),
+            ];
+
+            // Send notification to each donor
+            foreach ($donors as $donor) {
+                FCM::sendToDevice(
+                    $donor->device_token,
+                    $title,
+                    $body,
+                    $notificationData
+                );
+            }
+
+            // Log the notification
+            \Log::info("Campaign completion notifications sent", [
+                'campaign_id' => $campaign->id,
+                'campaign_title' => $campaign->title,
+                'donors_count' => $donors->count(),
+            ]);
+        } catch (\Exception $e) {
+            // Log error but don't fail the donation process
+            \Log::error("Failed to send campaign completion notifications", [
+                'campaign_id' => $campaign->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }
