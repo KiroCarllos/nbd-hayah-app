@@ -308,7 +308,7 @@
                             {{--                            <i class="bi bi-paypal payment-icon"></i> --}}
                     <i class="bi bi-bank payment-icon"></i>
                 </div>
-            </div> --}}
+            </div>
         </div>
         </div>
         </div>
