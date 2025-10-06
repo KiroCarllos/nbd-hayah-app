@@ -3,12 +3,12 @@
 ## Nabd Hayah - Charitable Donations Platform
 
 ![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/blob/main/public/website-screemshots/1.png)
-![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/2.png)
-![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/3.png)
-![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/4.png)
-![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/5.png)
-![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/6.png)
-![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/7.png)
+![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/blob/main/public/website-screemshots/2.png)
+![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/blob/main/public/website-screemshots/3.png)
+![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/blob/main/public/website-screemshots/4.png)
+![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/blob/main/public/website-screemshots/5.png)
+![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/blob/main/public/website-screemshots/6.png)
+![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/blob/main/public/website-screemshots/7.png)
 
 منصة شاملة للتبرعات الخيرية تتيح للمستخدمين إنشاء حملات خيرية والتبرع لها من خلال نظام محفظة إلكترونية آمن، مع واجهة ويب متكاملة ولوحة تحكم إدارية شاملة وAPI للتطبيقات المحمولة.
 
