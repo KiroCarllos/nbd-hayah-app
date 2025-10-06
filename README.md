@@ -1,7 +1,8 @@
 # نبض الحياة - منصة التبرعات الخيرية
 
 ## Nabd Hayah - Charitable Donations Platform
-![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/1.png)
+
+![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/blob/main/public/website-screemshots/1.png)
 ![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/2.png)
 ![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/3.png)
 ![screenshot](https://github.com/KiroCarllos/nbd-hayah-app/tree/main/public/website-screemshots/4.png)
